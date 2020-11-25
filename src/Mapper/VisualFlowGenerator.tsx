@@ -1,8 +1,7 @@
 import React from "react";
 import {DroppedStep} from "../visualEDitor/DroppedStep";
 import {GetStepsFromAst, GetRequest} from "./Parser";
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {Dispatch} from "redux";
+import {shallowEqual, useSelector} from "react-redux";
 
 export const VisualFlowGenerator: React.FC = () => {
 
@@ -13,15 +12,13 @@ export const VisualFlowGenerator: React.FC = () => {
         shallowEqual
     )
 
-    const dispatch: Dispatch<any> = useDispatch();
-
     const stepsArray = GetStepsFromAst(ast);
 
     if (GetRequest()){
         return (
         <div
             style={{
-                border: "dotted",
+                border: '1px solid rgba(0,0,0,0.2)',
                 height: window.innerHeight*2/3,
                 width: window.innerWidth/2 - 50,
                 // margin: "1px",

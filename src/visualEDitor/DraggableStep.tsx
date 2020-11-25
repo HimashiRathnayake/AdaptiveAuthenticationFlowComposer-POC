@@ -1,9 +1,5 @@
 import React from 'react'
 import { useDrag, DragSourceMonitor } from 'react-dnd'
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import { Dispatch } from "redux"
-import {AddStepToEnd} from "../Mapper/Parser";
-import {saveAst} from "../store/actionCreators";
 
 const style: React.CSSProperties = {
     border: '1px dashed gray',
@@ -21,34 +17,17 @@ interface BoxProps {
 
 export const DraggableStep: React.FC<BoxProps> = ({ name }) => {
 
-    const ast: any = useSelector(
-        (state: AstState) => {
-            return state.ast
-        },
-        shallowEqual
-    )
-
-    const dispatch: Dispatch<any> = useDispatch();
-
-    const saveAstToStore = React.useCallback(
-        (ast: Object) => dispatch(saveAst(ast)),
-        [dispatch]
-    )
-
     const [{ isDragging }, drag] = useDrag({
         item: { name, type: 'box' },
         end: (item: { name: string } | undefined, monitor: DragSourceMonitor) => {
             const dropResult = monitor.getDropResult()
-            if (item && dropResult) {
-                const newAst = AddStepToEnd(item.name.replace('Step', ''), ast);
-                saveAstToStore({});
-                saveAstToStore(newAst);
-            }
+            if (item && dropResult) {}
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
     })
+
     const opacity = isDragging ? 0.4 : 1
 
     return (

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDrop } from 'react-dnd'
 import {VisualFlowGenerator} from "../Mapper/VisualFlowGenerator";
+import {DroppableContainer} from "./DroppableContainer";
 
 const style: React.CSSProperties = {
     height: window.innerHeight*2/3,
@@ -11,7 +12,14 @@ const style: React.CSSProperties = {
     lineHeight: 'normal',
     float: 'right',
     marginLeft: '2px',
+    backgroundColor: "white",
     // flexDirection: "row"
+    minHeight: '8rem',
+    minWidth: '8rem',
+    // padding: '2rem',
+    // paddingTop: '1rem',
+    // margin: '1rem',
+    // float: 'left',
 }
 
 export const VisualFlow: React.FC = () => {
@@ -26,11 +34,14 @@ export const VisualFlow: React.FC = () => {
     })
 
     return (
-        <div
-            ref={drop}
-            style={{ ...style }}
-        >
+        // <div
+        //     ref={drop}
+        //     style={{ ...style }}
+        // >
+        <DroppableContainer styles={style} containerName={'Flow'}>
             <VisualFlowGenerator/>
-        </div>
+        </DroppableContainer>
+
+        // </div>
     )
 }

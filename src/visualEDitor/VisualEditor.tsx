@@ -3,18 +3,8 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {VisualFlow} from "./VisualFlow";
 import {DraggableStep} from "./DraggableStep";
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {Dispatch} from "redux";
-import {saveAst} from "../store/actionCreators";
 
 function VisualEditor() {
-
-    const dispatch: Dispatch<any> = useDispatch();
-
-    const saveAstToStore = React.useCallback(
-        (ast: Object) => dispatch(saveAst(ast)),
-        [dispatch]
-    )
 
     return (
         <div>

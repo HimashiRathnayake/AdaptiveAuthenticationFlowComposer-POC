@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useRef} from "react";
 import {ControlledEditor} from "@monaco-editor/react";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
@@ -8,6 +8,9 @@ import {GenerateCodeFromAst, ParseToAst} from "../Mapper/Parser";
 const ScriptEditor: React.FC = () => {
 
     const dispatch: Dispatch<any> = useDispatch();
+    let editorValue = '';
+    let timeout: any = null;
+    const editorRef = useRef<any>();
 
     const saveAstToStore = React.useCallback(
         (ast: Object) => dispatch(saveAst(ast)),
@@ -20,17 +23,31 @@ const ScriptEditor: React.FC = () => {
         },
         shallowEqual
     )
+
     let code = GenerateCodeFromAst(ast);
 
-    function handleChange(value: string|undefined){
+    const handleChange = (value: string|undefined) => {
         if (value===undefined){
             value=''
         }
-        let newAst = ParseToAst(value);
-        console.log(newAst);
+        editorValue=value;
+    }
+
+    const createASt = () => {
+        let newAst = ParseToAst(editorRef.current());
         if (newAst !== '') {
             saveAstToStore(newAst);
         }
+    }
+
+    const handleEditorDidMount = (value: any, editor: any) => {
+        editorRef.current = value;
+        editor.onKeyUp( ( e :any) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                createASt();
+            }, 2000);
+        } )
     }
 
     return (
@@ -40,6 +57,7 @@ const ScriptEditor: React.FC = () => {
                 width={window.innerWidth/2}
                 value={code}
                 onChange={(ev, value) => {handleChange(value)}}
+                editorDidMount={handleEditorDidMount}
                 language="javascript"
                 theme='dark'
             />

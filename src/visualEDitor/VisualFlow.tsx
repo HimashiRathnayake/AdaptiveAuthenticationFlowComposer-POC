@@ -16,12 +16,12 @@ const style: React.CSSProperties = {
 
 export const VisualFlow: React.FC = () => {
 
-    const [{ canDrop, isOver }, drop] = useDrop({
+    const [{ isOver, isOverCurrent }, drop] = useDrop({
         accept: 'box',
-        drop: () => ({ name: 'Dustbin' }),
+        drop: (item, monitor) => ({ name: 'Flow' }),
         collect: (monitor) => ({
             isOver: monitor.isOver(),
-            canDrop: monitor.canDrop(),
+            isOverCurrent: monitor.isOver({shallow: true}),
         }),
     })
 

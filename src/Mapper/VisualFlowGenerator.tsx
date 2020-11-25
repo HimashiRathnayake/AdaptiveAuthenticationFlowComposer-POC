@@ -1,10 +1,21 @@
 import React from "react";
 import {DroppedStep} from "../visualEDitor/DroppedStep";
 import {GetStepsFromAst, GetRequest} from "./Parser";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import {Dispatch} from "redux";
 
 export const VisualFlowGenerator: React.FC = () => {
 
-    const stepsArray = GetStepsFromAst();
+    const ast: any = useSelector(
+        (state: AstState) => {
+            return state.ast
+        },
+        shallowEqual
+    )
+
+    const dispatch: Dispatch<any> = useDispatch();
+
+    const stepsArray = GetStepsFromAst(ast);
 
     if (GetRequest()){
         return (
@@ -22,8 +33,8 @@ export const VisualFlowGenerator: React.FC = () => {
                 <DroppedStep
                     key={stepArray[0]}
                     step={stepArray[1]}
-                    success={stepArray[2]===-1 ? null: stepArray[2]}
-                    failure={stepArray[3]===-1 ? null: stepArray[3]}
+                    success={stepArray[2]}
+                    failure={stepArray[3]}
                     // removeStep={remove}
                 />
             ))}

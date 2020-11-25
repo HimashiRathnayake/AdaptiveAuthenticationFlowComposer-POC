@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ControlledEditor} from "@monaco-editor/react";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
@@ -6,8 +6,6 @@ import {saveAst} from "../store/actionCreators";
 import {GenerateCodeFromAst, ParseToAst} from "../Mapper/Parser";
 
 const ScriptEditor: React.FC = () => {
-
-    const [code, setCode] = useState(GenerateCodeFromAst());
 
     const dispatch: Dispatch<any> = useDispatch();
 
@@ -22,14 +20,17 @@ const ScriptEditor: React.FC = () => {
         },
         shallowEqual
     )
-
-    console.log('ast',ast);
+    let code = GenerateCodeFromAst(ast);
 
     function handleChange(value: string|undefined){
         if (value===undefined){
             value=''
         }
-        saveAstToStore(ParseToAst(value));
+        let newAst = ParseToAst(value);
+        console.log(newAst);
+        if (newAst !== '') {
+            saveAstToStore(newAst);
+        }
     }
 
     return (

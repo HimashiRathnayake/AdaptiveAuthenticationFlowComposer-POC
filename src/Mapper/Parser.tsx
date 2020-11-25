@@ -1,11 +1,10 @@
-import React from "react";
 import {shallowEqual, useSelector} from "react-redux";
 import * as syntax from "./AdaptiveCodeSyntax";
 import generate from "@babel/generator";
 import {parse} from "@babel/parser";
 import traverse from "@babel/traverse";
-import { transform } from "@babel/core";
 // import {generate} from "escodegen";
+const parser = require('@babel/parser').parse;
 
 export function ParseToAst(value?:string) {
     //.......................................acorn....................................................
@@ -52,7 +51,6 @@ export function GetRequest(){
     )
 
     try{
-        let count=0;
         traverse(ast, {
             VariableDeclarator(path: any){
                 if (path.node.id.name === syntax.loginRequest){
@@ -107,15 +105,9 @@ export function GetCallExpression(ast : any, scope:any, parentPath:any, state:an
     return steps;
 }
 
-export function GetStepsFromAst(){
+export function GetStepsFromAst(ast : any){
 
-    const stepsArray: any[] = [];
-    const ast: any = useSelector(
-        (state: AstState) => {
-            return state.ast
-        },
-        shallowEqual
-    )
+    let stepsArray: any[] = [];
 
     //.....................................acorn-walk....................................................
     // const walk = require("acorn-walk")
@@ -146,6 +138,7 @@ export function GetStepsFromAst(){
         traverse(ast, {
             CallExpression(path: any){
                 if (path.node.callee.name===syntax.stepExecutor){
+                    console.log(path.node.arguments[0].value)
                     let success = GetSuccessStep(path.node, path.scope, path.parentPath, path.state);
                     let fail = GetFailureStep(path.node, path.scope, path.parentPath, path.state);
                     stepsArray.push([count, path.node.arguments[0].value, success, fail]) //key, step, onSuccess, onFail
@@ -153,7 +146,6 @@ export function GetStepsFromAst(){
                 }
             }
         })
-        console.log(stepsArray);
     }
     catch(e){
         console.log(e);
@@ -162,14 +154,7 @@ export function GetStepsFromAst(){
     return(stepsArray);
 }
 
-export function GenerateCodeFromAst(): string|undefined{
-
-    const ast: any = useSelector(
-        (state: AstState) => {
-            return state.ast
-        },
-        shallowEqual
-    )
+export function GenerateCodeFromAst(ast : any): string|undefined{
 
     //...................................with acorn............................................
     // console.log('script', ast)
@@ -188,16 +173,21 @@ export function GenerateCodeFromAst(): string|undefined{
     }
 }
 
-export function AddStepToEnd(step: string, ast: any): object|undefined{
-    let pathASt:any;
+export function AddStepToEnd(step: string, ast: any): object{
+    let pathASt: any = ast;
+    let AlreadyHasStep = false;
     traverse(ast, {
         CallExpression(path: any){
             if (path.node.callee.name===syntax.stepExecutor) {
                 pathASt = path
+                AlreadyHasStep = true;
             }
-            path.skip()
-        }
+        },
     })
-    console.log(pathASt)
-    return;
+    if (AlreadyHasStep) {
+        pathASt.insertAfter(parser(`executeStep(${step});`, {sourceType: 'script'}).program.body[0]);
+    }else{
+        ast = parser(`var onLoginRequest = function(context){executeStep(${step});}`)
+    }
+    return ast;
 }

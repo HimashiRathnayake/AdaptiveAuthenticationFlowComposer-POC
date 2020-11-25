@@ -1,11 +1,12 @@
 import * as React from "react"
 import { Dispatch } from "redux"
 import { useDispatch } from "react-redux"
+import {Container} from "./Container";
 
 type Props = {
     step: string,
-    success: string,
-    failure: string
+    success: any[],
+    failure: any[]
     // removeStep: (article: IStep) => void
 }
 
@@ -23,16 +24,22 @@ export const DroppedStep: React.FC<Props> = ({step, success, failure
         <div className="Article">
             <div style={{
                 backgroundColor: "grey",
-                width: 120, height:120,
+                width: 150, height:300,
                 color: "white",
                 marginLeft: "2px",
                 marginTop: "10px",
                 alignItems: "center"
             }}>
                 <div style={{fontSize: '1.2rem', marginTop:"5px", marginBottom: "10px"}}>Step {step}</div>
-                <div>onSuccess: {success}</div>
-                <div>onFailure: {failure}</div>
-                <button>Delete</button>
+                <div>
+                    <div>onSuccess:</div>
+                    <Container steps={success}/>
+                </div>
+                <div>
+                    <div>onFailure:</div>
+                    <Container steps={failure}/>
+                </div>
+                {/*<button>Delete</button>*/}
             </div>
             {/*<button onClick={() => deleteStep(step)}>Delete</button>*/}
         </div>

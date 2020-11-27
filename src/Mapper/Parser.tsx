@@ -61,8 +61,8 @@ export const GetSuccessStep = (ast : any, scope:any, parentPath:any, state:any) 
         ObjectMember(path: any){
             if (path.node.key.name===syntax.onSuccess){
                 successSteps.push(GetCallExpression(path.node, path.scope, path.parentPath, path.state));
-                path.skip()
             }
+            path.skip()
         }
     }, scope, state, parentPath)
     return successSteps[0];
@@ -74,11 +74,37 @@ export const GetFailureStep = (ast : any, scope:any, parentPath:any, state:any) 
         ObjectMember(path: any){
             if (path.node.key.name===syntax.onFail){
                 failSteps.push(GetCallExpression(path.node, path.scope, path.parentPath, path.state));
-                path.skip()
             }
+            path.skip()
         }
     }, scope, state, parentPath)
     return failSteps.pop();
+}
+
+export const GetSuccessStepsAsNodes = (ast : any, scope:any, parentPath:any, state:any) => {
+    let successSteps: any[] = [];
+    traverse(ast, {
+        ObjectMember(path: any){
+            if (path.node.key.name===syntax.onSuccess){
+                successSteps.push(GetCallExpressionAsNode(path.node, path.scope, path.parentPath, path.state));
+            }
+            path.skip()
+        }
+    }, scope, state, parentPath)
+    return successSteps[0];
+}
+
+export const GetFailureStepsAsNodes = (ast : any, scope:any, parentPath:any, state:any) => {
+    let failureSteps: any[] = [];
+    traverse(ast, {
+        ObjectMember(path: any){
+            if (path.node.key.name===syntax.onFail){
+                failureSteps.push(GetCallExpressionAsNode(path.node, path.scope, path.parentPath, path.state));
+            }
+            path.skip()
+        }
+    }, scope, state, parentPath)
+    return failureSteps[0];
 }
 
 export const GetCallExpression = (ast : any, scope:any, parentPath:any, state:any): any => {
@@ -87,6 +113,19 @@ export const GetCallExpression = (ast : any, scope:any, parentPath:any, state:an
         CallExpression(path: any){
             if (path.node.callee.name===syntax.stepExecutor) {
                 steps.push(path.node.arguments[0].value)
+            }
+            path.skip()
+        }
+    }, scope, state, parentPath)
+    return steps;
+}
+
+export const GetCallExpressionAsNode = (ast : any, scope:any, parentPath:any, state:any): any => {
+    const steps: any[] = [];
+    traverse(ast, {
+        CallExpression(path: any){
+            if (path.node.callee.name===syntax.stepExecutor) {
+                steps.push(path.node)
             }
             path.skip()
         }
@@ -185,34 +224,36 @@ export const AddSuccessFailureSteps = (stepToAdd: string, currentStep: string, a
         CallExpression(path: any){
             if (path.node.callee.name===syntax.stepExecutor && path.node.arguments[0].value == currentStep) {
                 pathASt = path
-                successSteps = GetSuccessStep(path.node, path.scope, path.parentPath, path.state);
-                failureSteps = GetFailureStep(path.node, path.scope, path.parentPath, path.state);
+                successSteps = GetSuccessStepsAsNodes(path.node, path.scope, path.parentPath, path.state);
+                failureSteps = GetFailureStepsAsNodes(path.node, path.scope, path.parentPath, path.state);
             }
         },
     })
     let codeToParse = `executeStep(${currentStep},`;
     if (type==='success' && successSteps === undefined){successSteps = []}
     if (type==='fail' && failureSteps === undefined){failureSteps = []}
-    if (type==='success'){successSteps.push(stepToAdd);}
-    if (type==='fail'){failureSteps.push(stepToAdd);}
-    if (successSteps && successSteps.length!==0) {
-        codeToParse += `{onSuccess: function(context){`;
+    codeToParse+='{';
+    if (successSteps) {
+        codeToParse += `onSuccess: function(context){`;
         for (let step in successSteps) {
-            codeToParse += `executeStep(${successSteps[step]});`
+            codeToParse += generate(successSteps[step]).code.concat(';');
         }
-        codeToParse += `}},\n`
+        if (type==='success'){
+            codeToParse += `executeStep(${stepToAdd});`;
+        }
+        codeToParse += `},\n`
     }
-    if (failureSteps && failureSteps.length!=0) {
-        codeToParse += `{onFailure: function(context){`;
+    if (failureSteps) {
+        codeToParse += `onFailure: function(context){`;
         for (let step in failureSteps) {
-            codeToParse += `executeStep(${failureSteps[step]});`
+            codeToParse += generate(failureSteps[step]).code.concat(';');
         }
-        codeToParse += `}},\n`
+        if (type==='fail'){
+            codeToParse += `executeStep(${stepToAdd});`;
+        }
+        codeToParse += `},\n`
     }
-    codeToParse = codeToParse+')';
-    console.log(codeToParse)
-
+    codeToParse = codeToParse+'})';
     pathASt.replaceWith(parse(codeToParse, {sourceType: 'script'}).program.body[0]);
-
     return ast;
 }

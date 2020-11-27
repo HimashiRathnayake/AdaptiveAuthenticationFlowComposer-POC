@@ -1,6 +1,6 @@
 import * as actions from "./actionTypes"
 
-export function saveAst(ast: Object) {
+export const saveAst = (ast: Object) => {
     const action: AstAction = {
         type: actions.SAVE_AST,
         ast,
@@ -8,7 +8,15 @@ export function saveAst(ast: Object) {
     return simulate(action)
 }
 
-export function simulate(action: AstAction) {
+export const saveAstFromVisualEditor = (ast: Object) => {
+    const action: AstAction = {
+        type: actions.SAVE_AST_FROM_VISUAL_EDITOR,
+        ast,
+    }
+    return simulate(action)
+}
+
+export const simulate = (action: AstAction) => {
     return (dispatch: DispatchType) => {
         setTimeout(() => {
             dispatch(action)

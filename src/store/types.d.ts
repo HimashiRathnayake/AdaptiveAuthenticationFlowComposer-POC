@@ -1,4 +1,5 @@
 type AstState = {
+    changedFromVisualEditor: boolean
     ast: Object
 }
 

@@ -6,20 +6,15 @@ import {DroppableContainer} from "./DroppableContainer";
 const style: React.CSSProperties = {
     height: window.innerHeight*2/3,
     width: window.innerWidth/2,
-    padding: '1rem',
+    paddingInline: '1rem',
     textAlign: 'center',
     fontSize: '1rem',
     lineHeight: 'normal',
-    float: 'right',
-    marginLeft: '2px',
+    alignSelf: 'center',
     backgroundColor: "white",
-    // flexDirection: "row"
     minHeight: '8rem',
     minWidth: '8rem',
-    // padding: '2rem',
-    // paddingTop: '1rem',
-    // margin: '1rem',
-    // float: 'left',
+    paddingBottom: '1rem',
 }
 
 export const VisualFlow: React.FC = () => {

@@ -2,6 +2,7 @@ import * as actionTypes from "./actionTypes"
 import {ParseToAst} from "../Mapper/Parser";
 
 const initialState: AstState = {
+    changedFromVisualEditor: false,
     ast: ParseToAst(''),
 }
 
@@ -13,7 +14,14 @@ const reducer = (
         case actionTypes.SAVE_AST:
             return {
                 ...state,
+                changedFromVisualEditor: false,
                 ast: action.ast,
+            }
+        case actionTypes.SAVE_AST_FROM_VISUAL_EDITOR:
+            return  {
+                ...state,
+                changedFromVisualEditor: true,
+                ast: action.ast
             }
     }
     return state

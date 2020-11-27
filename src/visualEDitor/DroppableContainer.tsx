@@ -3,7 +3,7 @@ import { useDrop } from 'react-dnd'
 import {AddStepToEnd, AddSuccessFailureSteps} from "../Mapper/Parser";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
-import {saveAst} from "../store/actionCreators";
+import {saveAstFromVisualEditor} from "../store/actionCreators";
 
 export interface ContainerProps {
     greedy?: boolean
@@ -23,7 +23,7 @@ export const DroppableContainer: React.FC<ContainerProps> = ({ greedy, children,
     const dispatch: Dispatch<any> = useDispatch();
 
     const saveAstToStore = React.useCallback(
-        (ast: Object) => dispatch(saveAst(ast)),
+        (ast: Object) => dispatch(saveAstFromVisualEditor(ast)),
         [dispatch]
     )
 

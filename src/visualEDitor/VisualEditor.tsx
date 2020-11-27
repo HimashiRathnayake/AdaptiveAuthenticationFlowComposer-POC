@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import {VisualFlow} from "./VisualFlow";
 import {DraggableStep} from "./DraggableStep";
 
-function VisualEditor() {
+const VisualEditor = () => {
 
     return (
         <div>
@@ -28,6 +28,7 @@ function VisualEditor() {
                     <DraggableStep name="Step6" />
                     <DraggableStep name="Step7" />
                     <DraggableStep name="Step8" />
+                    <DraggableStep name="Step9" />
                 </div>
             </DndProvider>
         </div>

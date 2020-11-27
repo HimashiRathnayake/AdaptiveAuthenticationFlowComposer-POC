@@ -20,8 +20,7 @@ export const VisualFlowGenerator: React.FC = () => {
             style={{
                 border: '1px solid rgba(0,0,0,0.2)',
                 height: window.innerHeight*2/3,
-                width: window.innerWidth/2 - 50,
-                // margin: "1px",
+                width: window.innerWidth/2,
                 justifySelf: "center",
                 display:"flex", flexDirection: "row",
                 flexWrap: "wrap"

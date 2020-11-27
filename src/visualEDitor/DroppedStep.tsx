@@ -1,6 +1,6 @@
 import * as React from "react"
-import { Dispatch } from "redux"
-import { useDispatch } from "react-redux"
+// import { Dispatch } from "redux"
+// import { useDispatch } from "react-redux"
 import {DroppableContainer} from "./DroppableContainer";
 import {SuccessFailureStep} from "./SuccessFailureStep";
 
@@ -26,10 +26,8 @@ const style: React.CSSProperties = {
     // float: 'left',
 }
 
-export const DroppedStep: React.FC<Props> = ({step, success, failure
-                                                // removeStep
-}) => {
-    const dispatch: Dispatch<any> = useDispatch()
+export const DroppedStep: React.FC<Props> = ({step, success, failure}) => {
+    // const dispatch: Dispatch<any> = useDispatch()
 
     // const deleteStep = React.useCallback(
     //     (step: IStep) => dispatch(removeStep(step)),
@@ -51,7 +49,7 @@ export const DroppedStep: React.FC<Props> = ({step, success, failure
                     <div>onSuccess:</div>
                     <DroppableContainer styles={style} containerName={step+' onSuccess'}
                         children={success && success.map((step: any) => (
-                            <SuccessFailureStep step={step}/>
+                            <SuccessFailureStep key={success.indexOf((step))} step={step}/>
                         ))}
                     />
                 </div>
@@ -59,7 +57,7 @@ export const DroppedStep: React.FC<Props> = ({step, success, failure
                     <div>onFailure:</div>
                     <DroppableContainer styles={style} containerName={step+' onFailure'}
                         children={failure && failure.map((step: any) => (
-                            <SuccessFailureStep step={step}/>
+                            <SuccessFailureStep key={failure.indexOf((step))} step={step}/>
                         ))}
                     />
                 </div>

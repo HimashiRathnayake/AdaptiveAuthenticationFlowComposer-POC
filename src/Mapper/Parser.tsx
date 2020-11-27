@@ -3,6 +3,7 @@ import * as syntax from "./AdaptiveCodeSyntax";
 import generate from "@babel/generator";
 import {parse} from "@babel/parser";
 import traverse from "@babel/traverse";
+import * as type from "@babel/types";
 const parser = require('@babel/parser').parse;
 
 export const ParseToAst = (value?:string) => {
@@ -53,6 +54,20 @@ export const GetRequest = () => {
     catch(e){}
 
     return(request);
+}
+
+export const GetLastStep = (ast: any): number => {
+    let lastStep: number = 0;
+    traverse(ast, {
+        CallExpression(path: any){
+            if (path.node.callee.name===syntax.stepExecutor) {
+                if (path.node.arguments[0].value > lastStep){
+                    lastStep = path.node.arguments[0].value
+                }
+            }
+        },
+    })
+    return lastStep;
 }
 
 export const GetSuccessStep = (ast : any, scope:any, parentPath:any, state:any) => {
@@ -196,7 +211,7 @@ export const GenerateCodeFromAst = (ast : any): string|undefined => {
     }catch (e) {}
 }
 
-export const AddStepToEnd = (step: string, ast: any): object => {
+export const AddStepToEnd = (ast: any): object => {
     let pathASt: any = ast;
     let AlreadyHasStep = false;
     traverse(ast, {
@@ -209,17 +224,32 @@ export const AddStepToEnd = (step: string, ast: any): object => {
         },
     })
     if (AlreadyHasStep) {
-        pathASt.insertAfter(parser(`executeStep(${step});`, {sourceType: 'script'}).program.body[0]);
+        let stepNode = type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+GetLastStep(ast)+1)])
+        pathASt.insertAfter(stepNode);
     }else{
-        ast = parser(`var onLoginRequest = function(context){executeStep(${step});}`)
+        let stepNode = type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+GetLastStep(ast)+1)])
+        let node = type.variableDeclaration(
+            syntax.variable,
+            [
+                type.variableDeclarator(type.identifier(syntax.loginRequest),
+                type.functionExpression(null, [type.identifier(syntax.context)], type.blockStatement([type.expressionStatement(stepNode)])))]
+        );
+        ast = parser('');
+        ast.program.body.push(node);
     }
     return ast;
 }
 
-export const AddSuccessFailureSteps = (stepToAdd: string, currentStep: string, ast: any, type:string) => {
+export const AddSuccessFailureSteps = (currentStep: string, ast: any, stepType:string) => {
     let pathASt: any = ast;
     let successSteps: any;
     let failureSteps: any;
+    let successStepsAsExpressions: any;
+    let failureStepsAsExpressions: any;
+    let successProperty: any;
+    let failureProperty: any;
+    let properties: any = [];
+
     traverse(ast, {
         CallExpression(path: any){
             if (path.node.callee.name===syntax.stepExecutor && path.node.arguments[0].value == currentStep) {
@@ -229,31 +259,86 @@ export const AddSuccessFailureSteps = (stepToAdd: string, currentStep: string, a
             }
         },
     })
-    let codeToParse = `executeStep(${currentStep},`;
-    if (type==='success' && successSteps === undefined){successSteps = []}
-    if (type==='fail' && failureSteps === undefined){failureSteps = []}
-    codeToParse+='{';
-    if (successSteps) {
-        codeToParse += `onSuccess: function(context){`;
-        for (let step in successSteps) {
-            codeToParse += generate(successSteps[step]).code.concat(';');
-        }
-        if (type==='success'){
-            codeToParse += `executeStep(${stepToAdd});`;
-        }
-        codeToParse += `},\n`
+
+    if (successSteps === undefined){successSteps = []}
+    if (failureSteps === undefined){failureSteps = []}
+
+    successStepsAsExpressions = successSteps.map((step: any) => type.expressionStatement(step));
+    failureStepsAsExpressions = failureSteps.map((step: any) => type.expressionStatement(step));
+
+    if (stepType==='success'){
+        successStepsAsExpressions.push(type.expressionStatement(type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+GetLastStep(ast)+1)])));
     }
-    if (failureSteps) {
-        codeToParse += `onFailure: function(context){`;
-        for (let step in failureSteps) {
-            codeToParse += generate(failureSteps[step]).code.concat(';');
-        }
-        if (type==='fail'){
-            codeToParse += `executeStep(${stepToAdd});`;
-        }
-        codeToParse += `},\n`
+    if (stepType==='fail'){
+        failureStepsAsExpressions.push(type.expressionStatement(type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+GetLastStep(ast)+1)])));
     }
-    codeToParse = codeToParse+'})';
-    pathASt.replaceWith(parse(codeToParse, {sourceType: 'script'}).program.body[0]);
+
+    successProperty = type.objectProperty(
+        type.identifier(syntax.onSuccess),
+        type.functionExpression(null, [type.identifier(syntax.context)], type.blockStatement(successStepsAsExpressions))
+    )
+
+    failureProperty = type.objectProperty(
+        type.identifier(syntax.onFail),
+        type.functionExpression(null, [type.identifier(syntax.context)], type.blockStatement(failureStepsAsExpressions))
+    )
+
+    if (successStepsAsExpressions.length!==0){properties.push(successProperty)}
+    if (failureStepsAsExpressions.length!==0){properties.push(failureProperty)}
+
+    let newAst = type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+currentStep), type.objectExpression(
+        properties
+    )])
+    pathASt.replaceWith(newAst);
     return ast;
 }
+
+// export const AddSuccessFailureSteps = (stepToAdd: string, currentStep: string, ast: any, type:string) => {
+//     let pathASt: any = ast;
+//     let successSteps: any;
+//     let failureSteps: any;
+//     traverse(ast, {
+//         CallExpression(path: any){
+//             if (path.node.callee.name===syntax.stepExecutor && path.node.arguments[0].value == currentStep) {
+//                 pathASt = path
+//                 successSteps = GetSuccessStepsAsNodes(path.node, path.scope, path.parentPath, path.state);
+//                 failureSteps = GetFailureStepsAsNodes(path.node, path.scope, path.parentPath, path.state);
+//             }
+//         },
+//     })
+//     let codeToParse = `executeStep(${currentStep},`;
+//     if (type==='success' && successSteps === undefined){successSteps = []}
+//     if (type==='fail' && failureSteps === undefined){failureSteps = []}
+//     codeToParse+='{';
+//     if (successSteps) {
+//         codeToParse += `onSuccess: function(context){`;
+//         for (let step in successSteps) {
+//             codeToParse += generate(successSteps[step]).code.concat(';');
+//         }
+//         if (type==='success'){
+//             codeToParse += `executeStep(${stepToAdd});`;
+//         }
+//         codeToParse += `},\n`
+//     }
+//     if (failureSteps) {
+//         codeToParse += `onFailure: function(context){`;
+//         for (let step in failureSteps) {
+//             codeToParse += generate(failureSteps[step]).code.concat(';');
+//         }
+//         if (type==='fail'){
+//             codeToParse += `executeStep(${stepToAdd});`;
+//         }
+//         codeToParse += `},\n`
+//     }
+//     codeToParse = codeToParse+'})';
+//     pathASt.replaceWith(parse(codeToParse, {sourceType: 'script'}).program.body[0]);
+//     return ast;
+// }
+
+// export const GetCondition = (ast : any, scope:any, parentPath:any, state:any) => {
+//     let successSteps: number[] = [];
+//     traverse(ast, {
+//
+//     }, scope, state, parentPath)
+//     return successSteps[0];
+// }

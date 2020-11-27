@@ -35,15 +35,15 @@ export const DroppableContainer: React.FC<ContainerProps> = ({ greedy, children,
                 return
             }
             if (containerName==='Flow') {
-                const newAst = AddStepToEnd(item.name.replace('Step', ''), ast);
+                const newAst = AddStepToEnd(ast);
                 saveAstToStore({});
                 saveAstToStore(newAst);
             }else if (containerName.split(' ')[1]==='onSuccess'){
-                const newAst = AddSuccessFailureSteps(item.name.replace('Step', ''), containerName.split(' ')[0], ast, "success");
+                const newAst = AddSuccessFailureSteps(containerName.split(' ')[0], ast, "success");
                 saveAstToStore({});
                 saveAstToStore(newAst);
             }else if (containerName.split(' ')[1]==='onFailure'){
-                const newAst = AddSuccessFailureSteps(item.name.replace('Step', ''), containerName.split(' ')[0], ast, "fail");
+                const newAst = AddSuccessFailureSteps(containerName.split(' ')[0], ast, "fail");
                 saveAstToStore({});
                 saveAstToStore(newAst);
             }

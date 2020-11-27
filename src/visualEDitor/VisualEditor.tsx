@@ -20,15 +20,7 @@ const VisualEditor = () => {
                     <VisualFlow/>
                 </div>
                 <div style={{ overflow: 'hidden', clear: 'both', marginLeft: '1rem' }}>
-                    <DraggableStep name="Step1" />
-                    <DraggableStep name="Step2" />
-                    <DraggableStep name="Step3" />
-                    <DraggableStep name="Step4" />
-                    <DraggableStep name="Step5" />
-                    <DraggableStep name="Step6" />
-                    <DraggableStep name="Step7" />
-                    <DraggableStep name="Step8" />
-                    <DraggableStep name="Step9" />
+                    <DraggableStep name="Step" />
                 </div>
             </DndProvider>
         </div>

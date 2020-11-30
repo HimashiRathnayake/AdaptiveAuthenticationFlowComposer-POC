@@ -21,6 +21,7 @@ const VisualEditor = () => {
                 </div>
                 <div style={{ overflow: 'hidden', clear: 'both', marginLeft: '1rem' }}>
                     <DraggableStep name="Step" />
+                    <DraggableStep name="HasRole" />
                 </div>
             </DndProvider>
         </div>

@@ -1,7 +1,8 @@
 import React from 'react'
 import { useDrop } from 'react-dnd'
-import {VisualFlowGenerator} from "../Mapper/VisualFlowGenerator";
+import {VisualFlowGenerator} from "./VisualFlowGenerator";
 import {DroppableContainer} from "./DroppableContainer";
+import ReactFlow, {Background, Controls, MiniMap} from 'react-flow-renderer';
 
 const style: React.CSSProperties = {
     height: window.innerHeight*2/3,
@@ -29,14 +30,15 @@ export const VisualFlow: React.FC = () => {
     })
 
     return (
-        // <div
-        //     ref={drop}
-        //     style={{ ...style }}
-        // >
-        <DroppableContainer styles={style} containerName={'Flow'}>
-            <VisualFlowGenerator/>
-        </DroppableContainer>
+        // <DroppableContainer styles={style} containerName={'Flow'}>
+        //     <VisualFlowGenerator/>
+        // </DroppableContainer>
 
-        // </div>
+        <div style={style} ref={drop}>
+            <VisualFlowGenerator/>
+        </div>
     )
 }
+
+
+

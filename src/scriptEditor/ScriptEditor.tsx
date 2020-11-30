@@ -35,7 +35,7 @@ const ScriptEditor: React.FC = () => {
             value='';
         }
         setCode(value);
-        saveAstToStore(ParseToAst(code));
+        saveAstToStore(ParseToAst(value));
     }
 
     // const createASt = () => {

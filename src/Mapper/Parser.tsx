@@ -4,6 +4,7 @@ import generate from "@babel/generator";
 import {parse} from "@babel/parser";
 import traverse from "@babel/traverse";
 import * as type from "@babel/types";
+import {stringify} from "querystring";
 const parser = require('@babel/parser').parse;
 
 export const ParseToAst = (value?:string) => {
@@ -71,11 +72,14 @@ export const GetLastStep = (ast: any): number => {
 }
 
 export const GetSuccessStep = (ast : any, scope:any, parentPath:any, state:any) => {
-    let successSteps: number[] = [];
+    let successSteps: any[] = [];
     traverse(ast, {
         ObjectMember(path: any){
             if (path.node.key.name===syntax.onSuccess){
-                successSteps.push(GetCallExpression(path.node, path.scope, path.parentPath, path.state));
+                let steps = GetCallExpression(path.node, path.scope, path.parentPath, path.state);
+                let [condition, success] = GetCondition(path.node, path.scope, path.parentPath, path.state)
+                let remaining = steps.filter( (step:any) => success.indexOf(step)==-1);
+                successSteps.push([condition, success, remaining]);
             }
             path.skip()
         }
@@ -120,6 +124,22 @@ export const GetFailureStepsAsNodes = (ast : any, scope:any, parentPath:any, sta
         }
     }, scope, state, parentPath)
     return failureSteps[0];
+}
+
+export const GetCondition = (ast : any, scope:any, parentPath:any, state:any): any => {
+    let condition: string|undefined;
+    let success: any[] = [];
+    traverse(ast, {
+        IfStatement(path: any){
+            if (path.node.test.type==='Identifier'){
+                condition = path.node.test.name
+            }else{
+                condition = generate(path.node.test).code;
+            }
+            success = GetCallExpression(path.node, path.scope, path.parentPath, path.state)
+        }
+    }, scope, state, parentPath)
+    return [condition, success];
 }
 
 export const GetCallExpression = (ast : any, scope:any, parentPath:any, state:any): any => {
@@ -285,6 +305,7 @@ export const AddSuccessFailureSteps = (currentStep: string, ast: any, stepType:s
 
     if (successStepsAsExpressions.length!==0){properties.push(successProperty)}
     if (failureStepsAsExpressions.length!==0){properties.push(failureProperty)}
+    console.log(successProperty);
 
     let newAst = type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+currentStep), type.objectExpression(
         properties

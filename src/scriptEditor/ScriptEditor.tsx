@@ -1,9 +1,11 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ControlledEditor} from "@monaco-editor/react";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
 import {saveAst} from "../store/actionCreators";
-import {GenerateCodeFromAst, ParseToAst} from "../Mapper/Parser";
+import {ParseToAst} from "../Mapper/Parser";
+import {GenerateCodeFromAst} from "../Mapper/CodeGenerator";
+import '../App.css';
 
 const ScriptEditor: React.FC = () => {
 
@@ -55,9 +57,12 @@ const ScriptEditor: React.FC = () => {
 
     return (
         <>
+            <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1rem'}}>
+                <h3>Script Editor</h3>
+            </div>
             <ControlledEditor
-                height= {window.innerHeight}
-                width={window.innerWidth/2}
+                height={'86vmin'}
+                width={'65vmin'}
                 value={code}
                 onChange={(ev, value) => {handleChange(value)}}
                 // editorDidMount={handleEditorDidMount}

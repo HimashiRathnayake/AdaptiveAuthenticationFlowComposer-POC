@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDrop } from 'react-dnd'
-import {AddStepToEnd, AddSuccessFailureSteps} from "../Mapper/Parser";
+import {AddStepToEnd, AddSuccessFailureSteps} from "../Mapper/TraverseAst";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
 import {saveAstFromVisualEditor} from "../store/actionCreators";
@@ -27,26 +27,26 @@ export const DroppableContainer: React.FC<ContainerProps> = ({ greedy, children,
         [dispatch]
     )
 
-    const [{ isOver, isOverCurrent }, drop] = useDrop({
+    const [, drop] = useDrop({
         accept: 'box',
         drop(item: any, monitor) {
-            const didDrop = monitor.didDrop()
-            if (didDrop && !greedy) {
-                return
-            }
-            if (containerName==='Flow') {
-                const newAst = AddStepToEnd(ast);
-                saveAstToStore({});
-                saveAstToStore(newAst);
-            }else if (containerName.split(' ')[1]==='onSuccess'){
-                const newAst = AddSuccessFailureSteps(containerName.split(' ')[0], ast, "success");
-                saveAstToStore({});
-                saveAstToStore(newAst);
-            }else if (containerName.split(' ')[1]==='onFailure'){
-                const newAst = AddSuccessFailureSteps(containerName.split(' ')[0], ast, "fail");
-                saveAstToStore({});
-                saveAstToStore(newAst);
-            }
+            // const didDrop = monitor.didDrop()
+            // if (didDrop && !greedy) {
+            //     return
+            // }
+            // if (containerName==='Flow') {
+            //     const newAst = AddStepToEnd(ast);
+            //     saveAstToStore({});
+            //     saveAstToStore(newAst);
+            // }else if (containerName.split(' ')[1]==='onSuccess'){
+            //     const newAst = AddSuccessFailureSteps(containerName.split(' ')[0], ast, "success");
+            //     saveAstToStore({});
+            //     saveAstToStore(newAst);
+            // }else if (containerName.split(' ')[1]==='onFailure'){
+            //     const newAst = AddSuccessFailureSteps(containerName.split(' ')[0], ast, "fail");
+            //     saveAstToStore({});
+            //     saveAstToStore(newAst);
+            // }
         },
         collect: (monitor) => ({
             isOver: monitor.isOver(),

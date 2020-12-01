@@ -1,5 +1,4 @@
 import React from 'react';
-import './PopUp.css';
 
 const popup: React.CSSProperties = {
     height: window.innerHeight*2/3,
@@ -17,7 +16,7 @@ const popup: React.CSSProperties = {
 const popupInner: React.CSSProperties = {
     backgroundColor: 'white',
     margin: 100,
-    height: window.innerHeight*1/3,
+    height: window.innerHeight/3,
     paddingTop: 20,
 }
 

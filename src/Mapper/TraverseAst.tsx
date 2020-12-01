@@ -1,0 +1,230 @@
+import traverse from "@babel/traverse";
+import * as syntax from "./AdaptiveCodeSyntax";
+import generate from "@babel/generator";
+import * as type from "@babel/types";
+import {
+    createExpressionStatement, createObjectExpressionWithCondition,
+    createObjectExpressionWithProperty,
+    createSuccessFailurePropertyWithStep, createSuccessPropertyWithCondition
+} from "./GenerateTypes";
+
+const parser = require('@babel/parser').parse;
+
+export const GetRequest = (ast:any) => {
+    let request: boolean = false;
+    try{
+        traverse(ast, {
+            VariableDeclarator(path: any){
+                if (path.node.id.name === syntax.loginRequest){
+                    request = true;
+                }
+            },
+        })
+    }
+    catch(e){}
+    return(request);
+}
+
+export const GetLastStep = (ast: any): number => {
+    let lastStep: number = 0;
+    traverse(ast, {
+        CallExpression(path: any){
+            if (path.node.callee.name===syntax.stepExecutor) {
+                if (path.node.arguments[0].value > lastStep){
+                    lastStep = path.node.arguments[0].value
+                }
+            }
+        },
+    })
+    return lastStep;
+}
+
+export const GetSuccessStep = (ast : any, scope:any, parentPath:any, state:any) => {
+    let successSteps: any[] = [];
+    traverse(ast, {
+        ObjectMember(path: any){
+            if (path.node.key.name===syntax.onSuccess){
+                let steps = GetCallExpression(path.node, path.scope, path.parentPath, path.state);
+                let [condition, success] = GetCondition(path.node, path.scope, path.parentPath, path.state)
+                let remaining = steps.filter( (step:any) => success.indexOf(step)==-1);
+                successSteps.push([condition, success, remaining]);
+            }
+            path.skip()
+        }
+    }, scope, state, parentPath)
+    return successSteps[0];
+}
+
+export const GetFailureStep = (ast : any, scope:any, parentPath:any, state:any) => {
+    let failSteps: number[] = [];
+    traverse(ast, {
+        ObjectMember(path: any){
+            if (path.node.key.name===syntax.onFail){
+                failSteps.push(GetCallExpression(path.node, path.scope, path.parentPath, path.state));
+            }
+            path.skip()
+        }
+    }, scope, state, parentPath)
+    return failSteps.pop();
+}
+
+export const GetCondition = (ast : any, scope:any, parentPath:any, state:any): any => {
+    let condition: string|undefined;
+    let success: any[] = [];
+    traverse(ast, {
+        IfStatement(path: any){
+            if (path.node.test.type==='Identifier'){
+                condition = path.node.test.name
+            }else{
+                condition = generate(path.node.test).code;
+            }
+            success = GetCallExpression(path.node, path.scope, path.parentPath, path.state);
+            path.skip();
+        }
+    }, scope, state, parentPath)
+    return [condition, success];
+}
+
+export const GetConditionArguments = (ast : any, condition:string): any => {
+    let args: any[] = [];
+    traverse(ast, {
+        VariableDeclarator(path: any){
+            if(path.node.id.name===syntax.roles){
+                args = path.node.init.elements.map((ele:any)=>ele.value);
+            }
+        }
+    })
+    return args;
+}
+
+export const GetCallExpression = (ast : any, scope:any, parentPath:any, state:any): any => {
+    const steps: number[] = [];
+    traverse(ast, {
+        CallExpression(path: any){
+            if (path.node.callee.name===syntax.stepExecutor) {
+                steps.push(path.node.arguments[0].value)
+            }
+            path.skip()
+        }
+    }, scope, state, parentPath)
+    return steps;
+}
+
+export const GetStepsFromAst = (ast : any) => {
+
+    let stepsArray: any[] = [];
+
+    try{
+        let count=0;
+        traverse(ast, {
+            CallExpression(path: any){
+                if (path.node.callee.name===syntax.stepExecutor){
+                    let success = GetSuccessStep(path.node, path.scope, path.parentPath, path.state);
+                    let fail = GetFailureStep(path.node, path.scope, path.parentPath, path.state);
+                    stepsArray.push([count, path.node.arguments[0].value, success, fail]) //key, step, onSuccess, onFail
+                    count = count+1
+                }
+            }
+        })
+    }
+    catch(e){}
+
+    return(stepsArray);
+}
+
+export const AddStepToEnd = (ast: any): object => {
+    let pathASt: any = ast;
+    let AlreadyHasStep = false;
+    traverse(ast, {
+        CallExpression(path: any){
+            if (path.node.callee.name===syntax.stepExecutor) {
+                pathASt = path
+                AlreadyHasStep = true;
+                path.skip()
+            }
+        },
+    })
+    if (AlreadyHasStep) {
+        let stepNode = type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+GetLastStep(ast)+1)])
+        pathASt.insertAfter(stepNode);
+    }else{
+        let stepNode = type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+GetLastStep(ast)+1)])
+        let node = type.variableDeclaration(
+            syntax.variable,
+            [
+                type.variableDeclarator(type.identifier(syntax.loginRequest),
+                    type.functionExpression(null, [type.identifier(syntax.context)], type.blockStatement([type.expressionStatement(stepNode)])))]
+        );
+        ast = parser('');
+        ast.program.body.push(node);
+    }
+    return ast;
+}
+
+export const FindStep = (ast:any, step:string) => {
+    let stepPath : any = {};
+    traverse(ast, {
+        CallExpression(path: any){
+            if (path.node.callee.name===syntax.stepExecutor && path.node.arguments[0].value == step) {
+                stepPath = path;
+            }
+        },
+    })
+    return stepPath;
+}
+
+export const checkSuccessFailurePath = (ast : any, scope:any, parentPath:any, state:any, type:string) => {
+    let successPath :any = null;
+    traverse(ast, {
+        ObjectMember(path: any){
+            let key = (type==='success')?syntax.onSuccess : syntax.onFail
+            if (path.node.key.name===key){
+                successPath = [path.node, path.scope, path.parentPath, path.state];
+            }
+            path.skip()
+        }
+    }, scope, state, parentPath)
+    return successPath;
+}
+
+export const AddSuccessFailureSteps = (ast: any, currentStep: string, nextStep: string, stepType:string) => {
+    let path = FindStep(ast, currentStep);
+    let successPath = checkSuccessFailurePath(path.node, path.scope, path.parentPath, path.state, stepType);
+    if (successPath === null) {
+        let key = (stepType==='success')?syntax.onSuccess : syntax.onFail
+        if(path.node.arguments.length===1) {
+            path.node.arguments.push(createObjectExpressionWithProperty(key, nextStep));
+        }else{
+            path.node.arguments[1].properties.push(createSuccessFailurePropertyWithStep(key, nextStep));
+        }
+    } else {
+        successPath[0].value.body.body.push(type.expressionStatement(type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+nextStep)])));
+    }
+    return ast;
+}
+
+export const AddCondition = (ast:any, step:string, condition:string) => {
+    let path = FindStep(ast, step);
+    let successPath = checkSuccessFailurePath(path.node, path.scope, path.parentPath, path.state, 'success');
+    if(successPath===null){
+        if(path.node.arguments.length===1) {
+            path.node.arguments.push(createObjectExpressionWithCondition(syntax.onSuccess, condition));
+        }else{
+            path.node.arguments[1].properties.push(createSuccessPropertyWithCondition(syntax.onSuccess, condition));
+        }
+    }else{
+
+    }
+    return ast;
+}
+
+export const AddStepToCondition = (ast:any, condition:string, step:string) => {
+    traverse(ast, {
+        IfStatement(path: any){
+            if (path.node.test.name===condition) {
+                path.node.consequent.body.push(createExpressionStatement(step));
+            }
+        }
+    })
+    return ast;
+}

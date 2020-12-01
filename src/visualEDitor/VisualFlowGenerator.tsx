@@ -1,20 +1,25 @@
 import React, {useEffect, useState} from "react";
-import {AddStepToEnd, AddSuccessFailureSteps, GetRequest, GetStepsFromAst} from "../Mapper/Parser";
+import {
+    AddCondition, AddStepToCondition,
+    AddStepToEnd,
+    AddSuccessFailureSteps,
+    GetConditionArguments,
+    GetStepsFromAst
+} from "../Mapper/TraverseAst";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import ReactFlow, {Background, Controls} from "react-flow-renderer";
-import {ConditionNode, StepNode} from "./StepNode";
+import {ConditionNode, Nodes} from "./Nodes";
 import {Condition, Edge, Element} from "./Elements";
 import {useDrop} from "react-dnd";
 import {Popup} from "./PopUp";
 import {Dispatch} from "redux";
 import {saveAstFromVisualEditor} from "../store/actionCreators";
+import {GetRequest} from "../Mapper/TraverseAst";
 
 let uniqueStepList: any[] = []; //Array to keep a unique step list
 let conditionList: any[] = [];
-let lastStep: any = '';
 let x = 10; let y = 200;
 let lastStepX = 10; let lastStepY = 200;
-let lastSuccessStep:any = null, lastFailureStep:any = null;
 
 export const VisualFlowGenerator: React.FC = () => {
 
@@ -32,23 +37,20 @@ export const VisualFlowGenerator: React.FC = () => {
     const saveAstToStore = React.useCallback(
         (ast: Object) => dispatch(saveAstFromVisualEditor(ast)),
         [dispatch]
-    )
+    );
 
     let stepsArray = GetStepsFromAst(ast);
 
-    const createEdge = (source:string|null, target:string|null, color:string, label?:string, type?:string) => {
+    const createEdge = (source:string|null, target:string|null, color:string, label?:string) => {
         setElements((elements:any[])=>[...elements, Edge(`${source}${target}`, source, target, label, color)]);
-        // elements.push(Edge(`${source}${target}`, source, target, label, color));
     }
 
-    const createElement = (step:string, x:number, y:number, condition?:boolean) => {
+    const createElement = (step:string, x:number, y:number, condition?:boolean, args?:string[]) => {
         if(condition){
-            setElements((elements:any[])=>[...elements, Condition(step, step, x, y)])
-            // elements.push(Condition(step, step, x, y));
+            setElements((elements:any[])=>[...elements, Condition(step, step, x, y, args)])
             conditionList.push(step);
         }else{
             setElements((elements:any[])=>[...elements, Element(step, step, x, y)])
-            // elements.push(Element(step, step, x, y));
             uniqueStepList.push(step);
         }
     }
@@ -64,14 +66,26 @@ export const VisualFlowGenerator: React.FC = () => {
 
     const onSuccess = () => {
         setVisible(false);
-        let newAst = AddSuccessFailureSteps(params.source, ast, 'success');
-        saveAstToStore({});
-        saveAstToStore(newAst);
+        if(params.target==='hasRole'){
+            let newAst = AddCondition(ast, params.source, params.target);
+            saveAstToStore({});
+            saveAstToStore(newAst);
+        }
+        else if(params.source==='hasRole'){
+            let newAst = AddStepToCondition(ast, params.source, params.target);
+            saveAstToStore({});
+            saveAstToStore(newAst);
+        }
+        else{
+            let newAst = AddSuccessFailureSteps(ast, params.source, params.target, 'success');
+            saveAstToStore({});
+            saveAstToStore(newAst);
+        }
     }
 
     const onFailure = () => {
         setVisible(false);
-        let newAst = AddSuccessFailureSteps(params.source, ast, 'fail');
+        let newAst = AddSuccessFailureSteps(ast, params.source, params.target, 'fail');
         saveAstToStore({});
         saveAstToStore(newAst);
     }
@@ -79,10 +93,9 @@ export const VisualFlowGenerator: React.FC = () => {
     useEffect(()=>{
         uniqueStepList = [];
         conditionList = [];
-        lastStep = '';
         x=10; y=200; lastStepX=0; lastStepY=100; lastStepX = 10; lastStepY = 200;
-        lastSuccessStep=null; lastFailureStep=null;
         setElements([]);
+
         for (let step of stepsArray){
             let currentStep = step[1];
             let successSteps = step[2];
@@ -106,10 +119,9 @@ export const VisualFlowGenerator: React.FC = () => {
 
                 if(condition!==undefined && conditionList.indexOf(condition)===-1){
                     y-=100;
-                    createElement(condition, x, y, true);
+                    createElement(condition, x, y, true, GetConditionArguments(ast, condition).toString());
                     createEdge(currentStep, condition, 'green', 'Success');
-                    // elements.push(Edge(`s${condition}${currentStep}`, condition, currentStep, 'Failure', 'red', 'd'));
-                    x+=200;
+                    x+=250;
                 }
 
                 for (let successStep of successPath){
@@ -162,14 +174,20 @@ export const VisualFlowGenerator: React.FC = () => {
         }, [ast]
     );
 
-    const [{ isOver, isOverCurrent }, drop] = useDrop({
+    const [,drop] = useDrop({
         accept: 'box',
         drop(item:any, monitor) {
             if(item.name==='Step') {
                 let newStep = (Math.max.apply(Math, uniqueStepList.map((o) => {
                     return +o;
                 })) + 1).toString();
-                createElement(newStep, 600, 10);
+                if(newStep==='-Infinity'){
+                    let newAst = AddStepToEnd(ast);
+                    saveAstToStore({});
+                    saveAstToStore(newAst);
+                }else {
+                    createElement(newStep, 600, 10);
+                }
             }
             else if(item.name==='HasRole') {
                 createElement('hasRole',600,10, true);
@@ -182,8 +200,8 @@ export const VisualFlowGenerator: React.FC = () => {
     })
 
     return (
-        <div ref={drop}>
-            {GetRequest() && <div
+        <div ref={drop} style={{height: window.innerHeight*2/3, width: window.innerWidth/2, justifySelf: "center"}}>
+            {GetRequest(ast) && <div
                 style={{
                     border: '1px solid rgba(0,0,0,0.2)',
                     height: window.innerHeight*2/3,
@@ -197,7 +215,7 @@ export const VisualFlowGenerator: React.FC = () => {
                     )}
                     <ReactFlow
                         elements={elementsList}
-                        nodeTypes={{special: StepNode, condition: ConditionNode}}
+                        nodeTypes={{special: Nodes, condition: ConditionNode}}
                         onConnect={(params)=>onConnect(params)}
                     >
                         <Controls />

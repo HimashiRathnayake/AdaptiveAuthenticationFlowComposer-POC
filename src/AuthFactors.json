@@ -1,0 +1,64 @@
+[{
+  "id": "eDUwOUNlcnRpZmljYXRlQXV0aGVudGljYXRvcg",
+  "name": "x509CertificateAuthenticator",
+  "displayName": "X509Certificate",
+  "isEnabled": true,
+  "type": "LOCAL",
+  "self": "/t/carbon.super/api/server/v1/configs/authenticators/eDUwOUNlcnRpZmljYXRlQXV0aGVudGljYXRvcg"
+}, {
+  "id": "SWRlbnRpZmllckV4ZWN1dG9y",
+  "name": "IdentifierExecutor",
+  "displayName": "identifier-first",
+  "isEnabled": true,
+  "type": "LOCAL",
+  "self": "/t/carbon.super/api/server/v1/configs/authenticators/SWRlbnRpZmllckV4ZWN1dG9y"
+}, {
+  "id": "SldUQmFzaWNBdXRoZW50aWNhdG9y",
+  "name": "JWTBasicAuthenticator",
+  "displayName": "jwt-basic",
+  "isEnabled": false,
+  "type": "LOCAL",
+  "self": "/t/carbon.super/api/server/v1/configs/authenticators/SldUQmFzaWNBdXRoZW50aWNhdG9y"
+}, {
+  "id": "RklET0F1dGhlbnRpY2F0b3I",
+  "name": "FIDOAuthenticator",
+  "displayName": "fido",
+  "isEnabled": true,
+  "type": "LOCAL",
+  "self": "/t/carbon.super/api/server/v1/configs/authenticators/RklET0F1dGhlbnRpY2F0b3I"
+}, {
+  "id": "QmFzaWNBdXRoZW50aWNhdG9y",
+  "name": "BasicAuthenticator",
+  "displayName": "basic",
+  "isEnabled": true,
+  "type": "LOCAL",
+  "self": "/t/carbon.super/api/server/v1/configs/authenticators/QmFzaWNBdXRoZW50aWNhdG9y"
+}, {
+  "id": "dG90cA",
+  "name": "totp",
+  "displayName": "totp",
+  "isEnabled": true,
+  "type": "LOCAL",
+  "self": "/t/carbon.super/api/server/v1/configs/authenticators/dG90cA"
+}, {
+  "id": "U2Vzc2lvbkV4ZWN1dG9y",
+  "name": "SessionExecutor",
+  "displayName": "active-sessions-limit-handler",
+  "isEnabled": true,
+  "type": "LOCAL",
+  "self": "/t/carbon.super/api/server/v1/configs/authenticators/U2Vzc2lvbkV4ZWN1dG9y"
+}, {
+  "id": "QmFzaWNBdXRoUmVxdWVzdFBhdGhBdXRoZW50aWNhdG9y",
+  "name": "BasicAuthRequestPathAuthenticator",
+  "displayName": "basic-auth",
+  "isEnabled": true,
+  "type": "REQUEST_PATH",
+  "self": "/t/carbon.super/api/server/v1/configs/authenticators/QmFzaWNBdXRoUmVxdWVzdFBhdGhBdXRoZW50aWNhdG9y"
+}, {
+  "id": "T0F1dGhSZXF1ZXN0UGF0aEF1dGhlbnRpY2F0b3I",
+  "name": "OAuthRequestPathAuthenticator",
+  "displayName": "oauth-bearer",
+  "isEnabled": true,
+  "type": "REQUEST_PATH",
+  "self": "/t/carbon.super/api/server/v1/configs/authenticators/T0F1dGhSZXF1ZXN0UGF0aEF1dGhlbnRpY2F0b3I"
+}]

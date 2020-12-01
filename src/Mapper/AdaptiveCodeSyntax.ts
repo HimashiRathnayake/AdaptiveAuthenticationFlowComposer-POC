@@ -4,4 +4,4 @@ export const onSuccess = "onSuccess"
 export const onFail = "onFailure"
 export const context = "context"
 export const variable = "var"
-
+export const roles = "rolesToStepUp"

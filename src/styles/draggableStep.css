@@ -1,0 +1,20 @@
+.draggableStep {
+    border-radius: 2px !important;
+    background-color: rgba(0,0,0,0.2);
+    padding: 0.8rem;
+    margin-inline: 0.6vw;
+    margin-top: 0.5rem;
+    cursor: move;
+    float: left;
+    color: rgba(255,255,255,0.8);
+    box-shadow: 2px 2px 2px #4e5053;
+    font-size: 0.8vw;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+
+.icon {
+    margin-right: 12px;
+    font-size: 1vw;
+}

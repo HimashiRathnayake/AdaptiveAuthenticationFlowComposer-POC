@@ -1,52 +1,39 @@
 import React from 'react'
 import { useDrop } from 'react-dnd'
-import {AddStepToEnd, AddSuccessFailureSteps} from "../Mapper/TraverseAst";
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import { useDispatch} from "react-redux";
 import {Dispatch} from "redux";
-import {saveAstFromVisualEditor} from "../store/actionCreators";
+import {saveStep} from "../store/actionCreators";
 
 export interface ContainerProps {
     greedy?: boolean
     styles?: React.CSSProperties
     containerName: string
+    onDrop?: Function
+    className?: string
 }
 
-export const DroppableContainer: React.FC<ContainerProps> = ({ greedy, children, styles, containerName }) => {
-
-    const ast: any = useSelector(
-        (state: AstState) => {
-            return state.ast
-        },
-        shallowEqual
-    )
+export const DroppableContainer: React.FC<ContainerProps> = ({ greedy,children, styles, containerName,onDrop, className }) => {
 
     const dispatch: Dispatch<any> = useDispatch();
 
-    const saveAstToStore = React.useCallback(
-        (ast: Object) => dispatch(saveAstFromVisualEditor(ast)),
+    const addFactorToStore = React.useCallback(
+        (step: any, factor:any) => dispatch(saveStep(step, factor)),
         [dispatch]
     )
 
     const [, drop] = useDrop({
         accept: 'box',
         drop(item: any, monitor) {
-            // const didDrop = monitor.didDrop()
-            // if (didDrop && !greedy) {
-            //     return
-            // }
-            // if (containerName==='Flow') {
-            //     const newAst = AddStepToEnd(ast);
-            //     saveAstToStore({});
-            //     saveAstToStore(newAst);
-            // }else if (containerName.split(' ')[1]==='onSuccess'){
-            //     const newAst = AddSuccessFailureSteps(containerName.split(' ')[0], ast, "success");
-            //     saveAstToStore({});
-            //     saveAstToStore(newAst);
-            // }else if (containerName.split(' ')[1]==='onFailure'){
-            //     const newAst = AddSuccessFailureSteps(containerName.split(' ')[0], ast, "fail");
-            //     saveAstToStore({});
-            //     saveAstToStore(newAst);
-            // }
+            const didDrop = monitor.didDrop()
+            if (didDrop && !greedy) {
+                return
+            }
+            if (containerName==='Flow' && onDrop!==undefined) {
+                onDrop(item);
+            }
+            else{
+                addFactorToStore(containerName, item.name);
+            }
         },
         collect: (monitor) => ({
             isOver: monitor.isOver(),
@@ -55,7 +42,7 @@ export const DroppableContainer: React.FC<ContainerProps> = ({ greedy, children,
     })
 
     return (
-        <div ref={drop} style={styles}>
+        <div className={className} ref={drop} style={styles}>
             <div>{children}</div>
         </div>
     )

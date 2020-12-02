@@ -1,24 +1,20 @@
 import React, {useEffect, useState} from "react";
-import {
-    AddCondition, AddStepToCondition,
-    AddStepToEnd,
-    AddSuccessFailureSteps,
-    GetConditionArguments,
-    GetStepsFromAst
-} from "../Mapper/TraverseAst";
+import {AddCondition, AddStepToCondition, AddStepToEnd, AddSuccessFailureSteps, GetConditionArguments, GetStepsFromAst} from "../Mapper/TraverseAst";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import ReactFlow, {Background, Controls} from "react-flow-renderer";
 import {ConditionNode, Nodes} from "./Nodes";
 import {Condition, Edge, Element} from "./Elements";
-import {useDrop} from "react-dnd";
 import {Popup} from "./PopUp";
 import {Dispatch} from "redux";
 import {saveAstFromVisualEditor} from "../store/actionCreators";
 import {GetRequest} from "../Mapper/TraverseAst";
+import {DroppableContainer} from "./DroppableContainer";
+import "../styles/visualEditor.css";
 
 let uniqueStepList: any[] = []; //Array to keep a unique step list
 let conditionList: any[] = [];
 let x = 10; let y = 200;
+let distanceX=300; let distanceY=150;
 let lastStepX = 10; let lastStepY = 200;
 
 export const VisualFlowGenerator: React.FC = () => {
@@ -27,8 +23,9 @@ export const VisualFlowGenerator: React.FC = () => {
     const [elementsList, setElements] : [any, any] = useState([]);
     const [params, setParams] : [any,any] = useState({});
 
-    const ast: any = useSelector((state: AstState) => {
-            return state.ast
+    const ast : any = useSelector(
+        (state:any) => {
+            return state.astReducer.ast
         },
         shallowEqual
     )
@@ -66,12 +63,12 @@ export const VisualFlowGenerator: React.FC = () => {
 
     const onSuccess = () => {
         setVisible(false);
-        if(params.target==='hasRole'){
+        if(params.target==='hasAnyOfTheRoles'){
             let newAst = AddCondition(ast, params.source, params.target);
             saveAstToStore({});
             saveAstToStore(newAst);
         }
-        else if(params.source==='hasRole'){
+        else if(params.source==='hasAnyOfTheRoles'){
             let newAst = AddStepToCondition(ast, params.source, params.target);
             saveAstToStore({});
             saveAstToStore(newAst);
@@ -109,7 +106,7 @@ export const VisualFlowGenerator: React.FC = () => {
                 }
                 createElement(currentStep, x, y);
                 lastStepX=x;
-                x+=150;
+                x+=distanceX;
             }
 
             if (successSteps!==undefined){
@@ -118,16 +115,16 @@ export const VisualFlowGenerator: React.FC = () => {
                 let remainSuccess=successSteps[2];
 
                 if(condition!==undefined && conditionList.indexOf(condition)===-1){
-                    y-=100;
+                    y-=distanceY;
                     createElement(condition, x, y, true, GetConditionArguments(ast, condition).toString());
                     createEdge(currentStep, condition, 'green', 'Success');
-                    x+=250;
+                    x+=distanceX;
                 }
 
                 for (let successStep of successPath){
                     if (uniqueStepList.indexOf(successStep)===-1){
                         createElement(successStep, x, y);
-                        x+=150;
+                        x+=distanceX;
                     }
                     if (successPath.indexOf(successStep)===0){
                         createEdge(condition, successStep, 'green', 'Success');
@@ -140,10 +137,10 @@ export const VisualFlowGenerator: React.FC = () => {
                 for (let successStep of remainSuccess){
                     if (uniqueStepList.indexOf(successStep)===-1){
                         if (remainSuccess.indexOf(successStep)===0){
-                            y-=100;
+                            y-=distanceY;
                         }
                         createElement(successStep, x, y);
-                        x+=150;
+                        x+=distanceX;
                     }
                     if (remainSuccess.indexOf(successStep)===0){
                         createEdge(currentStep, successStep, 'green', 'Success');
@@ -155,15 +152,15 @@ export const VisualFlowGenerator: React.FC = () => {
             }
 
             if (failureSteps!==undefined){
-                x=lastStepX+150;
-                y=lastStepY+100;
+                x=lastStepX+distanceX;
+                y=lastStepY+distanceY;
                 for (let failureStep of failureSteps){
                     if (uniqueStepList.indexOf(failureStep)===-1){
                         createElement(failureStep, x, y);
-                        x+=150;
+                        x+=distanceX;
                     }
                     if (failureSteps.indexOf(failureStep)===0){
-                        createEdge(currentStep, failureStep, 'red', 'Failure');
+                        createEdge(currentStep, failureStep, '#c63046', 'Failure');
                     }
                     else{
                         createEdge(failureSteps[failureSteps.indexOf(failureStep)-1], failureStep,'#D6D5E6');
@@ -174,45 +171,30 @@ export const VisualFlowGenerator: React.FC = () => {
         }, [ast]
     );
 
-    const [,drop] = useDrop({
-        accept: 'box',
-        drop(item:any, monitor) {
-            if(item.name==='Step') {
-                let newStep = (Math.max.apply(Math, uniqueStepList.map((o) => {
-                    return +o;
-                })) + 1).toString();
-                if(newStep==='-Infinity'){
-                    let newAst = AddStepToEnd(ast);
-                    saveAstToStore({});
-                    saveAstToStore(newAst);
-                }else {
-                    createElement(newStep, 600, 10);
-                }
+    const onDrop = (item:any) => {
+        if(item.name==='Step') {
+            let newStep = (Math.max.apply(Math, uniqueStepList.map((o) => {
+                return +o;
+            })) + 1).toString();
+            if(newStep==='-Infinity'){
+                let newAst = AddStepToEnd(ast);
+                saveAstToStore({});
+                saveAstToStore(newAst);
+            }else {
+                createElement(newStep, 600, 10);
             }
-            else if(item.name==='HasRole') {
-                createElement('hasRole',600,10, true);
-            }
-        },
-        collect: (monitor) => ({
-            isOver: monitor.isOver(),
-            isOverCurrent: monitor.isOver({ shallow: true }),
-        }),
-    })
+        }
+        else if(item.name==='hasAnyOfTheRoles') {
+            createElement('hasAnyOfTheRoles',600,10, true);
+        }
+    }
 
     return (
-        <div ref={drop} style={{height: window.innerHeight*2/3, width: window.innerWidth/2, justifySelf: "center"}}>
-            {GetRequest(ast) && <div
-                style={{
-                    border: '1px solid rgba(0,0,0,0.2)',
-                    height: window.innerHeight*2/3,
-                    width: window.innerWidth/2,
-                    justifySelf: "center",
-                    display:"flex", flexDirection: "row",
-                    flexWrap: "wrap"
-                }}>
-                    {visible && (
+        <DroppableContainer className='Flow' containerName="Flow" onDrop={onDrop}>
+            {GetRequest(ast) && <div className='Flow-container'>
+                    {visible ? (
                         <Popup onCancel={onCancel} onSuccess={onSuccess} onFailure={onFailure}/>
-                    )}
+                    ):(
                     <ReactFlow
                         elements={elementsList}
                         nodeTypes={{special: Nodes, condition: ConditionNode}}
@@ -220,9 +202,9 @@ export const VisualFlowGenerator: React.FC = () => {
                     >
                         <Controls />
                         <Background color="#aaa" gap={16} />
-                    </ReactFlow>
+                    </ReactFlow>)}
             </div>}
-        </div>
+        </DroppableContainer>
     )
 
 }

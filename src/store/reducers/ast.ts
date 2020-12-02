@@ -1,12 +1,12 @@
-import * as actionTypes from "./actionTypes"
-import {ParseToAst} from "../Mapper/Parser";
+import * as actionTypes from "../actionTypes"
+import {ParseToAst} from "../../Mapper/Parser";
 
 const initialState: AstState = {
     changedFromVisualEditor: false,
     ast: ParseToAst(''),
 }
 
-const reducer = (
+const astReducer = (
     state: AstState = initialState,
     action: AstAction
 ): AstState => {
@@ -27,12 +27,12 @@ const reducer = (
     return state
 }
 
-export default reducer
+export default astReducer
 
 // import * as actionTypes from "./actionTypes"
 //
 // const initialState: StepState = {
-//     steps: [],
+//     steps.ts: [],
 // }
 //
 // const reducer = (
@@ -44,26 +44,26 @@ export default reducer
 //             const newStep: IStep = {
 //                 id: Math.random(), // not really unique
 //                 title: action.step.title,
-//                 position: state.steps.length + 1
+//                 position: state.steps.ts.length + 1
 //             }
 //             return {
 //                 ...state,
-//                 steps: state.steps.concat(newStep),
+//                 steps.ts: state.steps.ts.concat(newStep),
 //             }
 //         case actionTypes.REMOVE_STEP:
-//             const updatedSteps: IStep[] = state.steps.filter(
+//             const updatedSteps: IStep[] = state.steps.ts.filter(
 //                 step => step.id !== action.step.id
 //             )
-//             // const array=state.steps;
+//             // const array=state.steps.ts;
 //             // const newA: IStep[] = array.filter(step=>step.position<2).concat(array.filter(step => step.id>2).map(step=>));
 //             return {
 //                 ...state,
-//                 steps: updatedSteps,
+//                 steps.ts: updatedSteps,
 //             }
 //         case actionTypes.REMOVE_ALL_STEPS:
 //             return {
 //                 ...state,
-//                 steps: [],
+//                 steps.ts: [],
 //             }
 //     }
 //     return state

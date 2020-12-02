@@ -22,7 +22,7 @@ export const createSuccessPropertyWithCondition = (identifier:string, condition:
     return type.objectProperty(
         type.identifier(identifier),
         type.functionExpression(null, [type.identifier(syntax.context)], type.blockStatement(
-            [createIfStatement(condition)]
+            [createVariableDeclaration(), createIfStatement(condition)]
         ))
     )
 }
@@ -31,6 +31,15 @@ export const createExpressionStatement = (step:string) => {
     return type.expressionStatement(type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+step)]));
 }
 
+export const createVariableDeclaration = () => {
+    return type.variableDeclaration(syntax.variable, [type.variableDeclarator(type.identifier(syntax.user), type.memberExpression(type.identifier(syntax.context), type.identifier(syntax.currentKnownSubject)))])
+}
+
+export const createVariableDeclarationRolesToSetUp = () => {
+    return type.variableDeclaration(syntax.variable, [type.variableDeclarator(type.identifier(syntax.roles), type.arrayExpression([type.stringLiteral("admin"), type.stringLiteral("manager")]))])
+}
+
 export const createIfStatement = (condition:string) => {
-    return type.ifStatement(type.identifier(condition), type.blockStatement([]));
+    // return type.ifStatement(type.identifier(condition), type.blockStatement([]));
+    return type.ifStatement(type.callExpression(type.identifier(syntax.hasRoles), [type.identifier(syntax.user), type.identifier(syntax.roles)]), type.blockStatement([]))
 }

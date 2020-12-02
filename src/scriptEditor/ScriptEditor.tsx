@@ -5,7 +5,7 @@ import {Dispatch} from "redux";
 import {saveAst} from "../store/actionCreators";
 import {ParseToAst} from "../Mapper/Parser";
 import {GenerateCodeFromAst} from "../Mapper/CodeGenerator";
-import '../App.css';
+import '../styles/App.css';
 
 const ScriptEditor: React.FC = () => {
 
@@ -19,8 +19,8 @@ const ScriptEditor: React.FC = () => {
     )
 
     const [ast, changedFromVisualEditor] : any = useSelector(
-        (state: AstState) => {
-            return [state.ast, state.changedFromVisualEditor]
+        (state:any) => {
+            return [state.astReducer.ast, state.astReducer.changedFromVisualEditor]
         },
         shallowEqual
     )
@@ -56,20 +56,21 @@ const ScriptEditor: React.FC = () => {
     // }
 
     return (
-        <>
-            <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1rem'}}>
+        <div className="Script-editor-container">
+            <div className="script-editor-header">
                 <h3>Script Editor</h3>
             </div>
             <ControlledEditor
-                height={'86vmin'}
-                width={'65vmin'}
+                height={'88vh'}
+                width={'34vw'}
                 value={code}
                 onChange={(ev, value) => {handleChange(value)}}
                 // editorDidMount={handleEditorDidMount}
                 language="javascript"
                 theme='dark'
+                options={{autoIndent: "none"}}
             />
-        </>
+        </div>
     );
 }
 

@@ -1,0 +1,28 @@
+.Visual-editor-header{
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    padding-left: 1rem;
+}
+
+.Visual-editor-body {
+    padding-inline: 1rem;
+    text-align: center;
+    font-size: 1rem;
+    align-self: center;
+}
+
+.Flow {
+    height: 80vh;
+    width: 50vw;
+    justify-self: center
+}
+
+.Flow-container {
+    border: 1px solid rgba(0,0,0,0.2);
+    height: 80vh;
+    width: 48vw;
+    justify-self: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

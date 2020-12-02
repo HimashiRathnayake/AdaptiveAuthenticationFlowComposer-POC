@@ -3,16 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { render } from "react-dom"
-import { createStore, applyMiddleware, Store } from "redux"
+import {createStore, applyMiddleware, Store, CombinedState} from "redux"
 import { Provider } from "react-redux"
 import thunk from "redux-thunk"
-import reducer from "./store/reducer"
+import {rootReducer} from "./store/reducers"
 
-const store: Store<AstState, AstAction> & {
+const store: Store<CombinedState<{ astReducer: AstState; stepReducer: StepsState; }>, AstAction | StepAction> & {
     dispatch: DispatchType
-} = createStore(reducer, applyMiddleware(thunk))
-
+} = createStore(rootReducer, applyMiddleware(thunk))
 
 ReactDOM.render(
     <React.StrictMode>

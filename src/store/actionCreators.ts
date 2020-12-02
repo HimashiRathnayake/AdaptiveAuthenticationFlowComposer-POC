@@ -16,7 +16,16 @@ export const saveAstFromVisualEditor = (ast: Object) => {
     return simulate(action)
 }
 
-export const simulate = (action: AstAction) => {
+export const saveStep = (step:any, factor:any) => {
+    const action: StepAction = {
+        type: actions.ADD_FACTOR_TO_STEP,
+        step,
+        factor
+    }
+    return simulate(action)
+}
+
+export const simulate = (action: AstAction|StepAction) => {
     return (dispatch: DispatchType) => {
         setTimeout(() => {
             dispatch(action)

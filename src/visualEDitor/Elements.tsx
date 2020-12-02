@@ -5,6 +5,7 @@ export const Element = (id:string, step:string, x:number, y:number) => {
         id: id,
         data: {
             label: (<>Step {step}</>),
+            text: step
         },
         position: {x: x, y: y},
         type: 'special'
@@ -31,7 +32,7 @@ export const Edge = (id:string, source:string|null, target:string|null, label:st
         target: target,
         type: 'smoothstep',
         label: label,
-        labelStyle: {fill: color},
+        labelBgStyle: { fill: color, color: 'white'},
         sourceHandle: handler
     });
 }

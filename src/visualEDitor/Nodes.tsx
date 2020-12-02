@@ -1,10 +1,17 @@
 import {Handle, Position} from "react-flow-renderer";
 import React from "react";
+import {DroppableContainer} from "./DroppableContainer";
+import {shallowEqual, useSelector} from "react-redux";
+import "../styles/node.css";
 
 const customNodeStyles = {
-    background: '#9CA8B3',
+    background: 'rgba(0, 0, 0, 0.0)',
+    border: '1px dashed rgba(255,255,255,0.8)',
     color: '#FFF',
     padding: 10,
+    fontSize: '14px',
+    width: '10vw',
+    height: '10vw',
 };
 
 const condition: React.CSSProperties = {
@@ -16,17 +23,33 @@ const condition: React.CSSProperties = {
 };
 
 // @ts-ignore
-export const Nodes = ({data}) => {
+export const Nodes: React.FC = ({data}) => {
+    let factors: any[] = [];
+    const steps : any = useSelector(
+        (state:any) => {
+            return state.stepReducer.steps
+        },
+        shallowEqual
+    )
+
+    let step = steps.filter((step:any)=>step.id===data.text);
+    if (step.length>0){
+        factors=step[0].options
+    }
+
     return (
-        <div style={customNodeStyles}>
+        <DroppableContainer containerName={data.text} styles={customNodeStyles}>
             <Handle
                 type="target"
                 position={Position.Left}
                 style={{ background: '#555' }}
                 onConnect={(params) => console.log('handle onConnect', params)}
             />
-            <div>
-                {data.label}
+            <div>{data.label}</div>
+            <div style={{display:'flex', flexDirection:'column', alignContent:'center'}}>
+                {factors.map((factor: any) => (
+                    <div className='Dropped-factor' key={factor}>{factor}</div>
+                ))}
             </div>
             <Handle
                 type="source"
@@ -34,7 +57,7 @@ export const Nodes = ({data}) => {
                 id="a"
                 style={{ background: '#555' }}
             />
-        </div>
+        </DroppableContainer>
     );
 };
 

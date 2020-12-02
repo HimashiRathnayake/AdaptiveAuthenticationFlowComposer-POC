@@ -4,7 +4,7 @@
   flex: 1;
   background-color: #313234;
   color: rgba(255,255,255,0.5);
-  height: 100vmin;
+  height: 100vh;
 }
 
 .App-logo {
@@ -22,34 +22,57 @@
   background-color: #313234;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(5px + 2vmin);
   color: white;
-  height: 5%;
+  height: 7%;
   text-align: left;
+  border: 1px solid #77787b;
+  padding-left: 10px;
+  /*box-shadow: 1px 1px 1px #77787b;*/
 }
 
 .Container {
-  flexDirection: row;
+  flex-direction: row;
   display: flex;
-  height: 95%;
+  height: 93%;
   background-color: #313234;
 }
 
 .Side-bar{
   text-align: left;
   width: 15%;
-  border: 2px solid rgba(255,255,255,0.5);
-  margin-bottom: 10px;
+  border: 1px solid #77787b;
+  padding: 10px;
+  box-shadow: 1px 1px 1px #77787b;
 }
 
 .Visual-editor{
   width: 50%;
+  border: 1px solid #77787b;
+  padding: 10px;
+  box-shadow: 1px 1px 1px #77787b;
 }
 
 .Script-editor{
   width: 35%;
+  border: 1px solid #77787b;
+  box-shadow: 1px 1px 1px #77787b;
+}
+
+.Script-editor-container{
+  width: 35%;
+  border: 1px solid #77787b;
+  box-shadow: 1px 1px 1px #77787b;
+  position: fixed;
+}
+
+.script-editor-header {
+  display: flex;
+  flex-direction: row;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #77787b;
 }
 
 .App-link {

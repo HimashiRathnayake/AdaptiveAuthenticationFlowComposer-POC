@@ -2,23 +2,17 @@ import React from "react";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {VisualFlowGenerator} from "./VisualFlowGenerator";
-
-const style: React.CSSProperties = {
-    paddingInline: '1rem',
-    textAlign: 'center',
-    fontSize: '1rem',
-    alignSelf: 'center'
-}
+import "../styles/visualEditor.css";
 
 const VisualEditor = () => {
 
     return (
         <div>
-            <div style={{display: 'flex', flexDirection: 'row', marginLeft: '1rem'}}>
+            <div className='Visual-editor-header'>
                 <h3>Visual Editor</h3>
             </div>
             <DndProvider backend={HTML5Backend}>
-                <div style={style}>
+                <div className="Visual-editor-body">
                     <VisualFlowGenerator/>
                 </div>
             </DndProvider>

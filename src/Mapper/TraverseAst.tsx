@@ -3,9 +3,12 @@ import * as syntax from "./AdaptiveCodeSyntax";
 import generate from "@babel/generator";
 import * as type from "@babel/types";
 import {
-    createExpressionStatement, createObjectExpressionWithCondition,
+    createExpressionStatement,
+    createObjectExpressionWithCondition,
     createObjectExpressionWithProperty,
-    createSuccessFailurePropertyWithStep, createSuccessPropertyWithCondition
+    createSuccessFailurePropertyWithStep,
+    createSuccessPropertyWithCondition,
+    createVariableDeclarationRolesToSetUp
 } from "./GenerateTypes";
 
 const parser = require('@babel/parser').parse;
@@ -46,7 +49,7 @@ export const GetSuccessStep = (ast : any, scope:any, parentPath:any, state:any) 
             if (path.node.key.name===syntax.onSuccess){
                 let steps = GetCallExpression(path.node, path.scope, path.parentPath, path.state);
                 let [condition, success] = GetCondition(path.node, path.scope, path.parentPath, path.state)
-                let remaining = steps.filter( (step:any) => success.indexOf(step)==-1);
+                let remaining = steps.filter( (step:any) => success.indexOf(step)===-1);
                 successSteps.push([condition, success, remaining]);
             }
             path.skip()
@@ -69,17 +72,23 @@ export const GetFailureStep = (ast : any, scope:any, parentPath:any, state:any) 
 }
 
 export const GetCondition = (ast : any, scope:any, parentPath:any, state:any): any => {
-    let condition: string|undefined;
+    let condition: string|undefined = undefined;
     let success: any[] = [];
     traverse(ast, {
-        IfStatement(path: any){
+        CallExpression(path:any){
+            if (path.node.callee.name===syntax.stepExecutor){
+                path.stop();
+            }
+        }
+        ,IfStatement(path: any){
             if (path.node.test.type==='Identifier'){
                 condition = path.node.test.name
+            }else if (path.node.test.type==='CallExpression'){
+                condition = path.node.test.callee.name
             }else{
                 condition = generate(path.node.test).code;
             }
             success = GetCallExpression(path.node, path.scope, path.parentPath, path.state);
-            path.skip();
         }
     }, scope, state, parentPath)
     return [condition, success];
@@ -215,13 +224,14 @@ export const AddCondition = (ast:any, step:string, condition:string) => {
     }else{
 
     }
+    ast.program.body.unshift(createVariableDeclarationRolesToSetUp());
     return ast;
 }
 
 export const AddStepToCondition = (ast:any, condition:string, step:string) => {
     traverse(ast, {
         IfStatement(path: any){
-            if (path.node.test.name===condition) {
+            if (path.node.test.callee.name===condition) {
                 path.node.consequent.body.push(createExpressionStatement(step));
             }
         }

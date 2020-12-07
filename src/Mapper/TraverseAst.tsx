@@ -238,3 +238,9 @@ export const AddStepToCondition = (ast:any, condition:string, step:string) => {
     })
     return ast;
 }
+
+export const DeleteStep = (ast:any, step:string) => {
+    let parentPath = FindStep(ast, step).parentPath;
+    delete(parentPath.parent.body[parentPath.key]);
+    return ast;
+}

@@ -1,13 +1,15 @@
 import React from 'react'
 import { useDrag, DragSourceMonitor } from 'react-dnd'
 import "../styles/draggableStep.css";
+import {AiOutlineShareAlt, FiClock} from "react-icons/all";
 // import {FiClock} from "react-icons/fi";
 
 interface BoxProps {
     name: string,
+    type: string,
 }
 
-export const DraggableStep: React.FC<BoxProps> = ({ name }) => {
+export const DraggableStep: React.FC<BoxProps> = ({ name, type }) => {
 
     const [{ isDragging }, drag] = useDrag({
         item: { name, type: 'box' },
@@ -24,7 +26,7 @@ export const DraggableStep: React.FC<BoxProps> = ({ name }) => {
 
     return (
         <div ref={drag} className="draggableStep" style={{opacity}}>
-            {/*<FiClock className="icon"/>*/}
+            {type==='auth-factor' ? <FiClock className="icon"/> : <AiOutlineShareAlt className="icon"/>}
             <div>{name}</div>
         </div>
     )

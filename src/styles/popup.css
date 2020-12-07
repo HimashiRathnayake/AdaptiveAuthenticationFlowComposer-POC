@@ -1,2 +1,30 @@
 .popup {
+    height: 65%;
+    width: 50%;
+    padding-inline: 25%;
+    text-align: center;
+    font-size: 1rem;
+    align-self: center;
+    padding-bottom: 1rem;
+    color: #313234;
+    background-color: #313234;
+}
+
+.popupInner {
+    background-color: white;
+    height: 65%;
+    padding-top: 20px;
+    flex-direction: column;
+    display: flex;
+    border-radius: 2%;
+    box-shadow: 1px 1px 5px #0f1011;
+    z-index: -1;
+}
+
+.button {
+    width: 20vh;
+    height: 5vh;
+    align-self: center;
+    margin-top: 10px;
+    box-shadow: 1px 1px 5px #0f1011;
 }

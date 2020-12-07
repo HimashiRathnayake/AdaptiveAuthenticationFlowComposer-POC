@@ -1,9 +1,10 @@
 import * as actionTypes from "../actionTypes"
 import {ParseToAst} from "../../Mapper/Parser";
+import * as syntax from "../../Mapper/AdaptiveCodeSyntax";
 
 const initialState: AstState = {
     changedFromVisualEditor: false,
-    ast: ParseToAst(''),
+    ast: ParseToAst(syntax.begin),
 }
 
 const astReducer = (

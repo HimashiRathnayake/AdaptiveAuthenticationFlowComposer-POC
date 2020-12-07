@@ -1,0 +1,21 @@
+.Script-editor-container{
+    width: 34%;
+    border-inline: 1px solid #1d1d1f;
+    box-shadow: 1px 1px 1px #77787b;
+    position: fixed;
+    height: 100%;
+}
+
+.script-editor-header {
+    display: flex;
+    flex-direction: row;
+    padding-left: 1rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #49494c;
+    box-shadow: 1px 1px 1px #1d1d1f;
+}
+
+.monaco-editor {
+    height: 87%;
+    width: 33%;
+}

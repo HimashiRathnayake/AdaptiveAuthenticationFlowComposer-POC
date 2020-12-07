@@ -1,3 +1,4 @@
+export const begin = "var onLoginRequest = function(context){executeStep(1);}"
 export const loginRequest = "onLoginRequest"
 export const stepExecutor = "executeStep"
 export const onSuccess = "onSuccess"

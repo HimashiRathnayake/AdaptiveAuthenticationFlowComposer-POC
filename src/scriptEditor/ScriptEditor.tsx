@@ -5,7 +5,7 @@ import {Dispatch} from "redux";
 import {saveAst} from "../store/actionCreators";
 import {ParseToAst} from "../Mapper/Parser";
 import {GenerateCodeFromAst} from "../Mapper/CodeGenerator";
-import '../styles/App.css';
+import '../styles/scriptEditor.css';
 
 const ScriptEditor: React.FC = () => {
 
@@ -61,14 +61,12 @@ const ScriptEditor: React.FC = () => {
                 <h3>Script Editor</h3>
             </div>
             <ControlledEditor
-                height={'88vh'}
-                width={'34vw'}
+                className="monaco-editor"
                 value={code}
                 onChange={(ev, value) => {handleChange(value)}}
                 // editorDidMount={handleEditorDidMount}
                 language="javascript"
                 theme='dark'
-                options={{autoIndent: "none"}}
             />
         </div>
     );

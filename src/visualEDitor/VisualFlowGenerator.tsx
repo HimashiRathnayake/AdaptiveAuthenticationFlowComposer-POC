@@ -1,9 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {AddCondition, AddStepToCondition, AddStepToEnd, AddSuccessFailureSteps, GetConditionArguments, GetStepsFromAst} from "../Mapper/TraverseAst";
+import {
+    AddCondition,
+    AddStepToCondition,
+    AddStepToEnd,
+    AddSuccessFailureSteps,
+    DeleteStep,
+    GetConditionArguments,
+    GetStepsFromAst
+} from "../Mapper/TraverseAst";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import ReactFlow, {Background, Controls} from "react-flow-renderer";
-import {ConditionNode, Nodes} from "./Nodes";
-import {Condition, Edge, Element} from "./Elements";
+import {ConditionNode, Nodes, PlusNode, SuccessNode} from "./Nodes";
+import {Condition, Edge, Element, Plus, Success} from "./Elements";
 import {Popup} from "./PopUp";
 import {Dispatch} from "redux";
 import {saveAstFromVisualEditor} from "../store/actionCreators";
@@ -14,8 +22,9 @@ import "../styles/visualEditor.css";
 let uniqueStepList: any[] = []; //Array to keep a unique step list
 let conditionList: any[] = [];
 let x = 10; let y = 200;
-let distanceX=300; let distanceY=150;
+let distanceX=400; let distanceY=150;
 let lastStepX = 10; let lastStepY = 200;
+let stepsToSuccess: any[] = [];
 
 export const VisualFlowGenerator: React.FC = () => {
 
@@ -40,55 +49,61 @@ export const VisualFlowGenerator: React.FC = () => {
 
     const createEdge = (source:string|null, target:string|null, color:string, label?:string) => {
         setElements((elements:any[])=>[...elements, Edge(`${source}${target}`, source, target, label, color)]);
+        stepsToSuccess = stepsToSuccess.filter((value, index, arr)=>{
+            return value != source;
+        });
     }
 
-    const createElement = (step:string, x:number, y:number, condition?:boolean, args?:string[]) => {
-        if(condition){
+    const createElement = (step:string, x:number, y:number, type?:string, args?:string[]) => {
+        if(type==='condition'){
             setElements((elements:any[])=>[...elements, Condition(step, step, x, y, args)])
             conditionList.push(step);
-        }else{
-            setElements((elements:any[])=>[...elements, Element(step, step, x, y)])
+            stepsToSuccess.push(step);
+        }else if (type==='success'){
+            setElements((elements:any[])=>[...elements, Success(x, y)])
+        }else if (type==='plus'){
+            setElements((elements:any[])=>[...elements, Plus(x, y)])
+        } else{
+            setElements((elements:any[])=>[...elements, Element(step, step, x, y, ()=>onClickDelete(step))])
             uniqueStepList.push(step);
+            stepsToSuccess.push(step);
         }
     }
 
     const onConnect = (params:any) => {
-        setVisible(true);
-        setParams(params);
+        // setVisible(true);
+        // setParams(params);
     }
 
     const onCancel = () =>{
         setVisible(false);
     }
 
-    const onSuccess = () => {
+    const addStep = () => {
+        let newAst;
         setVisible(false);
-        if(params.target==='hasAnyOfTheRoles'){
-            let newAst = AddCondition(ast, params.source, params.target);
-            saveAstToStore({});
-            saveAstToStore(newAst);
-        }
-        else if(params.source==='hasAnyOfTheRoles'){
-            let newAst = AddStepToCondition(ast, params.source, params.target);
-            saveAstToStore({});
-            saveAstToStore(newAst);
-        }
-        else{
-            let newAst = AddSuccessFailureSteps(ast, params.source, params.target, 'success');
-            saveAstToStore({});
-            saveAstToStore(newAst);
-        }
+        let lastStep = (Math.max.apply(Math, uniqueStepList.map((o) => {
+            return +o;
+        })));
+        // createElement(newStep, 600, 10);
+        newAst = AddSuccessFailureSteps(ast, lastStep.toString(), (lastStep+1).toString(), 'success');
+        saveAstToStore({});
+        saveAstToStore(newAst);
     }
 
-    const onFailure = () => {
+    const addCondition = () => {
         setVisible(false);
-        let newAst = AddSuccessFailureSteps(ast, params.source, params.target, 'fail');
+        let lastStep = (Math.max.apply(Math, uniqueStepList.map((o) => {
+            return +o;
+        }))).toString();
+        let newAst = AddCondition(ast, lastStep, 'hasRole');
         saveAstToStore({});
         saveAstToStore(newAst);
     }
 
     useEffect(()=>{
         uniqueStepList = [];
+        stepsToSuccess = [];
         conditionList = [];
         x=10; y=200; lastStepX=0; lastStepY=100; lastStepX = 10; lastStepY = 200;
         setElements([]);
@@ -115,8 +130,7 @@ export const VisualFlowGenerator: React.FC = () => {
                 let remainSuccess=successSteps[2];
 
                 if(condition!==undefined && conditionList.indexOf(condition)===-1){
-                    y-=distanceY;
-                    createElement(condition, x, y, true, GetConditionArguments(ast, condition).toString());
+                    createElement(condition, x, y+140, 'condition', GetConditionArguments(ast, condition).toString());
                     createEdge(currentStep, condition, 'green', 'Success');
                     x+=distanceX;
                 }
@@ -137,7 +151,7 @@ export const VisualFlowGenerator: React.FC = () => {
                 for (let successStep of remainSuccess){
                     if (uniqueStepList.indexOf(successStep)===-1){
                         if (remainSuccess.indexOf(successStep)===0){
-                            y-=distanceY;
+                            // y-=distanceY;
                         }
                         createElement(successStep, x, y);
                         x+=distanceX;
@@ -168,39 +182,64 @@ export const VisualFlowGenerator: React.FC = () => {
                 }
             }
         }
+
+        if (stepsToSuccess.length !==0) {
+            y+=166;
+            createElement('plus', x, y, 'plus');
+            createElement('success', x+200, y, 'success');
+            createEdge('plus', 'success', '#D6D5E6');
+        }
+
+        for (let step of stepsToSuccess){
+            createEdge(step, 'plus', '#D6D5E6');
+        }
+
         }, [ast]
     );
 
     const onDrop = (item:any) => {
         if(item.name==='Step') {
-            let newStep = (Math.max.apply(Math, uniqueStepList.map((o) => {
-                return +o;
-            })) + 1).toString();
-            if(newStep==='-Infinity'){
-                let newAst = AddStepToEnd(ast);
-                saveAstToStore({});
-                saveAstToStore(newAst);
-            }else {
-                createElement(newStep, 600, 10);
-            }
+            // let newStep = (Math.max.apply(Math, uniqueStepList.map((o) => {
+            //     return +o;
+            // })) + 1).toString();
+            // if(newStep==='-Infinity'){
+            //     let newAst = AddStepToEnd(ast);
+            //     saveAstToStore({});
+            //     saveAstToStore(newAst);
+            // }else {
+            //     createElement(newStep, 600, 10);
+            // }
         }
         else if(item.name==='hasAnyOfTheRoles') {
-            createElement('hasAnyOfTheRoles',600,10, true);
+            createElement('hasAnyOfTheRoles',600,10, 'condition');
         }
+    }
+
+    const onClick = (element:any) => {
+        if(element.type==='plus'){
+            setVisible(true);
+        }
+    }
+
+    const onClickDelete = (step:string) => {
+        let newAst = DeleteStep(ast, step);
+        saveAstToStore({});
+        saveAstToStore(newAst);
     }
 
     return (
         <DroppableContainer className='Flow' containerName="Flow" onDrop={onDrop}>
             {GetRequest(ast) && <div className='Flow-container'>
                     {visible ? (
-                        <Popup onCancel={onCancel} onSuccess={onSuccess} onFailure={onFailure}/>
+                        <Popup onCancel={onCancel} addStep={addStep} addCondition={addCondition}/>
                     ):(
                     <ReactFlow
                         elements={elementsList}
-                        nodeTypes={{special: Nodes, condition: ConditionNode}}
+                        nodeTypes={{special: Nodes, condition: ConditionNode, success: SuccessNode, plus: PlusNode}}
                         onConnect={(params)=>onConnect(params)}
+                        onElementClick={(params, element)=>onClick(element)}
                     >
-                        <Controls />
+                        <Controls className="flow-control"/>
                         <Background color="#aaa" gap={16} />
                     </ReactFlow>)}
             </div>}

@@ -9,3 +9,44 @@
     box-shadow: 2px 2px 2px #4e5053;
     font-size: 0.8vw;
 }
+
+.factor-container {
+    align-items: center;
+}
+
+.step {
+    background: rgba(0, 0, 0, 0.0);
+    border: 1px dashed rgba(255,255,255,0.8);
+    color: #FFF;
+    padding: 10px;
+    font-size: 14px;
+    width: 15vw;
+    height: 20vw;
+    border-radius: 2px;
+}
+
+.condition {
+    background: #5b6889;
+    color: #FFF;
+    padding: 10px;
+    width: 8vw;
+    word-wrap: normal;
+    border-radius: 5px;
+}
+
+.success {
+    font-size: 50px;
+    color: #27ad27;
+}
+
+.plus {
+    font-size: 50px;
+}
+
+.delete-button {
+    background-color: rgba(0,0,0,0);
+    color: #FFFFFF;
+    border: rgba(0,0,0,0);
+    font-size: 24px;
+    margin-left: 13vw;
+}

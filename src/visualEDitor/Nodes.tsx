@@ -3,24 +3,8 @@ import React from "react";
 import {DroppableContainer} from "./DroppableContainer";
 import {shallowEqual, useSelector} from "react-redux";
 import "../styles/node.css";
-
-const customNodeStyles = {
-    background: 'rgba(0, 0, 0, 0.0)',
-    border: '1px dashed rgba(255,255,255,0.8)',
-    color: '#FFF',
-    padding: 10,
-    fontSize: '14px',
-    width: '10vw',
-    height: '10vw',
-};
-
-const condition: React.CSSProperties = {
-    background: '#5b6889',
-    color: '#FFF',
-    padding: 10,
-    width: 150,
-    wordWrap: "normal"
-};
+import svgMap from "../svg";
+import {AiOutlineCheckCircle, BsPlusCircle, FiMoreVertical, MdDelete} from "react-icons/all";
 
 // @ts-ignore
 export const Nodes: React.FC = ({data}) => {
@@ -38,24 +22,33 @@ export const Nodes: React.FC = ({data}) => {
     }
 
     return (
-        <DroppableContainer containerName={data.text} styles={customNodeStyles}>
+        <DroppableContainer containerName={data.text} className="step">
+            <button className="delete-button" onClick={data.onClick}><MdDelete/></button>
             <Handle
                 type="target"
                 position={Position.Left}
-                style={{ background: '#555' }}
+                style={{ opacity : 0 }}
                 onConnect={(params) => console.log('handle onConnect', params)}
             />
-            <div>{data.label}</div>
+            {/*<div>{data.label}</div>*/}
             <div style={{display:'flex', flexDirection:'column', alignContent:'center'}}>
                 {factors.map((factor: any) => (
-                    <div className='Dropped-factor' key={factor}>{factor}</div>
+                    <div className='factor-container' key={factor}>
+                        {svgMap.get(factor) || <div className='Dropped-factor'>{factor}</div>}
+                    </div>
                 ))}
             </div>
             <Handle
                 type="source"
                 position={Position.Right}
                 id="a"
-                style={{ background: '#555' }}
+                style={{ color: "red"}}
+            />
+            <Handle
+                type="source"
+                position={Position.Bottom}
+                id="g"
+                style={{ backgroundColor: "#8d4a4a"}}
             />
         </DroppableContainer>
     );
@@ -64,11 +57,11 @@ export const Nodes: React.FC = ({data}) => {
 // @ts-ignore
 export const ConditionNode = ({data}) => {
     return (
-        <div style={condition}>
+        <div className="condition">
             <Handle
                 type="target"
                 position={Position.Left}
-                style={{ background: '#5b6889' }}
+                style={{ opacity : 0 }}
                 onConnect={(params) => console.log('handle onConnect', params)}
             />
             <div>
@@ -78,7 +71,49 @@ export const ConditionNode = ({data}) => {
                 type="source"
                 position={Position.Right}
                 id="c"
-                style={{ background: '#5b6889' }}
+                style={{ opacity : 0}}
+            />
+        </div>
+    );
+};
+
+// @ts-ignore
+export const SuccessNode = ({data}) => {
+    return (
+        <div className="success">
+            <Handle
+                type="target"
+                position={Position.Left}
+                style={{opacity: 0}}
+                onConnect={(params) => console.log('handle onConnect', params)}
+            />
+            <div>
+                <AiOutlineCheckCircle/>
+            </div>
+        </div>
+    );
+};
+
+// @ts-ignore
+export const PlusNode = ({data}) => {
+    return (
+        <div className="plus">
+            <Handle
+                type="target"
+                position={Position.Left}
+                style={{opacity: 0}}
+                id='e'
+                onConnect={(params) => console.log('handle onConnect', params)}
+            />
+            <div>
+                <BsPlusCircle/>
+            </div>
+            <Handle
+                type="source"
+                position={Position.Right}
+                style={{opacity: 0}}
+                id= 'f'
+                onConnect={(params) => console.log('handle onConnect', params)}
             />
         </div>
     );

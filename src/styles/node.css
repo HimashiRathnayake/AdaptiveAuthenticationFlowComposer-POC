@@ -21,7 +21,7 @@
     padding: 10px;
     font-size: 14px;
     width: 15vw;
-    height: 20vw;
+    height: 42vh;
     border-radius: 2px;
 }
 
@@ -43,10 +43,25 @@
     font-size: 50px;
 }
 
+.step-top-bar {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
 .delete-button {
     background-color: rgba(0,0,0,0);
     color: #FFFFFF;
     border: rgba(0,0,0,0);
     font-size: 24px;
-    margin-left: 13vw;
+}
+
+.authenticators-button {
+    /*justify-self: center;*/
+}
+
+.bottom-text {
+    font-size: 20px;
 }

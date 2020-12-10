@@ -16,11 +16,11 @@ export const saveAstFromVisualEditor = (ast: Object) => {
     return simulate(action)
 }
 
-export const saveStep = (step:any, factor:any) => {
+export const saveStep = (step:any, factors:any[]) => {
     const action: StepAction = {
         type: actions.ADD_FACTOR_TO_STEP,
         step,
-        factor
+        factors
     }
     return simulate(action)
 }

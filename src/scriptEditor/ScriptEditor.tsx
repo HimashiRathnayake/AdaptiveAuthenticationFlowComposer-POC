@@ -3,8 +3,8 @@ import {ControlledEditor} from "@monaco-editor/react";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
 import {saveAst} from "../store/actionCreators";
-import {ParseToAst} from "../Mapper/Parser";
-import {GenerateCodeFromAst} from "../Mapper/CodeGenerator";
+import {ParseToAst} from "../mapper/Parser";
+import {GenerateCodeFromAst} from "../mapper/CodeGenerator";
 import '../styles/scriptEditor.css';
 
 const ScriptEditor: React.FC = () => {

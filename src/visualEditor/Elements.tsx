@@ -1,12 +1,13 @@
 import React from "react";
 
-export const Element = (id:string, step:string, x:number, y:number, onClick:Function) => {
+export const Element = (id:string, step:string, x:number, y:number, onClick:Function, showAuthenticatorsList:Function) => {
     return ({
         id: id,
         data: {
             label: (<>Step {step}</>),
             text: step,
             onClick: onClick,
+            showAuthenticatorsList: showAuthenticatorsList
         },
         position: {x: x, y: y},
         type: 'special'
@@ -39,6 +40,25 @@ export const Plus = (x:number, y:number) => {
         id: 'plus',
         position: {x: x, y: y},
         type: 'plus'
+    });
+}
+
+export const MultiFactor = (id:string, type:string, x:number, y:number) => {
+    return ({
+        id: id,
+        data: {
+            type: type
+        },
+        position: {x: x, y: y},
+        type: 'multiFactor'
+    });
+}
+
+export const Invisible = (id:string, x:number, y:number) => {
+    return ({
+        id: id,
+        position: {x: x, y: y},
+        type: 'invisible'
     });
 }
 

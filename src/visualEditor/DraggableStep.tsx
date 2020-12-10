@@ -2,7 +2,6 @@ import React from 'react'
 import { useDrag, DragSourceMonitor } from 'react-dnd'
 import "../styles/draggableStep.css";
 import {AiOutlineShareAlt, FiClock} from "react-icons/all";
-// import {FiClock} from "react-icons/fi";
 
 interface BoxProps {
     name: string,

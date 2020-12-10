@@ -61,4 +61,20 @@
   "isEnabled": true,
   "type": "REQUEST_PATH",
   "self": "/t/carbon.super/api/server/v1/configs/authenticators/T0F1dGhSZXF1ZXN0UGF0aEF1dGhlbnRpY2F0b3I"
+}, {
+  "id": "1",
+  "displayName": "Facebook",
+  "type": "federated"
+}, {
+  "id": "2",
+  "displayName": "Twitter",
+  "type": "federated"
+}, {
+  "id": "3",
+  "displayName": "Google",
+  "type": "federated"
+}, {
+  "id": "4",
+  "displayName": "Instagram",
+  "type": "federated"
 }]

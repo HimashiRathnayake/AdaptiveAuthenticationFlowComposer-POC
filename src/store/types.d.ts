@@ -15,7 +15,7 @@ type AstAction = {
 type StepAction = {
     type: string
     step: any
-    factor: any
+    factors: any[]
 }
 
 type DispatchType = (args: AstAction|StepAction) => AstAction | StepAction

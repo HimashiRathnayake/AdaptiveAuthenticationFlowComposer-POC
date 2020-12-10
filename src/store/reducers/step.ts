@@ -1,7 +1,10 @@
 import * as actionTypes from "../actionTypes"
 
 const initialState: StepsState = {
-    steps: [],
+    steps: [{
+        id:"1",
+        options: ["basic"]
+    }],
 }
 
 const stepReducer = (
@@ -14,7 +17,7 @@ const stepReducer = (
             if(index===-1) {
                 return {
                     ...state,
-                    steps: state.steps.concat([{id: action.step, options: [action.factor]}]),
+                    steps: state.steps.concat([{id: action.step, options: action.factors}]),
                 }
             }else{
                 return {
@@ -25,7 +28,7 @@ const stepReducer = (
                         }
                         return {
                             ...item,
-                            options: item.options.concat([action.factor])
+                            options: action.factors
                         }
                     })
                 }

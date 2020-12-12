@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {shallowEqual, useSelector} from "react-redux";
 import {DroppableContainer} from "../visualEditor/DroppableContainer";
 import {MdDelete} from "react-icons/all";
@@ -6,10 +6,12 @@ import {Handle, Position} from "react-flow-renderer";
 import {Basic} from "../svg/Basic";
 import {IdentifierFirst} from "../svg/IdentifierFirst";
 import {Login} from "../svg/Login";
+import authFactors from "../AuthFactors.json";
 
 // @ts-ignore
 export const Step: React.FC = ({data}) => {
     let factors: any[] = [];
+    const middle = 217;
 
     const steps : any = useSelector(
         (state:any) => {
@@ -39,12 +41,14 @@ export const Step: React.FC = ({data}) => {
             :(factors.indexOf("identifier-first")!==-1)? (<IdentifierFirst options={factors.filter((factor)=>factor!=="identifier-first")}/>)
             :(<Login options={factors}/>)
             }
-            <Handle
-                type="source"
-                position={Position.Right}
-                id="a"
-                style={{ color: "red"}}
-            />
+            {/*{factors.map((branch: any, index: number) => (*/}
+                <Handle
+                    // key={index}
+                    type="source"
+                    position={Position.Right}
+                    id= {"branch"}
+                />
+            {/*))}*/}
             <Handle
                 type="source"
                 position={Position.Bottom}

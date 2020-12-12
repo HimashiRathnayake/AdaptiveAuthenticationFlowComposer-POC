@@ -3,13 +3,13 @@ import * as syntax from "./AdaptiveCodeSyntax";
 import generate from "@babel/generator";
 import * as type from "@babel/types";
 import {
-    createExpressionStatement,
+    createExpressionStatement, createIfStatement,
     createObjectExpressionWithCondition,
     createObjectExpressionWithProperty,
     createSuccessFailurePropertyWithStep,
-    createSuccessPropertyWithCondition,
-    createVariableDeclarationRolesToSetUp
+    createSuccessPropertyWithCondition, createVariableDeclarationForCondition,
 } from "./GenerateTypes";
+import {parse} from "@babel/parser";
 
 const parser = require('@babel/parser').parse;
 
@@ -222,9 +222,10 @@ export const AddCondition = (ast:any, step:string, condition:string) => {
             path.node.arguments[1].properties.push(createSuccessPropertyWithCondition(syntax.onSuccess, condition));
         }
     }else{
-
+        successPath[0].value.body.body.push(createIfStatement(condition));
     }
-    ast.program.body.unshift(createVariableDeclarationRolesToSetUp());
+    ast.program.body.unshift(parse(syntax.getConditionSyntax(condition)).program.body[0]);
+    ast.program.body.unshift(createVariableDeclarationForCondition(condition));
     return ast;
 }
 

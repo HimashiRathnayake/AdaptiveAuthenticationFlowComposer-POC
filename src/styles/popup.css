@@ -21,6 +21,17 @@
     z-index: -1;
 }
 
+.authFactorListContainer {
+    background-color: white;
+    height: 75%;
+    padding-top: 20px;
+    flex-direction: column;
+    display: flex;
+    box-shadow: 1px 1px 5px #0f1011;
+    z-index: -1;
+    overflow: scroll;
+}
+
 .checkbox {
     color: #3b2020;
     background-color: #61dafb;
@@ -45,4 +56,38 @@
     padding-bottom: 1rem;
     color: #313234;
     background-color: #313234;
+}
+
+.conditionGroup {
+    padding-left: 2vw;
+    margin-bottom: 4vh;
+}
+
+.conditionContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.conditionDescription{
+    margin-top: 0;
+    color: #acadaf;
+    align-self: flex-start;
+    margin-bottom: 10px;
+}
+
+.conditionInput {
+    width: 28vw;
+}
+
+.factor {
+    display: flex;
+    flex-direction: column;
+}
+
+.menuItem {
+    height: 5vh;
+}
+
+.warning {
+    color: #971844;
 }

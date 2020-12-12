@@ -8,7 +8,7 @@ import {
     GetStepsFromAst
 } from "../mapper/TraverseAst";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import ReactFlow, {Background, Controls} from "react-flow-renderer";
+import ReactFlow, {Background, Controls, ReactFlowProvider} from "react-flow-renderer";
 import {Condition, Edge, Element, Invisible, MultiFactor, Plus, Success} from "./Elements";
 import {Popup} from "./PopUp";
 import {Dispatch} from "redux";
@@ -18,9 +18,10 @@ import {DroppableContainer} from "./DroppableContainer";
 import "../styles/visualEditor.css";
 import {AuthFactorList} from "./AuthFactorList";
 import {nodeTypes} from "../nodes";
+import {ConditionList} from "./ConditionList";
 
-let uniqueStepList: any[] = []; //Array to keep a unique step list
-let conditionList: any[] = [];
+let uniqueNodeIdList: any[] = []; //Array to keep a unique nodes id list
+let lastStep: any = null;
 let x = 10; let y = 200;
 let stepHeight = 220;
 let distanceX=400; let distanceY=150;
@@ -32,6 +33,7 @@ export const VisualFlowGenerator: React.FC = () => {
 
     const [visible, setVisible] = useState(false);
     const [visibleAuthFactors, setVisibleAuthFactors] = useState(false);
+    const [visibleConditions, setVisibleConditions] = useState(false);
     const [elementsList, setElements] : [any, any] = useState([]);
     const [stepToViewAuthFactors, setStep] : [any, any] = useState(null);
 
@@ -66,7 +68,7 @@ export const VisualFlowGenerator: React.FC = () => {
     const createElement = (step:string, xVal:number, yVal:number, type?:string, args?:string[]) => {
         if(type==='condition'){
             setElements((elements:any[])=>[...elements, Condition(step, step, xVal, yVal, args)])
-            conditionList.push(step);
+            uniqueNodeIdList.push(step);
             stepsToSuccess.push(step);
             endsWithCondition = step;
         }else if (type==='success'){
@@ -75,24 +77,40 @@ export const VisualFlowGenerator: React.FC = () => {
             setElements((elements:any[])=>[...elements, Plus(xVal, yVal)])
         } else{
             let authFactorsWithStep = steps.filter((element:any)=>element.id==step);
-            setElements((elements:any[])=>[...elements, Element(step, step, xVal, yVal, ()=>onClickDelete(step), ()=>showAuthenticatorsList(step))])
-            uniqueStepList.push(step);
-            stepsToSuccess.push(step);
+            setElements((elements:any[])=>[...elements, Element(step, xVal, yVal, ()=>onClickDelete(step), ()=>showAuthenticatorsList(step))])
+            uniqueNodeIdList.push(step);
+            lastStep = step;
             if (authFactorsWithStep.length>0){
+                let basic = authFactorsWithStep[0].options.indexOf("basic") !== -1
                 let factors=authFactorsWithStep[0].options.filter((factor:any)=>factor!=="basic")
                 let elementList: any[] = [];
                 if (factors.length>0) {
-                    elementList.push(Invisible(step + "invisible", xVal + 650, yVal + stepHeight));
-                    for (let index in factors) {
-                        let factor = factors[index];
-                        elementList.push(MultiFactor(step + factor, factor, xVal + 400, yVal + 300*+index));
+                    elementList.push(Invisible(step + "invisible", xVal + 650, yVal -4 + stepHeight));
+                    uniqueNodeIdList.push(step+"invisible");
+                    if (basic){
+                        elementList.push(Edge(`${step}${step + "invisible"}`, step, step + "invisible", undefined, "#D6D5E6", undefined, "targetLeft"));
+                    }
+                    let indexToSplit = factors.length/2;
+                    let firstHalf = factors.slice(0, indexToSplit);
+                    let secondHalf = factors.slice(indexToSplit);
+                    for (let index in firstHalf) {
+                        let factor = firstHalf[index];
+                        elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal -150 - 300*+index));
                         elementList.push(Edge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6"));
-                        elementList.push(Edge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6"));
+                        elementList.push(Edge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetTop"));
+                    }
+                    for (let index in secondHalf) {
+                        let factor = secondHalf[index];
+                        elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal + 150 + 300*+index));
+                        elementList.push(Edge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6"));
+                        elementList.push(Edge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetBottom"));
                     }
                     setElements((elements: any[]) => [...elements, ...elementList])
                     stepsToSuccess.push(step + "invisible");
                     x+=400;
                 }
+            }else{
+                stepsToSuccess.push(step);
             }
         }
     }
@@ -113,15 +131,15 @@ export const VisualFlowGenerator: React.FC = () => {
 
     const addCondition = () => {
         setVisible(false);
-        let lastStep = (Math.max.apply(Math, uniqueStepList.map((o) => {
-            return +o;
-        }))).toString();
-        let newAst = AddCondition(ast, lastStep, 'hasRole');
+        setVisibleConditions(true);
+    }
+
+    const addConditionToFlow = (condition:string) => {
+        setVisibleConditions(false);
+        let newAst = AddCondition(ast, lastStep, condition);
         saveAstToStore({});
         saveAstToStore(newAst);
     }
-
-    const onDrop = (item:any) => {}
 
     const onClick = (element:any) => {
         if(element.type==='plus'){
@@ -144,14 +162,11 @@ export const VisualFlowGenerator: React.FC = () => {
         let step: string = '';
         if (stepToViewAuthFactors===null) {
             let newAst;
-            let lastStep = (Math.max.apply(Math, uniqueStepList.map((o) => {
-                return +o;
-            })));
             if (endsWithCondition===null){
-                newAst = AddSuccessFailureSteps(ast, lastStep.toString(), (lastStep + 1).toString(), 'success');
+                newAst = AddSuccessFailureSteps(ast, lastStep.toString(), (+lastStep + 1).toString(), 'success');
             }
             else{
-                newAst = AddStepToCondition(ast, endsWithCondition, (lastStep + 1).toString());
+                newAst = AddStepToCondition(ast, endsWithCondition, (+lastStep + 1).toString());
                 endsWithCondition = null;
             }
             saveAstToStore({});
@@ -166,9 +181,8 @@ export const VisualFlowGenerator: React.FC = () => {
     }
 
     useEffect(()=>{
-            uniqueStepList = [];
+            uniqueNodeIdList = [];
             stepsToSuccess = [];
-            conditionList = [];
             x=10; y=200; lastStepX=0; lastStepY=100; lastStepX = 10; lastStepY = 200;
             setElements([]);
 
@@ -177,10 +191,10 @@ export const VisualFlowGenerator: React.FC = () => {
                 let successSteps = step[2];
                 let failureSteps = step[3];
 
-                if (uniqueStepList.indexOf(currentStep)===-1){
-                    if(uniqueStepList.length>=1){
+                if (uniqueNodeIdList.indexOf(currentStep)===-1){
+                    if(uniqueNodeIdList.length>=1){
                         x=x+20; y=lastStepY;
-                        let last = uniqueStepList[uniqueStepList.length-1];
+                        let last = uniqueNodeIdList[uniqueNodeIdList.length-1];
                         createEdge(last, currentStep, '#D6D5E6');
                     }
                     createElement(currentStep, x, y);
@@ -193,14 +207,14 @@ export const VisualFlowGenerator: React.FC = () => {
                     let successPath = successSteps[1];
                     let remainSuccess=successSteps[2];
 
-                    if(condition!==undefined && conditionList.indexOf(condition)===-1){
+                    if(condition!==undefined && uniqueNodeIdList.indexOf(condition)===-1){
                         createElement(condition, x, y+187.5, 'condition', GetConditionArguments(ast, condition).toString());
-                        createEdge(currentStep, condition, 'green', 'Success');
+                        createEdge(uniqueNodeIdList[uniqueNodeIdList.length-2], condition, 'green', 'Success');
                         x+=distanceX;
                     }
 
                     for (let successStep of successPath){
-                        if (uniqueStepList.indexOf(successStep)===-1){
+                        if (uniqueNodeIdList.indexOf(successStep)===-1){
                             createElement(successStep, x, y);
                             x+=distanceX;
                         }
@@ -213,18 +227,15 @@ export const VisualFlowGenerator: React.FC = () => {
                     }
 
                     for (let successStep of remainSuccess){
-                        if (uniqueStepList.indexOf(successStep)===-1){
+                        if (uniqueNodeIdList.indexOf(successStep)===-1){
                             if (remainSuccess.indexOf(successStep)===0){
-                                // y-=distanceY;
+                                createEdge(uniqueNodeIdList[uniqueNodeIdList.length-1], successStep, 'green', 'Success');
+                            }
+                            else{
+                                createEdge(remainSuccess[remainSuccess.indexOf(successStep)-1], successStep,'#D6D5E6');
                             }
                             createElement(successStep, x, y);
                             x+=distanceX;
-                        }
-                        if (remainSuccess.indexOf(successStep)===0){
-                            createEdge(currentStep, successStep, 'green', 'Success');
-                        }
-                        else{
-                            createEdge(remainSuccess[remainSuccess.indexOf(successStep)-1], successStep,'#D6D5E6');
                         }
                     }
                 }
@@ -233,7 +244,7 @@ export const VisualFlowGenerator: React.FC = () => {
                     x=lastStepX+distanceX;
                     y=lastStepY+distanceY;
                     for (let failureStep of failureSteps){
-                        if (uniqueStepList.indexOf(failureStep)===-1){
+                        if (uniqueNodeIdList.indexOf(failureStep)===-1){
                             createElement(failureStep, x, y);
                             x+=distanceX;
                         }
@@ -262,14 +273,17 @@ export const VisualFlowGenerator: React.FC = () => {
     );
 
     return (
-        <DroppableContainer className='Flow' containerName="Flow" onDrop={onDrop}>
+        <DroppableContainer className='Flow' containerName="Flow">
             {GetRequest(ast) && <div className='Flow-container'>
                     {visible ? (
                         <Popup onCancel={onCancel} addStep={addStep} addCondition={addCondition}/>
                     ): visibleAuthFactors ? (
                         <AuthFactorList onDone={onDone} step={stepToViewAuthFactors}/>
+                    ): visibleConditions ? (
+                        <ConditionList onDoneCondition={addConditionToFlow}/>
                     ):(
-                        <ReactFlow
+                        <ReactFlowProvider>
+                            <ReactFlow
                             elements={elementsList}
                             nodeTypes={nodeTypes}
                             onConnect={(params)=>onConnect(params)}
@@ -277,7 +291,8 @@ export const VisualFlowGenerator: React.FC = () => {
                         >
                             <Controls className="flow-control"/>
                             <Background color="#aaa" gap={16} />
-                        </ReactFlow>)}
+                        </ReactFlow>
+                        </ReactFlowProvider>)}
             </div>}
         </DroppableContainer>
     )

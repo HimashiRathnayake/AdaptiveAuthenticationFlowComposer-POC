@@ -13,7 +13,7 @@ export const Popup: React.FC<Props> = ({onCancel, addStep, addCondition}) => {
             <div className="popupInner">
                 <h1>Select Component</h1>
                 <button className="button" onClick={()=>addStep()}>Step</button>
-                <button className="button" onClick={()=>addCondition()}>HasRole</button>
+                <button className="button" onClick={()=>addCondition()}>Condition</button>
                 <button className="button" onClick={()=>onCancel()}>cancel</button>
             </div>
         </div>

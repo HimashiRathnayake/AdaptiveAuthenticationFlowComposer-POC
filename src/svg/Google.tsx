@@ -7,7 +7,7 @@ type props ={
 export const Google: React.FC<props> = ({options}) => {
     return(
         <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="220px" height="400px" rx="4" viewBox="0 0 220 400" enable-background="0 0 220 400" xmlSpace="preserve">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="220px" height="400px" rx="4" viewBox="0 0 220 400" enableBackground="0 0 220 400" xmlSpace="preserve">
                 <image id="image0" rx="4" width="220" height="400" x="0" y="0"
                        xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcAAAAH0CAYAAACqzv3IAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
                         AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAABW

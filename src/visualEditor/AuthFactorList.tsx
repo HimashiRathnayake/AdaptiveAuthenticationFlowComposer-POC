@@ -43,21 +43,25 @@ export const AuthFactorList: React.FC<Props> = ({onDone, step}) => {
 
     return (
         <div className="authFactorList">
-            <div className="popupInner">
+            <div className="authFactorListContainer">
                 <h2>Select Authentication Factors</h2>
                 {authFactors.map((factor: any) => {
-                    let disabled = (step=="1" && factor.displayName==="fido") || (checkedList.indexOf("basic")!==-1 && factor.type!=="federated" && factor.displayName!=="basic")
+                    let disabled = (step=="1" && factor.displayName==="fido")
+                        // || (checkedList.indexOf("basic")!==-1 && factor.type!=="federated" && factor.displayName!=="basic")
                     let checked = checkedList.indexOf(factor.displayName)!==-1 && !disabled
                     return(
-                    <MenuItem key={factor.id} value={factor.displayName} className="menuItem">
-                        <Checkbox
-                            className="checkbox"
-                            disabled ={disabled}
-                            checked={checked}
-                            onChange={(event, checked) => onChange(checked, factor.displayName)}
-                        />
-                        <ListItemText primary={factor.displayName} />
-                    </MenuItem>
+                        <div className="factor" key={factor.id}>
+                            <MenuItem value={factor.displayName} className="menuItem">
+                                <Checkbox
+                                    className="checkbox"
+                                    disabled ={disabled}
+                                    checked={checked}
+                                    onChange={(event, checked) => onChange(checked, factor.displayName)}
+                                />
+                                <ListItemText primary={factor.displayName} />
+                            </MenuItem>
+                            {(factor.displayName==="identifier-first"||factor.displayName==="active-sessions-limit-handler") && checkedList.indexOf(factor.displayName)!==-1 && <p className="warning">This is a handler. Make sure you add authenticators in other steps.</p>}
+                        </div>
                 )})}
                 <button
                     className="button"

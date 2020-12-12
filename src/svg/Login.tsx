@@ -32,7 +32,7 @@ export const Login: React.FC<props> = ({options}) => {
                 {options.map((option: string, index:number) => {
                     let x=87, y=200+40*index;
                     return (
-                        <MultipleFactor type={option} x={x} y={y}/>
+                        <MultipleFactor key={index} type={option} x={x} y={y}/>
                     )})
                 }
             </svg>

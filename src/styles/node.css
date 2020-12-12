@@ -16,7 +16,7 @@
 
 .step {
     background: rgba(0, 0, 0, 0.0);
-    border: 1px dashed rgba(255,255,255,0.8);
+    border: 1px dashed rgba(255,255,255,0.3);
     color: #FFF;
     padding: 10px;
     font-size: 14px;
@@ -32,6 +32,7 @@
     width: 8vw;
     word-wrap: normal;
     border-radius: 5px;
+    height: 4vh;
 }
 
 .success {
@@ -64,4 +65,22 @@
 
 .bottom-text {
     font-size: 20px;
+}
+
+.invisible {
+    height: 0.1vh;
+    width: 0.1vh;
+}
+
+.multiFactor {
+    width: 220px;
+    background-color: #fff;
+    height: 200px;
+    margin-top: 100px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    color: #0f1011;
+    font-weight: bold;
+    font-size: 16px;
 }

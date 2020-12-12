@@ -1,13 +1,13 @@
 import React from "react";
 
-export const Element = (id:string, step:string, x:number, y:number, onClick:Function, showAuthenticatorsList:Function) => {
+export const Element = (step:string, x:number, y:number, onClick:Function, showAuthenticatorsList:Function) => {
     return ({
-        id: id,
+        id: step,
         data: {
             label: (<>Step {step}</>),
             text: step,
             onClick: onClick,
-            showAuthenticatorsList: showAuthenticatorsList
+            showAuthenticatorsList: showAuthenticatorsList,
         },
         position: {x: x, y: y},
         type: 'special'
@@ -62,15 +62,17 @@ export const Invisible = (id:string, x:number, y:number) => {
     });
 }
 
-export const Edge = (id:string, source:string|null, target:string|null, label:string|undefined, color:string, handler?:string) => {
+export const Edge = (id:string, source:string|null, target:string|null, label:string|undefined, color:string, handler?:string, targetHandler?:string) => {
     return ({
         id: id,
         source: source,
         target: target,
-        type: 'smoothstep',
+        type: 'step',
         arrowHeadType: 'arrow',
         label: label,
         labelBgStyle: { fill: color, color: 'white'},
-        sourceHandle: handler
+        sourceHandle: handler,
+        targetHandle: targetHandler,
+        style: {borderRadius:20}
     });
 }

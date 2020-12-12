@@ -4,6 +4,7 @@ import {SuccessNode} from "./SuccessNode";
 import {PlusNode} from "./PlusNode";
 import {MultiFactorNode} from "./MultiFactorNode";
 import {InvisibleNode} from "./InvisibleNode";
+import {CustomEdge} from "./Edge";
 
 export const nodeTypes = {
     special: Step,
@@ -12,4 +13,8 @@ export const nodeTypes = {
     plus: PlusNode,
     multiFactor: MultiFactorNode,
     invisible: InvisibleNode
+};
+
+export const edgeTypes = {
+    custom: CustomEdge,
 };

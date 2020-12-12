@@ -41,14 +41,12 @@ export const Step: React.FC = ({data}) => {
             :(factors.indexOf("identifier-first")!==-1)? (<IdentifierFirst options={factors.filter((factor)=>factor!=="identifier-first")}/>)
             :(<Login options={factors}/>)
             }
-            {/*{factors.map((branch: any, index: number) => (*/}
-                <Handle
-                    // key={index}
-                    type="source"
-                    position={Position.Right}
-                    id= {"branch"}
-                />
-            {/*))}*/}
+            <Handle
+                type="source"
+                position={Position.Right}
+                id= {"branch"}
+                style={{opacity:0}}
+            />
             <Handle
                 type="source"
                 position={Position.Bottom}

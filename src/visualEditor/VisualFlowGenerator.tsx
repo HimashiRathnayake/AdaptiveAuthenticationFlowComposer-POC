@@ -17,14 +17,14 @@ import {GetRequest} from "../mapper/TraverseAst";
 import {DroppableContainer} from "./DroppableContainer";
 import "../styles/visualEditor.css";
 import {AuthFactorList} from "./AuthFactorList";
-import {nodeTypes} from "../nodes";
+import {edgeTypes, nodeTypes} from "../nodes";
 import {ConditionList} from "./ConditionList";
 
 let uniqueNodeIdList: any[] = []; //Array to keep a unique nodes id list
 let lastStep: any = null;
 let x = 10; let y = 200;
 let stepHeight = 220;
-let distanceX=400; let distanceY=150;
+let distanceX=350; let distanceY=150;
 let lastStepX = 10; let lastStepY = 200;
 let stepsToSuccess: any[] = [];
 let endsWithCondition: string|null = null ;
@@ -90,24 +90,28 @@ export const VisualFlowGenerator: React.FC = () => {
                     if (basic){
                         elementList.push(Edge(`${step}${step + "invisible"}`, step, step + "invisible", undefined, "#D6D5E6", undefined, "targetLeft"));
                     }
-                    let indexToSplit = factors.length/2;
-                    let firstHalf = factors.slice(0, indexToSplit);
-                    let secondHalf = factors.slice(indexToSplit);
+                    let indexToSplit = factors.length/2, firstHalf:any[] =[], secondHalf:any[] =[];
+                    if (factors.length===1){firstHalf=factors}
+                    else{
+                        [firstHalf, secondHalf]  = [factors.slice(0, indexToSplit), factors.slice(indexToSplit)];
+                    }
                     for (let index in firstHalf) {
                         let factor = firstHalf[index];
-                        elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal -150 - 300*+index));
-                        elementList.push(Edge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6"));
-                        elementList.push(Edge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetTop"));
+                        elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal -120 - 250*+index));
+                        elementList.push(Edge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined));
+                        elementList.push(Edge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetTop", undefined, 10*+index, (index==="0")?0:-10));
                     }
                     for (let index in secondHalf) {
                         let factor = secondHalf[index];
-                        elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal + 150 + 300*+index));
+                        elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal + 160 + 250*+index));
                         elementList.push(Edge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6"));
-                        elementList.push(Edge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetBottom"));
+                        elementList.push(Edge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetBottom", undefined, 10*+index));
                     }
                     setElements((elements: any[]) => [...elements, ...elementList])
                     stepsToSuccess.push(step + "invisible");
                     x+=400;
+                }else{
+                    stepsToSuccess.push(step);
                 }
             }else{
                 stepsToSuccess.push(step);
@@ -282,17 +286,17 @@ export const VisualFlowGenerator: React.FC = () => {
                     ): visibleConditions ? (
                         <ConditionList onDoneCondition={addConditionToFlow}/>
                     ):(
-                        <ReactFlowProvider>
-                            <ReactFlow
+                        <ReactFlow
                             elements={elementsList}
                             nodeTypes={nodeTypes}
+                            edgeTypes={edgeTypes}
                             onConnect={(params)=>onConnect(params)}
                             onElementClick={(params, element)=>onClick(element)}
                         >
                             <Controls className="flow-control"/>
                             <Background color="#aaa" gap={16} />
                         </ReactFlow>
-                        </ReactFlowProvider>)}
+                        )}
             </div>}
         </DroppableContainer>
     )

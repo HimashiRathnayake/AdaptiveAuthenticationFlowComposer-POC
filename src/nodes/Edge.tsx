@@ -1,5 +1,5 @@
 import React from 'react';
-import {ArrowHeadType, getMarkerEnd, getSmoothStepPath, Position} from 'react-flow-renderer';
+import {ArrowHeadType, getEdgeCenter, getMarkerEnd, getSmoothStepPath, Position} from 'react-flow-renderer';
 
 type props ={
     id : string,
@@ -21,13 +21,15 @@ export const CustomEdge : React.FC<props> = ({id, sourceX, sourceY, targetX, tar
     if (offset===undefined) offset=0;
     if (targetOffsetX===undefined) targetOffsetX=0;
     if (targetOffsetY===undefined) targetOffsetY=0;
-    const edgePath = getSmoothStepPath({ sourceX, sourceY:sourceY+offset, sourcePosition, targetX:targetX+targetOffsetX, targetY:targetY+targetOffsetY, targetPosition, borderRadius: 20, });
+    let center = getEdgeCenter({sourceX, sourceY, targetX, targetY});
+    const edgePath = getSmoothStepPath({ sourceX, sourceY:sourceY+offset, sourcePosition, targetX:targetX+targetOffsetX, targetY:targetY+targetOffsetY, targetPosition, borderRadius: 20, centerX:center[0]-Math.abs(offset)});
     const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
+
     return (
         <>
             <path id={id} style={style} className="react-flow__edge-path" d={edgePath} markerEnd={markerEnd} />
-            <text style={{backgroundColor:"green"}}>
-                <textPath href={`#${id}`} style={{fill:"white", fontSize:12}} startOffset="50%" textAnchor="middle">
+            <text>
+                <textPath href={`#${id}`} style={{fill:"green", fontSize:12}} startOffset="50%" textAnchor="middle">
                     {data.text}
                 </textPath>
             </text>

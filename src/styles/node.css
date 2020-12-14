@@ -41,14 +41,14 @@
 }
 
 .plus {
-    font-size: 50px;
+    font-size: 35px;
 }
 
 .step-top-bar {
     align-items: center;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
+    /*align-items: center;*/
     margin-bottom: 15px;
 }
 
@@ -70,6 +70,7 @@
 .invisible {
     height: 0.1vh;
     width: 0.1vh;
+    background-color: #0f1011;
 }
 
 .multiFactor {

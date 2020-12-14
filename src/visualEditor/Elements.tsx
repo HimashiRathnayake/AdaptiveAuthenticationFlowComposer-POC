@@ -62,7 +62,7 @@ export const Invisible = (id:string, x:number, y:number) => {
     });
 }
 
-export const Edge = (id:string, source:string|null, target:string|null, label:string|undefined, color:string, handler?:string, targetHandler?:string, offset?:number, targetOffsetX?:number, targetOffsetY?:number) => {
+export const CustomEdge = (id:string, source:string|null, target:string|null, label:string|undefined, color:string, handler?:string, targetHandler?:string, offset?:number, targetOffsetX?:number, targetOffsetY?:number) => {
     return ({
         id: id,
         source: source,
@@ -79,5 +79,20 @@ export const Edge = (id:string, source:string|null, target:string|null, label:st
             targetOffsetX: targetOffsetX,
             targetOffsetY: targetOffsetY
         },
+    });
+}
+
+export const Edge = (id:string, source:string|null, target:string|null, label:string|undefined, color:string, handler?:string, targetHandler?:string) => {
+    return ({
+        id: id,
+        source: source,
+        target: target,
+        type: 'step',
+        arrowHeadType: 'arrow',
+        label: label,
+        labelBgStyle: { fill: color, color: 'white'},
+        sourceHandle: handler,
+        targetHandle: targetHandler
+        // style: {fill:"red"}
     });
 }

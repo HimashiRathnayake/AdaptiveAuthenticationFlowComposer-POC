@@ -9,7 +9,7 @@ import {
 } from "../mapper/TraverseAst";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import ReactFlow, {Background, Controls, ReactFlowProvider} from "react-flow-renderer";
-import {Condition, Edge, Element, Invisible, MultiFactor, Plus, Success} from "./Elements";
+import {Condition, CustomEdge, Edge, Element, Invisible, MultiFactor, Plus, Success} from "./Elements";
 import {Popup} from "./PopUp";
 import {Dispatch} from "redux";
 import {saveAstFromVisualEditor, saveStep} from "../store/actionCreators";
@@ -90,7 +90,7 @@ export const VisualFlowGenerator: React.FC = () => {
                     if (basic){
                         elementList.push(Edge(`${step}${step + "invisible"}`, step, step + "invisible", undefined, "#D6D5E6", undefined, "targetLeft"));
                     }
-                    let indexToSplit = factors.length/2, firstHalf:any[] =[], secondHalf:any[] =[];
+                    let indexToSplit = factors.length/2, firstHalf:any[]=[], secondHalf:any[] =[];
                     if (factors.length===1){firstHalf=factors}
                     else{
                         [firstHalf, secondHalf]  = [factors.slice(0, indexToSplit), factors.slice(indexToSplit)];
@@ -98,14 +98,14 @@ export const VisualFlowGenerator: React.FC = () => {
                     for (let index in firstHalf) {
                         let factor = firstHalf[index];
                         elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal -120 - 250*+index));
-                        elementList.push(Edge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined));
-                        elementList.push(Edge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetTop", undefined, 10*+index, (index==="0")?0:-10));
+                        elementList.push(CustomEdge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined, -10*(+index+1)));
+                        elementList.push(CustomEdge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetTop", undefined, 10*+index, (index==="0")?0:-10));
                     }
                     for (let index in secondHalf) {
                         let factor = secondHalf[index];
                         elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal + 160 + 250*+index));
-                        elementList.push(Edge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6"));
-                        elementList.push(Edge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetBottom", undefined, 10*+index));
+                        elementList.push(CustomEdge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined, 10*(+index+1)));
+                        elementList.push(CustomEdge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetBottom", undefined, 10*+index));
                     }
                     setElements((elements: any[]) => [...elements, ...elementList])
                     stepsToSuccess.push(step + "invisible");
@@ -264,7 +264,7 @@ export const VisualFlowGenerator: React.FC = () => {
 
             if (stepsToSuccess.length !==0) {
                 y+=186.5;
-                createElement('plus', x, y, 'plus');
+                createElement('plus', x+40, y+9, 'plus');
                 createElement('success', x+200, y, 'success');
                 createEdge('plus', 'success', '#D6D5E6');
             }

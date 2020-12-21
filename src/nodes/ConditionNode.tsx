@@ -20,6 +20,12 @@ export const ConditionNode = ({data}) => {
                 id="c"
                 style={{ opacity : 0}}
             />
+            <Handle
+                type="source"
+                position={Position.Top}
+                id="failure"
+                style={{ opacity : 0}}
+            />
         </div>
     );
 };

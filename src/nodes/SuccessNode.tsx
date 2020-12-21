@@ -9,13 +9,13 @@ export const SuccessNode = ({data}) => {
             <Handle
                 type="target"
                 position={Position.Left}
-                style={{opacity: 0}}
+                style={{top:30, opacity:0}}
                 onConnect={(params) => console.log('handle onConnect', params)}
             />
             <div>
                 <AiOutlineCheckCircle/>
             </div>
-            {/*<div className="bottom-text">Done</div>*/}
+            <div className="bottom-text">Done</div>
         </div>
     );
 };

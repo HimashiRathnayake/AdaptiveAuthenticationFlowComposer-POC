@@ -1,14 +1,11 @@
 import React from "react";
 
-type props ={
-    options:any
-}
-
-export const Google: React.FC<props> = ({options}) => {
+export const Google: React.FC = () => {
     return(
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="220px" height="400px" rx="4" viewBox="0 0 220 400" enableBackground="0 0 220 400" xmlSpace="preserve">
-                <image id="image0" rx="4" width="220" height="400" x="0" y="0"
+        <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:240, height:267}}>
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 267" enableBackground="0 0 240 267" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" xmlSpace="preserve">
+                <rect id="social-path" x="0" fill="#FFFFFF" y="0" width="240" height="267" rx={2}/>
+                <image id="image0" rx="4" width="240" height="266" x="0" y="0"
                        xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcAAAAH0CAYAAACqzv3IAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
                         AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAABW
                         zElEQVR42u3deVxU9f7H8Rcww7DI4AIqCqiMCYGmmBvlWi6VSxbaNa20tMVudm231dIWy25126yu
@@ -404,6 +401,9 @@ export const Google: React.FC<props> = ({options}) => {
                         AAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMTItMDlUMTA6MDE6MTMrMDM6MDBdDmo+AAAAJXRFWHRk
                         YXRlOm1vZGlmeQAyMDIwLTEyLTA5VDEwOjAxOjEzKzAzOjAwLFPSggAAAABJRU5ErkJggg=="
                 />
+                <text id="Log-In" fontFamily="inherit" fontSize="18" fontWeight="normal" fill="#fff">
+                    <tspan x="0" y="0">Fido</tspan>
+                </text>
             </svg>
 
         </div>

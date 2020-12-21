@@ -14,9 +14,13 @@
     align-items: center;
 }
 
+.stepContainer {
+    margin-top: -6.3vh;
+}
+
 .step {
     background: rgba(0, 0, 0, 0.0);
-    border: 1px dashed rgba(255,255,255,0.3);
+    border: 1px dashed rgba(255,255,255,0.5);
     color: #FFF;
     padding: 10px;
     font-size: 14px;
@@ -29,15 +33,19 @@
     background: #5b6889;
     color: #FFF;
     padding: 10px;
-    width: 8vw;
-    word-wrap: normal;
+    width: 9vw;
+    word-wrap: break-word;
     border-radius: 5px;
     height: 4vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .success {
     font-size: 50px;
-    color: #27ad27;
+    color: #08c282;
+    font-weight: normal;
 }
 
 .plus {
@@ -64,7 +72,8 @@
 }
 
 .bottom-text {
-    font-size: 20px;
+    font-size: 14px;
+    margin-top: -12px;
 }
 
 .invisible {
@@ -84,4 +93,11 @@
     color: #0f1011;
     font-weight: bold;
     font-size: 16px;
+}
+
+.failure {
+    font-size: 0.6vw;
+    background-color: #4b040d;
+    border-radius: 2%;
+    padding: 3px;
 }

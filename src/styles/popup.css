@@ -32,11 +32,6 @@
     overflow: scroll;
 }
 
-.checkbox {
-    color: #3b2020;
-    background-color: #61dafb;
-}
-
 .button {
     width: 20vh;
     height: 5vh;
@@ -47,13 +42,14 @@
 }
 
 .authFactorList {
-    height: 80%;
-    width: 50%;
-    padding-inline: 25%;
+    height: 95%;
+    width: 60%;
+    padding-inline: 20%;
     text-align: center;
     font-size: 1rem;
     align-self: center;
-    padding-bottom: 1rem;
+    /*padding-bottom: 1rem;*/
+    margin-top: 5%;
     color: #313234;
     background-color: #313234;
 }
@@ -90,4 +86,19 @@
 
 .warning {
     color: #971844;
+}
+
+.button-2 {
+    width: 20vh;
+    height: 3vh;
+    align-self: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    box-shadow: 1px 1px 1px #0f1011;
+    margin-inline: 2vw;
+}
+
+.successFailureSelectionForm{
+    width: 10vw;
+    align-self: flex-end;
 }

@@ -5,6 +5,8 @@ type AstState = {
 
 type StepsState = {
     steps: any[]
+    useSubjectFrom: string
+    useAttributesFrom: string
 }
 
 type AstAction = {
@@ -15,7 +17,7 @@ type AstAction = {
 type StepAction = {
     type: string
     step: any
-    factors: any[]
+    factors?: any[]
 }
 
 type DispatchType = (args: AstAction|StepAction) => AstAction | StepAction

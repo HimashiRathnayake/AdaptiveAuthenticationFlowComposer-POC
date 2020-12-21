@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "../styles/popup.css"
+import {FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
 
 type Props={
     onCancel: Function,
@@ -8,6 +9,7 @@ type Props={
 }
 
 export const Popup: React.FC<Props> = ({onCancel, addStep, addCondition}) => {
+
     return (
         <div className="popup">
             <div className="popupInner">

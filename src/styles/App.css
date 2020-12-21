@@ -21,17 +21,28 @@
 .App-header {
   background-color: #313234;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
   font-size: calc(5px + 2vmin);
   color: white;
   height: 7%;
   text-align: left;
-  /*border: 1px solid #77787b;*/
   padding-left: 25px;
-  /*box-shadow: inset 0 0 4px #77787b;*/
   box-shadow: 3px 3px 5px #1d1d1f;
   z-index: 1;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.reset-button {
+  display: flex;
+  align-items: center;
+  float: right;
+  height: 4vh;
+  margin-left: 67.5vw;
+}
+
+.reset-icon {
+  padding-right: 0.5vw;
 }
 
 .Container {

@@ -27,17 +27,17 @@ export const Condition = (id:string, condition:string, x:number, y:number, args?
     });
 }
 
-export const Success = (x:number, y:number) => {
+export const Success = (id:string, x:number, y:number) => {
     return ({
-        id: 'success',
+        id: id,
         position: {x: x, y: y},
         type: 'success'
     });
 }
 
-export const Plus = (x:number, y:number) => {
+export const Plus = (id:string, x:number, y:number) => {
     return ({
-        id: 'plus',
+        id: id,
         position: {x: x, y: y},
         type: 'plus'
     });
@@ -62,7 +62,15 @@ export const Invisible = (id:string, x:number, y:number) => {
     });
 }
 
-export const CustomEdge = (id:string, source:string|null, target:string|null, label:string|undefined, color:string, handler?:string, targetHandler?:string, offset?:number, targetOffsetX?:number, targetOffsetY?:number) => {
+export const Failure = (id:string, x:number, y:number) => {
+    return ({
+        id: id,
+        position: {x: x, y: y},
+        type: 'failure'
+    });
+}
+
+export const CustomEdge = (id:string, source:string|null, target:string|null, label:string|undefined, color:string, handler?:string, targetHandler?:string, offset?:number, targetOffsetX?:number, targetOffsetY?:number, middleOffset?:number) => {
     return ({
         id: id,
         source: source,
@@ -77,7 +85,9 @@ export const CustomEdge = (id:string, source:string|null, target:string|null, la
             labelBgStyle: { backgroundColor: color, color: 'white'},
             offset: offset,
             targetOffsetX: targetOffsetX,
-            targetOffsetY: targetOffsetY
+            targetOffsetY: targetOffsetY,
+            middleOffset: middleOffset,
+            color:color
         },
     });
 }
@@ -90,9 +100,9 @@ export const Edge = (id:string, source:string|null, target:string|null, label:st
         type: 'step',
         arrowHeadType: 'arrow',
         label: label,
-        labelBgStyle: { fill: color, color: 'white'},
+        labelBgStyle: { fill: color, color: 'white', bottom:0},
         sourceHandle: handler,
-        targetHandle: targetHandler
+        targetHandle: targetHandler,
         // style: {fill:"red"}
     });
 }

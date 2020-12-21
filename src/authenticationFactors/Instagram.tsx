@@ -2,9 +2,10 @@ import React from "react";
 
 export const Instagram: React.FC = () => {
     return(
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="220px" height="400px" viewBox="0 0 220 400" enableBackground="new 0 0 220 400" xmlSpace="preserve">
-                <image id="image0" width="220" height="400" x="0" y="0"
+        <div style={{display:"flex", flexDirection:"column", alignItems:"center", width: 240}}>
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="240px" height="436px" viewBox="0 0 240 436" enableBackground="new 0 0 246 436" xmlSpace="preserve">
+                <rect id="social-path" x="0" y="86" fill="#FFFFFF" width="240" height="264" rx={2}/>
+                <image id="image0" width="240" height="436" x="0" y="0"
                        xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAF9CAYAAABMEwCCAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
                         AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAABC
                         fElEQVR42u3de1xUdeL/8RcMMsgthotiuIIoLCreN1LLom+arl1W7UaZ1c/KLtuWZfettv3adtlq

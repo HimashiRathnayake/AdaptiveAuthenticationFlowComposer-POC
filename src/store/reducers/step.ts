@@ -5,6 +5,8 @@ const initialState: StepsState = {
         id:"1",
         options: ["basic"]
     }],
+    useSubjectFrom: "1",
+    useAttributesFrom: "1"
 }
 
 const stepReducer = (
@@ -32,6 +34,16 @@ const stepReducer = (
                         }
                     })
                 }
+            }
+        case actionTypes.CHANGE_SUBJECT_FROM_STEP:
+            return {
+                ...state,
+                useSubjectFrom: action.step
+            }
+        case actionTypes.CHANGE_ATTRIBUTES_FROM_STEP:
+            return{
+                ...state,
+                useAttributesFrom: action.step
             }
     }
     return state

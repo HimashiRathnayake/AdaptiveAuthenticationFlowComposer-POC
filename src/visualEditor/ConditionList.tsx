@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import "../styles/popup.css"
 import {Radio, RadioGroup, FormControlLabel, FormControl, MenuItem, Select, Chip, Input} from "@material-ui/core";
-import {TiTick} from "react-icons/all";
+import {BiArrowBack, TiTick} from "react-icons/all";
 
 type Props={
     onDoneCondition: Function,
+    onBack: Function
 }
 
-export const ConditionList: React.FC<Props> = ({onDoneCondition}) => {
+export const ConditionList: React.FC<Props> = ({onDoneCondition, onBack}) => {
 
     const [checkedCondition, setCheckedCondition] = useState("hasRole");
     const [customConditionName, setCustomConditionName] = useState("");
@@ -74,11 +75,11 @@ export const ConditionList: React.FC<Props> = ({onDoneCondition}) => {
                             {/*    </FormControl>*/}
                             {/*}*/}
                         </div>
-                        {/*<div className="conditionContainer">*/}
-                        {/*    <FormControlLabel value="isExceedInvalidAttempts" control={<Radio />} label="Is Exceed Invalid Attempts" />*/}
-                        {/*    <p className="conditionDescription">Checking if the user exceeds given number of failed login attempts</p>*/}
-                        {/*    /!*{checkedCondition==="hasRole" && <input value={"admin"}/>}*!/*/}
-                        {/*</div>*/}
+                        <div className="conditionContainer">
+                            <FormControlLabel value="isExceedInvalidAttempts" control={<Radio />} label="Is Exceed Invalid Attempts" />
+                            <p className="conditionDescription">Checking if the user exceeds given number of failed login attempts</p>
+                            {/*{checkedCondition==="hasRole" && <input value={"admin"}/>}*/}
+                        </div>
                         <div className="conditionContainer">
                             <FormControlLabel value="custom" control={<Radio />} label="Custom condition" />
                             <p className="conditionDescription">You can define a custom condition using this</p>
@@ -86,19 +87,27 @@ export const ConditionList: React.FC<Props> = ({onDoneCondition}) => {
                         </div>
                     </RadioGroup>
                 </FormControl>
-                <button
-                    className="button"
-                    disabled={checkedCondition==="custom" && customConditionName===""}
-                    onClick={()=>{
-                    if(checkedCondition==="custom"){
-                        onDoneCondition(customConditionName)
-                    }else{
-                        onDoneCondition(checkedCondition)
-                    }
-                }}>
-                    <TiTick/>
-                    Done
-                </button>
+                <div>
+                    <button
+                        className="button-2"
+                        disabled={checkedCondition==="custom" && customConditionName===""}
+                        onClick={()=>{
+                        if(checkedCondition==="custom"){
+                            onDoneCondition(customConditionName)
+                        }else{
+                            onDoneCondition(checkedCondition)
+                        }
+                    }}>
+                        <TiTick/>
+                        Done
+                    </button>
+                    <button
+                        className="button-2"
+                        onClick={()=>onBack()}
+                    >
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     );

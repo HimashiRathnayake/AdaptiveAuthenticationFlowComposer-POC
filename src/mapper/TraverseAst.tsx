@@ -232,7 +232,6 @@ export const AddCondition = (ast:any, step:string, condition:string) => {
 export const AddStepToCondition = (ast:any, condition:string, step:string) => {
     traverse(ast, {
         IfStatement(path: any){
-            console.log(path)
             if (path.node.test.callee && path.node.test.callee.name===condition) {
                 path.node.consequent.body.push(createExpressionStatement(step));
             }

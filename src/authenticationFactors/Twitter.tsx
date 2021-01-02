@@ -2,9 +2,18 @@ import React from "react";
 
 export const Twitter: React.FC = () => {
     return(
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center", backgroundColor:"#fff", width:240}}>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="220px" height="200px" viewBox="0 0 220 200" enableBackground="new 0 0 200 250" xmlSpace="preserve">
-                <image id="image0" width="220" height="200" x="0" y="0" xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAFzCAYAAADi5Xe0AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
+        <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:240}}>
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 220 180" enableBackground="new 0 0 200 250" xmlSpace="preserve">
+                <defs>
+                    <rect id="rect-twitter" x="0%" y="0%" width="100%" height="100%" rx="10" fill="#fff"/>
+                    <clipPath id="clip-twitter">
+                        <use xlinkHref="#rect-twitter"/>
+                    </clipPath>
+                </defs>
+
+                <use xlinkHref="#rect-twitter"/>
+                <image y="5%" width="100%" height="90%" clipPath="url(#clip-twitter)"
+                    xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAFzCAYAAADi5Xe0AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
                     AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAA/
                     6ElEQVR42u3de3xU9b3v/9ckM5nJdUggCQQyPSQEtAkq4VJu+xAEBLyASsFLxVaw9Wdxt0rro8Xj
                     PuJud3FvW7TdYo8WaAuKCBureAnIRWhBUDAWSaoIhL0nEMidCSGZycxkfn9MrogKYWUmgffz8fAh

@@ -30,21 +30,21 @@
 }
 
 .condition {
-    background: #5b6889;
     color: #FFF;
-    padding: 10px;
-    width: 9vw;
-    word-wrap: break-word;
-    border-radius: 5px;
-    height: 4vh;
+}
+
+.textContainer {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    width: 120px;
+    margin-left: -35px;
+    word-wrap: break-word;
 }
 
 .success {
     font-size: 50px;
-    color: #08c282;
+    color: #1BC462;
     font-weight: normal;
 }
 
@@ -76,23 +76,33 @@
     margin-top: -12px;
 }
 
-.invisible {
-    height: 0.1vh;
-    width: 0.1vh;
-    background-color: #0f1011;
+.connector {
+    font-size: 20px;
+}
+
+.multiFactorNode {
+    width: 240px;
+    height: 270px;
+    display: flex;
+    align-items: center;
 }
 
 .multiFactor {
-    width: 220px;
+    width: 240px;
     background-color: #fff;
     height: 200px;
-    margin-top: 100px;
     align-items: center;
     justify-content: center;
     display: flex;
+    flex-direction: column;
     color: #0f1011;
     font-weight: bold;
     font-size: 16px;
+    border-radius: 10px;
+}
+
+.multiFactorText{
+    padding-bottom: 10px;
 }
 
 .failure {

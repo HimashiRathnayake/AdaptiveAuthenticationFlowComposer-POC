@@ -1,16 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {
-    AddCondition,
-    AddStepToCondition,
-    AddSuccessFailureSteps,
-    DeleteStep,
-    GetConditionArguments,
-    GetRequest,
-    GetStepsFromAst
-} from "../mapper/TraverseAst";
+import {AddCondition, AddStepToCondition, AddSuccessFailureSteps, DeleteStep, GetConditionArguments, GetRequest, GetStepsFromAst} from "../mapper/TraverseAst";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import ReactFlow, {Background, Controls, OnLoadParams} from "react-flow-renderer";
-import {Condition, CustomEdge, Edge, Element, Failure, Invisible, MultiFactor, Plus, Success} from "./Elements";
+import ReactFlow, {Background, Controls} from "react-flow-renderer";
+import {Condition, CustomEdge, Edge, Element, Invisible, MultiFactor, Plus, Success} from "./Elements";
 import {Popup} from "./PopUp";
 import {Dispatch} from "redux";
 import {saveAstFromVisualEditor, saveStep} from "../store/actionCreators";
@@ -88,7 +80,7 @@ export const VisualFlowGenerator: React.FC = () => {
             let authFactorsWithStep = steps.filter((element:any)=>element.id==step);
             elementList.push(Element(step, xVal, yVal, ()=>onClickDelete(step), ()=>showAuthenticatorsList(step)));
             // elementList.push(Failure(step+'failure', xVal+125, yVal+2*stepHeight));
-            // elementList.push(Edge(step+'failure', step, step+'failure', undefined, "#D6D5E6"));
+            // elementList.push(Edge(step+step+'failure', step, step+'failure', undefined, "#D6D5E6", "failure", ""));
             uniqueNodeIdList.push(step);
             lastStep = step;
             if (authFactorsWithStep.length>0){
@@ -98,32 +90,42 @@ export const VisualFlowGenerator: React.FC = () => {
                 if(basic){
                     factors=authFactorsWithStep[0].options.filter((factor:any)=>factor!=="basic")
                 }else if(identifierFirst){
-                    factors=authFactorsWithStep[0].options.filter((factor:any)=>factor!=="identifier-first")
+                    factors=authFactorsWithStep[0].options
+                        // .filter((factor:any)=>factor!=="identifier-first")
                 }else{
                     factors=authFactorsWithStep[0].options
                 }
                 if (factors.length>0) {
-                    elementList.push(Invisible(step + "invisible", xVal + 650, yVal -4 + stepHeight));
+                    elementList.push(Invisible(step + "invisible", xVal + 650, yVal - 15.5 + stepHeight));
                     uniqueNodeIdList.push(step+"invisible");
                     if (basic){
-                        elementList.push(Edge(`${step}${step + "invisible"}`, step, step + "invisible", undefined, "#D6D5E6", undefined, "targetLeft"));
+                        elementList.push(Edge(`${step}${step + "invisible"}`, step, step + "invisible", "Basic", "#D6D5E6", undefined, "targetLeft"));
                     }
                     let indexToSplit = factors.length/2, firstHalf:any[]=[], secondHalf:any[] =[];
-                    if (factors.length===1){firstHalf=factors}
+                    if (!basic && factors.length===1){
+                        let factor=factors[0];
+                        elementList.push(MultiFactor(step + factor, factor, xVal + 380, yVal+stepHeight/2-28.5));
+                        elementList.push(CustomEdge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined));
+                        elementList.push(CustomEdge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetLeft", undefined));
+                    }
                     else{
-                        [firstHalf, secondHalf]  = [factors.slice(0, indexToSplit), factors.slice(indexToSplit)];
-                    }
-                    for (let index in firstHalf) {
-                        let factor = firstHalf[index];
-                        elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal -160 - 360*+index));
-                        elementList.push(CustomEdge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined, -10*(+index+1)));
-                        elementList.push(CustomEdge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetTop", undefined, 10*+index, (index==="0")?0:-10));
-                    }
-                    for (let index in secondHalf) {
-                        let factor = secondHalf[index];
-                        elementList.push(MultiFactor(step + factor, factor, xVal + 385, yVal + 260 + 280*+index));
-                        elementList.push(CustomEdge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined, 10*(+index+1)));
-                        elementList.push(CustomEdge(`${step + factor}React App${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetBottom", undefined, 10*+index));
+                        if (factors.length === 1) {
+                            firstHalf = factors
+                        } else {
+                            [firstHalf, secondHalf] = [factors.slice(0, indexToSplit), factors.slice(indexToSplit)];
+                        }
+                        for (let index in firstHalf) {
+                            let factor = firstHalf[index];
+                            elementList.push(MultiFactor(step + factor, factor, xVal + 380, yVal - 100 - 300 * +index));
+                            elementList.push(CustomEdge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined, -10 * (+index + 1)));
+                            elementList.push(CustomEdge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetTop", undefined, 10 * +index, (index === "0") ? 0 : -10));
+                        }
+                        for (let index in secondHalf) {
+                            let factor = secondHalf[index];
+                            elementList.push(MultiFactor(step + factor, factor, xVal + 380, yVal + 260 + 300 * +index));
+                            elementList.push(CustomEdge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined, 10 * (+index + 1)));
+                            elementList.push(CustomEdge(`${step + factor}React App${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetBottom", undefined, 10 * +index));
+                        }
                     }
                     stepsToSuccess.push(step + "invisible");
                     x+=400;
@@ -185,12 +187,12 @@ export const VisualFlowGenerator: React.FC = () => {
     }
 
     const onDone = (authFactors:any[]) => {
+        console.log('hi')
         let step: string = '';
         if (stepToViewAuthFactors===null) {
             let newAst;
             let currentStep = lastStep;
             let stepType = 'success';
-            console.log(successFailure)
             if(successFailure!==null){
                 currentStep=successFailure[0];
                 stepType='failure';
@@ -213,8 +215,6 @@ export const VisualFlowGenerator: React.FC = () => {
         addFactorToStore(step, authFactors);
         setVisibleAuthFactors(false);
     }
-
-    const onLoad = (reactFlowInstance: OnLoadParams) => reactFlowInstance.fitView();
 
     useEffect(()=>{
             uniqueNodeIdList = [];
@@ -244,8 +244,8 @@ export const VisualFlowGenerator: React.FC = () => {
                     let remainSuccess=successSteps[2];
 
                     if(condition!==undefined && uniqueNodeIdList.indexOf(condition)===-1){
-                        createElement(condition, x, y+187.5, 'condition', GetConditionArguments(ast, condition).toString());
-                        createEdge(uniqueNodeIdList[uniqueNodeIdList.length-2], condition, 'green', 'Success');
+                        createElement(condition, x, y+189.5, 'condition', GetConditionArguments(ast, condition).toString());
+                        createEdge(uniqueNodeIdList[uniqueNodeIdList.length-2], condition, '#D6D5E6');
                         createCustomEdge(condition, lastStep, 'red', 'Failure','failure', 'failTarget');
                         x+=distanceX;
                     }
@@ -256,17 +256,18 @@ export const VisualFlowGenerator: React.FC = () => {
                             x+=distanceX;
                         }
                         if (successPath.indexOf(successStep)===0){
-                            createEdge(condition, successStep, 'green', 'Success');
+                            createEdge(condition, successStep, '#D6D5E6');
                         }
                         else{
-                            createEdge(successPath[successPath.indexOf(successStep)-1], successStep,'#D6D5E6');
+                            console.log(uniqueNodeIdList[uniqueNodeIdList.length-1])
+                            createEdge(uniqueNodeIdList[uniqueNodeIdList.length-3], successStep,'#D6D5E6');
                         }
                     }
 
                     for (let successStep of remainSuccess){
                         if (uniqueNodeIdList.indexOf(successStep)===-1){
                             if (remainSuccess.indexOf(successStep)===0){
-                                createEdge(uniqueNodeIdList[uniqueNodeIdList.length-1], successStep, 'green', 'Success');
+                                createEdge(uniqueNodeIdList[uniqueNodeIdList.length-1], successStep, '#D6D5E6');
                             }
                             else{
                                 createEdge(remainSuccess[remainSuccess.indexOf(successStep)-1], successStep,'#D6D5E6');
@@ -292,25 +293,15 @@ export const VisualFlowGenerator: React.FC = () => {
                     }
                     count+=1;
                 }
-
-                // if(successSteps!==undefined || failureSteps!==undefined){
-                //     createElement(currentStep + 'successFailJoin', x, y, 'invisible');
-                // }
             }
 
-            // if (stepsToSuccess.length !==0) {
-            //     y+=186.5;
-            //     createElement('plus', x+40, y+9, 'plus');
-            //     createElement('success', x+200, y, 'success');
-            //     createEdge('plus', 'success', '#D6D5E6');
-            // }
-
+            y+=186.5;
             for (let step of stepsToSuccess){
-                y+=186.5;
-                createElement(step+'plus', x+40, y+9, 'plus');
+                createElement(step+'plus', x+40, y+8, 'plus');
                 createElement(step+'success', x+200, y, 'success');
                 createEdge(step+'plus', step+'success', '#D6D5E6');
                 createEdge(step, step+'plus', '#D6D5E6');
+                y+=800;
             }
 
         }, [ast, steps]
@@ -328,11 +319,11 @@ export const VisualFlowGenerator: React.FC = () => {
                     ):(
                         <ReactFlow
                             elements={elementsList}
+                            nodesConnectable={false}
                             nodeTypes={nodeTypes}
                             edgeTypes={edgeTypes}
                             onConnect={(params)=>onConnect(params)}
                             onElementClick={(params, element)=>onClick(element)}
-                            // onLoad={onLoad}
                         >
                             <Controls className="flow-control"/>
                             <Background color="#aaa" gap={16} />

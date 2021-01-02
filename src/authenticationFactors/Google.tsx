@@ -3,9 +3,16 @@ import React from "react";
 export const Google: React.FC = () => {
     return(
         <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:240, height:267}}>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 267" enableBackground="0 0 240 267" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" xmlSpace="preserve">
-                <rect id="social-path" x="0" fill="#FFFFFF" y="0" width="240" height="267" rx={2}/>
-                <image id="image0" rx="4" width="240" height="266" x="0" y="0"
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 268" enableBackground="0 0 240 266" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" xmlSpace="preserve">
+                <defs>
+                    <rect id="rect-google" x="0%" y="0%" width="100%" height="100%" rx="10"/>
+                    <clipPath id="clip-google">
+                        <use xlinkHref="#rect-google"/>
+                    </clipPath>
+                </defs>
+
+                <use xlinkHref="#rect-google"/>
+                <image width="100%" height="100%" clipPath="url(#clip-google)"
                        xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcAAAAH0CAYAAACqzv3IAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
                         AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAABW
                         zElEQVR42u3deVxU9f7H8Rcww7DI4AIqCqiMCYGmmBvlWi6VSxbaNa20tMVudm231dIWy25126yu
@@ -401,9 +408,6 @@ export const Google: React.FC = () => {
                         AAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMTItMDlUMTA6MDE6MTMrMDM6MDBdDmo+AAAAJXRFWHRk
                         YXRlOm1vZGlmeQAyMDIwLTEyLTA5VDEwOjAxOjEzKzAzOjAwLFPSggAAAABJRU5ErkJggg=="
                 />
-                <text id="Log-In" fontFamily="inherit" fontSize="18" fontWeight="normal" fill="#fff">
-                    <tspan x="0" y="0">Fido</tspan>
-                </text>
             </svg>
 
         </div>

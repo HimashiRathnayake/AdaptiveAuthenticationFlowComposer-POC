@@ -3,7 +3,7 @@ import {ConditionNode} from "./ConditionNode";
 import {SuccessNode} from "./SuccessNode";
 import {PlusNode} from "./PlusNode";
 import {MultiFactorNode} from "./MultiFactorNode";
-import {InvisibleNode} from "./InvisibleNode";
+import {Connector} from "./Connector";
 import {FailureNode} from "./FailureNode";
 
 export const nodeTypes = {
@@ -12,6 +12,6 @@ export const nodeTypes = {
     success: SuccessNode,
     plus: PlusNode,
     multiFactor: MultiFactorNode,
-    invisible: InvisibleNode,
+    invisible: Connector,
     failure: FailureNode
 };

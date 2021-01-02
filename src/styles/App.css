@@ -26,11 +26,16 @@
   color: white;
   height: 7%;
   text-align: left;
-  padding-left: 25px;
   box-shadow: 3px 3px 5px #1d1d1f;
   z-index: 1;
   align-items: center;
   justify-content: flex-start;
+}
+
+.header-icon {
+  height: 50px;
+  width: 50px;
+  padding: 10px;
 }
 
 .reset-button {
@@ -38,7 +43,12 @@
   align-items: center;
   float: right;
   height: 4vh;
-  margin-left: 67.5vw;
+  width: 6vw;
+  margin-left: 66vw;
+  background-color: rgba(0,0,0,0.2);
+  color: rgba(255,255,255,0.8);
+  box-shadow: 2px 2px 2px #4e5053;
+  border-radius: 5px;
 }
 
 .reset-icon {

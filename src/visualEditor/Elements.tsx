@@ -15,12 +15,11 @@ export const Element = (step:string, x:number, y:number, onClick:Function, showA
 }
 
 export const Condition = (id:string, condition:string, x:number, y:number, args?:string[]) => {
-    let next = '\n['+args+']';
-    if(args===undefined || args.length===0){next=''}
     return ({
         id: id,
         data: {
-            label: (<>{condition+next}</>),
+            condition: condition,
+            args: args
         },
         position: {x: x, y: y},
         type: 'condition'
@@ -100,7 +99,8 @@ export const Edge = (id:string, source:string|null, target:string|null, label:st
         type: 'step',
         arrowHeadType: 'arrow',
         label: label,
-        labelBgStyle: { fill: color, color: 'white', bottom:0},
+        labelBgStyle: { fill: color, color: 'white'},
+        labelStyle: {fontSize: 14},
         sourceHandle: handler,
         targetHandle: targetHandler,
         // style: {fill:"red"}

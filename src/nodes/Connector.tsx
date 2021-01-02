@@ -1,10 +1,11 @@
 import {Handle, Position} from "react-flow-renderer";
 import React from "react";
+import {BsFillCircleFill} from "react-icons/all";
 
 // @ts-ignore
-export const InvisibleNode = () => {
+export const Connector = () => {
     return (
-        <div className="invisible">
+        <div className="connector">
             <Handle
                 type="target"
                 position={Position.Top}
@@ -21,6 +22,9 @@ export const InvisibleNode = () => {
                 onConnect={(params) => console.log('handle onConnect', params)}
 
             />
+            <div>
+                <BsFillCircleFill/>
+            </div>
             <Handle
                 type="target"
                 position={Position.Bottom}

@@ -3,9 +3,16 @@ import React from "react";
 export const Fido: React.FC = () => {
     return(
         <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:240, height:243}}>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="450px" height="500px" viewBox="0 0 450 500" enableBackground="new 0 0 450 500" xmlSpace="preserve">
-                <rect id="social-path" x="0" fill="#FFFFFF" y="0" width="450" height="456" rx={3}/>
-                <image id="image0" width="450" height="453" x="0" y="0"
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 450 454" enableBackground="new 0 0 450 454" xmlSpace="preserve">
+                <defs>
+                    <rect id="rect-fido" x="0%" y="0%" width="100%" height="100%" rx="15"/>
+                    <clipPath id="clip-fido">
+                        <use xlinkHref="#rect-fido"/>
+                    </clipPath>
+                </defs>
+
+                <use xlinkHref="#rect-fido"/>
+                <image width="100%" height="100%" clipPath="url(#clip-fido)"
                        xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcIAAAHFCAYAAABhHfn9AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
                         AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAACA
                         AElEQVR42uz9WXAcWXomCn7H3WPFFgRBECSTTDDJTCJ35FaJWqSCqkoqSK1W4Uo9EuzamBWs74Mw
@@ -768,9 +775,6 @@ export const Fido: React.FC = () => {
                         AAB4Fff399put8rzXF7XdQ+Hw0FVVel0Og09GwAALy4MQznnlGWZ/gJ6g0tj6nkuIQAAACV0RVh0
                         ZGF0ZTpjcmVhdGUAMjAyMC0xMi0xOFQwOToxODo1MCswMzowMOZjOx8AAAAldEVYdGRhdGU6bW9k
                         aWZ5ADIwMjAtMTItMThUMDk6MTg6NTArMDM6MDCXPoOjAAAAAElFTkSuQmCC" />
-                <text id="Log-In" fontFamily="inherit" fontSize="18" fontWeight="normal" fill="#fff">
-                    <tspan x="210" y="475">Fido</tspan>
-                </text>
             </svg>
         </div>
     )

@@ -12,7 +12,22 @@ export const ConditionNode = ({data}) => {
                 onConnect={(params) => console.log('handle onConnect', params)}
             />
             <div>
-                {data.label}
+                <div>
+                    <svg height="50" width="50">
+                        <circle cx="25" cy="25" r="20" stroke="#0A84AE" strokeWidth="3" fill="none"/>
+                        <g>
+                            <circle cx="20" cy="20" r="3" stroke="#0A84AE" strokeWidth="3" fill="none"/>
+                            <circle cx="30" cy="32" r="3" stroke="#0A84AE" strokeWidth="3" fill="none"/>
+                            <line x1="20" y1="25" x2="20" y2="35" stroke="#0A84AE" strokeWidth="3"/>
+                            <line x1="30" y1="16" x2="30" y2="27" stroke="#0A84AE" strokeWidth="3"/>
+                            <line x1="25" y1="17" x2="30" y2="17" stroke="#0A84AE" strokeWidth="3"/>
+                        </g>
+                    </svg>
+                </div>
+                <div className="textContainer">
+                    <text>{data.condition}</text>
+                    <text>{data.args}</text>
+                </div>
             </div>
             <Handle
                 type="source"

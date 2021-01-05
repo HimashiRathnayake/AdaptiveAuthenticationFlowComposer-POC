@@ -28,13 +28,13 @@ export const CustomEdge : React.FC<props> = ({id, sourceX, sourceY, targetX, tar
     const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
 
     return (
-        <>
+        <g>
             <path id={id} style={style} className="react-flow__edge-path" d={edgePath} markerEnd={markerEnd} />
             <text>
                 <textPath href={`#${id}`} style={{fill:'#c96b72', fontSize:12}} startOffset="10%" textAnchor="middle">
                     {data.text}
                 </textPath>
             </text>
-        </>
+        </g>
     );
 }

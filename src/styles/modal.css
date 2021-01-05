@@ -1,57 +1,56 @@
-.popup {
-    height: 65%;
-    width: 50%;
-    padding-inline: 25%;
+.modal {
+    position: fixed;
+    background-color: #fff;
+    padding-top: 5vh;
+    flex-direction: column;
+    display: flex;
+    box-shadow: 1px 1px 5px #0f1011;
     text-align: center;
     font-size: 1rem;
-    align-self: center;
     padding-bottom: 1rem;
     color: #313234;
-    background-color: #313234;
 }
 
-.popupInner {
-    background-color: white;
-    height: 65%;
-    padding-top: 20px;
-    flex-direction: column;
-    display: flex;
-    border-radius: 2%;
-    box-shadow: 1px 1px 5px #0f1011;
-    z-index: -1;
-}
-
-.authFactorListContainer {
-    background-color: white;
-    height: 75%;
-    padding-top: 20px;
-    flex-direction: column;
-    display: flex;
-    box-shadow: 1px 1px 5px #0f1011;
-    z-index: -1;
-    overflow: scroll;
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.2);
 }
 
 .button {
     width: 20vh;
     height: 5vh;
     align-self: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.button:hover {
     box-shadow: 1px 1px 5px #0f1011;
 }
 
 .authFactorList {
-    height: 95%;
-    width: 60%;
-    padding-inline: 20%;
-    text-align: center;
-    font-size: 1rem;
-    align-self: center;
-    /*padding-bottom: 1rem;*/
-    margin-top: 5%;
-    color: #313234;
-    background-color: #313234;
+    position: fixed;
+    top: 20vh;
+    left: 20vw;
+    right: 50vw;
+    bottom: 10vh;
+    padding-top: 20px;
+    flex-direction: column;
+    display: flex;
+    box-shadow: 1px 1px 5px #0f1011;
+    overflow: scroll;
+}
+
+.conditionList {
+    position: fixed;
+    top: 25vh;
+    left: 20vw;
+    right: 50vw;
+    bottom: 25vh;
+    border-radius: 2%;
 }
 
 .conditionGroup {
@@ -101,4 +100,12 @@
 .successFailureSelectionForm{
     width: 10vw;
     align-self: flex-end;
+}
+
+.componentSelector{
+    top: 25vh;
+    left: 20vw;
+    right: 50vw;
+    bottom: 35vh;
+    border-radius: 2%;
 }

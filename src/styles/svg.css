@@ -1,0 +1,32 @@
+.buttonRectangle {
+    height:40px;
+    width: 350px;
+    stroke: rgba(188,188,188,1);
+    stroke-width: 2px;
+}
+
+.buttonText {
+    font-size: 16px;
+    fill: #fff;
+    dominant-baseline: middle;
+    letter-spacing: 0.5px;
+}
+
+.textLeft {
+    fill: #0f1011;
+}
+
+.textRight {
+    fill: #0f1011;
+    font-weight: 600;
+}
+
+.textEmpty {
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    dominant-baseline: middle;
+}
+
+.textAddAuthenticators {
+    fill: #919293;
+}

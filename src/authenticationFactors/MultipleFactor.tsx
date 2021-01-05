@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles/svg.css";
 
 type props ={
     type:string,
@@ -7,11 +8,16 @@ type props ={
 }
 
 export const MultipleFactor: React.FC<props> = ({type,x,y}) => {
+    let iconX = x+10,
+        iconY = y+3,
+        iconHeight = 30,
+        iconWidth = 30;
+
     return(
         <g>
-            <rect fill="#fff" rx="4" x={x} y={y} height="35" width="350" stroke="rgba(188,188,188,1)" strokeWidth="2" id="Rectangle_25"/>
+            <rect fill="#fff" rx="8" x={x} y={y} id="Rectangle_25" className="buttonRectangle"/>
             {type==="Google" &&
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x={x} y={y} height={30} width={30}
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x={iconX} y={iconY} height={iconHeight} width={iconWidth}
                  viewBox="-150 -150 700 700" enableBackground="new 0 0 512 512;" xmlSpace="preserve">
                 <path fill="#167EE6" d="M492.668,211.489l-208.84-0.01c-9.222,0-16.697,7.474-16.697,16.696v66.715
                     c0,9.22,7.475,16.696,16.696,16.696h117.606c-12.878,33.421-36.914,61.41-67.58,79.194L384,477.589
@@ -31,7 +37,7 @@ export const MultipleFactor: React.FC<props> = ({type,x,y}) => {
                 </svg>
             }
             {type==="Instagram" &&
-                <svg enableBackground="new 0 0 24 24" height="32" viewBox="-6 -5 30 30" width="32" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x={x} y={y}>
+                <svg enableBackground="new 0 0 24 24" height={iconHeight} viewBox="-6 -5 30 30" width={iconWidth} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x={iconX} y={iconY}>
                     <linearGradient id="SVGID_1_" gradientTransform="matrix(0 -1.982 -1.844 0 -132.522 -51.077)" gradientUnits="userSpaceOnUse" x1="-37.106" x2="-26.555" y1="-72.705" y2="-84.047"><stop offset="0" stopColor="#fd5"/><stop offset=".5" stopColor="#ff543e"/><stop offset="1" stopColor="#c837ab"/>
                     </linearGradient>
                     <path d="m1.5 1.633c-1.886 1.959-1.5 4.04-1.5 10.362 0 5.25-.916 10.513 3.878 11.752 1.497.385 14.761.385 16.256-.002 1.996-.515 3.62-2.134 3.842-4.957.031-.394.031-13.185-.001-13.587-.236-3.007-2.087-4.74-4.526-5.091-.559-.081-.671-.105-3.539-.11-10.173.005-12.403-.448-14.41 1.633z" fill="url(#SVGID_1_)"/>
@@ -39,7 +45,7 @@ export const MultipleFactor: React.FC<props> = ({type,x,y}) => {
                 </svg>
             }
             {type==="Twitter" &&
-                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x={x} y={y} height={30} width={30}
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x={iconX} y={iconY} height={iconHeight} width={iconWidth}
                      viewBox="-100 -100 600 600" enableBackground="new 0 0 512 512" xmlSpace="preserve">
                     <path fill="#03A9F4" d="M512,97.248c-19.04,8.352-39.328,13.888-60.48,16.576c21.76-12.992,38.368-33.408,46.176-58.016
                         c-20.288,12.096-42.688,20.64-66.56,25.408C411.872,60.704,384.416,48,354.464,48c-58.112,0-104.896,47.168-104.896,104.992
@@ -52,14 +58,14 @@ export const MultipleFactor: React.FC<props> = ({type,x,y}) => {
                 </svg>
             }
             {type==="Facebook" &&
-                <svg height="30" width="30" viewBox="-100 -100 612 612" xmlns="http://www.w3.org/2000/svg" x={x} y={y}>
+                <svg height={iconHeight} width={iconWidth} viewBox="-100 -100 612 612" xmlns="http://www.w3.org/2000/svg" x={iconX} y={iconY}>
                     <path d="m483.738281 0h-455.5c-15.597656.0078125-28.24218725 12.660156-28.238281 28.261719v455.5c.0078125 15.597656 12.660156 28.242187 28.261719 28.238281h455.476562c15.605469.003906 28.257813-12.644531 28.261719-28.25 0-.003906 0-.007812 0-.011719v-455.5c-.007812-15.597656-12.660156-28.24218725-28.261719-28.238281zm0 0" fill="#4267b2"/>
                     <path d="m353.5 512v-198h66.75l10-77.5h-76.75v-49.359375c0-22.386719 6.214844-37.640625 38.316406-37.640625h40.683594v-69.128906c-7.078125-.941406-31.363281-3.046875-59.621094-3.046875-59 0-99.378906 36-99.378906 102.140625v57.035156h-66.5v77.5h66.5v198zm0 0" fill="#fff"/>
                 </svg>
             }
             {type==="fido" &&
-                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x={x} y={y}
-                     viewBox="0 0 503.488 503.488" enableBackground="new 0 0 503.488 503.488" xmlSpace="preserve" width={30} height={30}>
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x={iconX} y={iconY}
+                     viewBox="0 0 503.488 503.488" enableBackground="new 0 0 503.488 503.488" xmlSpace="preserve" width={iconWidth} height={iconHeight}>
                     <g>
                         <g>
                             <path d="M382.616,133.644h-61.908c-2.148,0-4.156-0.436-4.156,1.7v61.904c0,2.14,2.008,3.28,4.156,3.28h15.516v49.764
@@ -79,9 +85,10 @@ export const MultipleFactor: React.FC<props> = ({type,x,y}) => {
                     </g>
                 </svg>
             }
-            <text x={x} y={y} fontFamily="Roboto" fontSize="19" fill="#CACBCE" id="Sign_In_With_Google_Idp">
-                <tspan id="svg_1" fill="black" y={y+22} x={x+40}>Sign In With </tspan>
-                <tspan id="svg_2" fill="black" fontWeight="700" fontFamily="Roboto-Regular, Roboto" y={y+22}>{type}</tspan>
+
+            <text x={x} y={y} className="buttonText" id="Sign_In_With_Google_Idp">
+                <tspan className="textLeft" id="svg_1" y={y+22} x={x+60}>Sign In With </tspan>
+                <tspan className="textRight" id="svg_2" y={y+22}>{type}</tspan>
             </text>
         </g>
     )

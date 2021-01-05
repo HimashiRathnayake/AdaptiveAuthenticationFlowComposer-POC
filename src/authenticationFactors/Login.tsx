@@ -6,8 +6,8 @@ type props ={
 }
 
 export const Login: React.FC<props> = ({options}) => {
-    let Y= options.length*40;
-    let height = 780+Y;
+    let Y= options.length*50;
+    let height = 780;
     let viewBox = `0 0 526 ${height}`;
     return(
         <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
@@ -29,8 +29,14 @@ export const Login: React.FC<props> = ({options}) => {
                     </g>
                     <text id="IDENTITY_SERVER" data-name="IDENTITY SERVER" transform="translate(957 -1201.461)" fill="#fff" fontSize="21" fontFamily="Helvetica"><tspan x="0" y="0">IDENTITY SERVER</tspan></text>
                 </g>
+                {options.length===0 &&
+                    <text x={190} y={220} className="textEmpty" id="textEmpty">
+                        <tspan className="textAddAuthenticators" id="svg_1">Add authenticators </tspan>
+                        <tspan className="textAddAuthenticators" id="svg_1" x={120} y={240}>to build an authentication sequence.</tspan>
+                    </text>
+                }
                 {options.map((option: string, index:number) => {
-                    let x=87, y=200+40*index;
+                    let x=87, y=200+50*index;
                     return (
                         <MultipleFactor key={index} type={option} x={x} y={y}/>
                     )})

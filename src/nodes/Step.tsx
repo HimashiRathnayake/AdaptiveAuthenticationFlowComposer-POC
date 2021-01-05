@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {shallowEqual, useSelector} from "react-redux";
 import {DroppableContainer} from "../visualEditor/DroppableContainer";
-import {MdDelete} from "react-icons/all";
+import {MdDelete, MdModeEdit} from "react-icons/all";
 import {Handle, Position} from "react-flow-renderer";
 import {Basic} from "../authenticationFactors/Basic";
 import {IdentifierFirst} from "../authenticationFactors/IdentifierFirst";
@@ -12,14 +12,14 @@ import {Tooltip} from "@material-ui/core";
 // @ts-ignore
 export const Step: React.FC = ({data}) => {
     let factors: any[] = [];
-    const middle = 217;
 
-    const steps : any = useSelector(
+    const [steps, useSubjectFrom, useAttributesFrom] : [any[], string, string] = useSelector(
         (state:any) => {
-            return state.stepReducer.steps
+            return [state.stepReducer.steps, state.stepReducer.useSubjectFrom, state.stepReducer.useAttributesFrom];
         },
         shallowEqual
     )
+    console.log(steps)
 
     let step = steps.filter((step:any)=>step.id==data.text);
     if (step.length>0){
@@ -28,11 +28,25 @@ export const Step: React.FC = ({data}) => {
 
     return (
         <div className="stepContainer">
-            <h4>Step {data.text}</h4>
+            <div className="stepHeader">
+                <h3 className="stepHeaderText">Step {data.text}</h3>
+            </div>
             <DroppableContainer containerName={data.text} className="step">
                 <div className="step-top-bar">
-                    <button className="authenticators-button" onClick={data.showAuthenticatorsList}>Authenticators</button>
-                    <button className="delete-button" onClick={data.onClick}><MdDelete/></button>
+                    {data.text==useSubjectFrom && <Tooltip title="Subject is used from this step" aria-label="s">
+                        <div className="stepHeaderIcon">s</div>
+                    </Tooltip>}
+                    {data.text==useAttributesFrom && <Tooltip title="Attributes are used from this step" aria-label="a">
+                        <div className="stepHeaderIcon">a</div>
+                    </Tooltip>}
+                    <Tooltip title="Edit" aria-label="Edit">
+                        <button className="step-button" onClick={data.showAuthenticatorsList}>
+                            <MdModeEdit/>
+                        </button>
+                    </Tooltip>
+                    <Tooltip title="Remove" aria-label="Remove">
+                        <button className="step-button" onClick={data.onClick}><MdDelete/></button>
+                    </Tooltip>
                 </div>
                 <Handle
                     type="target"

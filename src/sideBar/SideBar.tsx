@@ -1,7 +1,7 @@
 import React from "react";
 import authFactors from "../AuthFactors.json";
 import '../styles/sidebar.css';
-import {DraggableStep} from "../visualEditor/DraggableStep";
+import {DraggableStep} from "./DraggableStep";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {DndProvider} from "react-dnd";
 

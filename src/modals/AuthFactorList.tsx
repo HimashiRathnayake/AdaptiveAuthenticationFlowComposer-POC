@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import "../styles/popup.css"
+import React, {useState} from 'react';
+import "../styles/modal.css"
 import authFactors from "../AuthFactors.json";
 import {Checkbox, ListItemText, MenuItem} from "@material-ui/core";
-import {BiArrowBack, TiTick} from "react-icons/all";
+import {TiTick} from "react-icons/all";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {saveAstFromVisualEditor, setUseAttributesFromStep, setUseSubjectFromStep} from "../store/actionCreators";
+import {setUseAttributesFromStep, setUseSubjectFromStep} from "../store/actionCreators";
 import {Dispatch} from "redux";
+import ReactModal from "react-modal";
 
 type Props={
     onDone: Function,
@@ -64,7 +65,11 @@ export const AuthFactorList: React.FC<Props> = ({onDone, step, onBack}) => {
     }
 
     return (
-        <div className="authFactorList">
+        <ReactModal
+            isOpen={true}
+            className="authFactorList modal"
+            overlayClassName="overlay"
+        >
             <div className="authFactorListContainer">
                 <h1>Step {step}</h1>
                 <div className="factor">
@@ -122,6 +127,6 @@ export const AuthFactorList: React.FC<Props> = ({onDone, step, onBack}) => {
                     </button>
                 </div>
             </div>
-        </div>
+        </ReactModal>
     );
 }

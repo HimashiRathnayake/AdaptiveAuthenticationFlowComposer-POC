@@ -18,9 +18,35 @@
     margin-top: -6.3vh;
 }
 
+.stepHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.headerIconContainer {
+    display: flex;
+    flex-direction: row;
+    padding-left: 3.5vw;
+    width: 3.5vw;
+}
+
+.stepHeaderIcon {
+    height: 20px;
+    width: 20px;
+    margin-block: 4px;
+    margin-inline: 10px;
+    border: 1px rgba(255,255,255,0.5) solid;
+    border-radius: 100%;
+    cursor: default;
+    justify-content: center;
+    display: flex;
+    color: #b9bbc1;
+}
+
 .step {
     background: rgba(0, 0, 0, 0.0);
-    border: 1px dashed rgba(255,255,255,0.5);
+    border: 1px dashed rgba(255,255,255,0.7);
     color: #FFF;
     padding: 10px;
     font-size: 14px;
@@ -53,18 +79,18 @@
 }
 
 .step-top-bar {
-    align-items: center;
     display: flex;
+    flex-direction: row;
     justify-content: flex-end;
-    /*align-items: center;*/
     margin-bottom: 15px;
 }
 
-.delete-button {
+.step-button {
     background-color: rgba(0,0,0,0);
-    color: #FFFFFF;
+    color: #a3a5aa;
     border: rgba(0,0,0,0);
     font-size: 24px;
+    margin-top: 3px;
 }
 
 .authenticators-button {

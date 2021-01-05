@@ -3,19 +3,19 @@ import {AddCondition, AddStepToCondition, AddSuccessFailureSteps, DeleteStep, Ge
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import ReactFlow, {Background, Controls} from "react-flow-renderer";
 import {Condition, CustomEdge, Edge, Element, Invisible, MultiFactor, Plus, Success} from "./Elements";
-import {Popup} from "./PopUp";
+import {ComponentSelector} from "../modals/ComponentSelector";
 import {Dispatch} from "redux";
 import {saveAstFromVisualEditor, saveStep} from "../store/actionCreators";
 import {DroppableContainer} from "./DroppableContainer";
 import "../styles/visualEditor.css";
-import {AuthFactorList} from "./AuthFactorList";
+import {AuthFactorList} from "../modals/AuthFactorList";
 import {nodeTypes} from "../nodes";
 import {edgeTypes} from "../edges";
-import {ConditionList} from "./ConditionList";
+import {ConditionList} from "../modals/ConditionList";
 
 let uniqueNodeIdList: any[] = []; //Array to keep a unique nodes id list
 let lastStep: any = null;
-let x = 10; let y = 200;
+let x = 20; let y = 200;
 let stepHeight = 220;
 let distanceX=350; let distanceY=600;
 let lastStepX = 10; let lastStepY = 200;
@@ -60,7 +60,7 @@ export const VisualFlowGenerator: React.FC = () => {
     }
 
     const createCustomEdge = (source:string|null, target:string|null, color:string, label?:string, handler?:string, targetHandler?:string) => {
-        setElements((elements:any[])=>[...elements, CustomEdge(`${source}${target}`, source, target, label, color, handler, targetHandler, undefined, undefined, undefined, 300)]);
+        setElements((elements:any[])=>[...elements, CustomEdge(`${source}${target}`, source, target, label, color, handler, targetHandler, undefined, undefined, -40, 400)]);
     }
 
     const createElement = (step:string, xVal:number, yVal:number, type?:string, args?:string[]) => {
@@ -96,7 +96,7 @@ export const VisualFlowGenerator: React.FC = () => {
                     factors=authFactorsWithStep[0].options
                 }
                 if (factors.length>0) {
-                    elementList.push(Invisible(step + "invisible", xVal + 650, yVal - 15.5 + stepHeight));
+                    elementList.push(Invisible(step + "invisible", xVal + 650, yVal - 16.5 + stepHeight));
                     uniqueNodeIdList.push(step+"invisible");
                     if (basic){
                         elementList.push(Edge(`${step}${step + "invisible"}`, step, step + "invisible", "Basic", "#D6D5E6", undefined, "targetLeft"));
@@ -114,17 +114,17 @@ export const VisualFlowGenerator: React.FC = () => {
                         } else {
                             [firstHalf, secondHalf] = [factors.slice(0, indexToSplit), factors.slice(indexToSplit)];
                         }
-                        for (let index in firstHalf) {
-                            let factor = firstHalf[index];
-                            elementList.push(MultiFactor(step + factor, factor, xVal + 380, yVal - 100 - 300 * +index));
-                            elementList.push(CustomEdge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined, -10 * (+index + 1)));
-                            elementList.push(CustomEdge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetTop", undefined, 10 * +index, (index === "0") ? 0 : -10));
+                        for (let index1 in firstHalf) {
+                            let factor1 = firstHalf[index1];
+                            elementList.push(MultiFactor(step + factor1, factor1, xVal + 380, yVal - 100 - 300 * +index1));
+                            elementList.push(CustomEdge(`${step}${step + factor1}`, step, step + factor1, undefined, "#D6D5E6", undefined, undefined, -10 * (+index1 + 1)));
+                            elementList.push(CustomEdge(`${step + factor1}${step + "invisible"}`, step + factor1, step + "invisible", undefined, "#D6D5E6", undefined, "targetTop", undefined, 10*+index1));
                         }
                         for (let index in secondHalf) {
                             let factor = secondHalf[index];
                             elementList.push(MultiFactor(step + factor, factor, xVal + 380, yVal + 260 + 300 * +index));
                             elementList.push(CustomEdge(`${step}${step + factor}`, step, step + factor, undefined, "#D6D5E6", undefined, undefined, 10 * (+index + 1)));
-                            elementList.push(CustomEdge(`${step + factor}React App${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetBottom", undefined, 10 * +index));
+                            elementList.push(CustomEdge(`${step + factor}${step + "invisible"}`, step + factor, step + "invisible", undefined, "#D6D5E6", undefined, "targetBottom", undefined, 10*+index));
                         }
                     }
                     stepsToSuccess.push(step + "invisible");
@@ -187,7 +187,6 @@ export const VisualFlowGenerator: React.FC = () => {
     }
 
     const onDone = (authFactors:any[]) => {
-        console.log('hi')
         let step: string = '';
         if (stepToViewAuthFactors===null) {
             let newAst;
@@ -219,8 +218,14 @@ export const VisualFlowGenerator: React.FC = () => {
     useEffect(()=>{
             uniqueNodeIdList = [];
             stepsToSuccess = [];
-            x=10; y=200; lastStepX=0; lastStepY=100; lastStepX = 10; lastStepY = 200;
+            x=20; y=200; lastStepX=0; lastStepY=100; lastStepX = 10; lastStepY = 200;
             setElements([]);
+            setVisible(false);
+            setVisibleAuthFactors(false);
+            setVisibleConditions(false);
+            setElements([]);
+            setStep(null);
+            setSuccessFailure(null);
 
             for (let step of stepsArray){
                 let currentStep = step[1];
@@ -244,10 +249,10 @@ export const VisualFlowGenerator: React.FC = () => {
                     let remainSuccess=successSteps[2];
 
                     if(condition!==undefined && uniqueNodeIdList.indexOf(condition)===-1){
-                        createElement(condition, x, y+189.5, 'condition', GetConditionArguments(ast, condition).toString());
+                        createElement(condition, x, y+189, 'condition', GetConditionArguments(ast, condition).toString());
                         createEdge(uniqueNodeIdList[uniqueNodeIdList.length-2], condition, '#D6D5E6');
-                        createCustomEdge(condition, lastStep, 'red', 'Failure','failure', 'failTarget');
-                        x+=distanceX;
+                        // createCustomEdge(condition, lastStep, 'red', 'Failure','failure', 'failTarget');
+                        x+=120;
                     }
 
                     for (let successStep of successPath){
@@ -297,8 +302,8 @@ export const VisualFlowGenerator: React.FC = () => {
 
             y+=186.5;
             for (let step of stepsToSuccess){
-                createElement(step+'plus', x+40, y+8, 'plus');
-                createElement(step+'success', x+200, y, 'success');
+                createElement(step+'plus', x+40, y+7.5, 'plus');
+                createElement(step+'success', x+distanceX/2, y-0.5, 'success');
                 createEdge(step+'plus', step+'success', '#D6D5E6');
                 createEdge(step, step+'plus', '#D6D5E6');
                 y+=800;
@@ -311,8 +316,9 @@ export const VisualFlowGenerator: React.FC = () => {
         <DroppableContainer className='Flow' containerName="Flow">
             {GetRequest(ast) && <div className='Flow-container'>
                     {visible ? (
-                        <Popup onCancel={onCancel} addStep={addStep} addCondition={addCondition}/>
-                    ): visibleAuthFactors ? (
+                        <ComponentSelector isOpen={visible} onCancel={onCancel} addStep={addStep} addCondition={addCondition}/>
+                    ):
+                    visibleAuthFactors ? (
                         <AuthFactorList onDone={onDone} step={stepToViewAuthFactors} onBack={()=>{setVisibleAuthFactors(false); setStep(null);}}/>
                     ): visibleConditions ? (
                         <ConditionList onDoneCondition={addConditionToFlow} onBack={()=>{setVisibleConditions((false))}}/>

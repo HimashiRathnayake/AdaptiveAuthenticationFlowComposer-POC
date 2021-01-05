@@ -1,6 +1,6 @@
 import {Handle, Position} from "react-flow-renderer";
 import React from "react";
-import {BsFillCircleFill} from "react-icons/all";
+import {BiCircle} from "react-icons/all";
 
 // @ts-ignore
 export const Connector = () => {
@@ -23,7 +23,7 @@ export const Connector = () => {
 
             />
             <div>
-                <BsFillCircleFill/>
+                <BiCircle/>
             </div>
             <Handle
                 type="target"

@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import "../styles/popup.css"
-import {Radio, RadioGroup, FormControlLabel, FormControl, MenuItem, Select, Chip, Input} from "@material-ui/core";
-import {BiArrowBack, TiTick} from "react-icons/all";
+import "../styles/modal.css"
+import {Radio, RadioGroup, FormControlLabel, FormControl} from "@material-ui/core";
+import {TiTick} from "react-icons/all";
+import ReactModal from "react-modal";
 
 type Props={
     onDoneCondition: Function,
@@ -36,8 +37,11 @@ export const ConditionList: React.FC<Props> = ({onDoneCondition, onBack}) => {
     }
 
     return (
-        <div className="authFactorList">
-            <div className="popupInner">
+        <ReactModal
+            isOpen={true}
+            className="conditionList modal"
+            overlayClassName="overlay"
+        >
                 <h2>Select Conditions</h2>
                 <FormControl component="fieldset">
                     <RadioGroup
@@ -108,7 +112,6 @@ export const ConditionList: React.FC<Props> = ({onDoneCondition, onBack}) => {
                         Cancel
                     </button>
                 </div>
-            </div>
-        </div>
+        </ReactModal>
     );
 }

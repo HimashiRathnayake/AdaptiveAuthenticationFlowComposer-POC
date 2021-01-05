@@ -45,15 +45,15 @@ export const IdentifierFirst: React.FC<props> = ({options}) => {
                 </g>
                     {options.length>0 && (
                         <g>
-                            <line x1="87" y1="410" x2="197" y2="410" stroke="#CACBCE" strokeWidth="2"/>
+                            <line x1="87" y1="415" x2="197" y2="415" stroke="#CACBCE" strokeWidth="2"/>
                             <text fontFamily="Cambria" fontSize="16" id="OR">
-                                <tspan id="svg_1" y={415} x={261}>OR</tspan>
+                                <tspan id="svg_1" y={420} x={261}>OR</tspan>
                             </text>
-                            <line x1="327" y1="410" x2="437" y2="410" stroke="#CACBCE" strokeWidth="2"/>
+                            <line x1="327" y1="415" x2="437" y2="415" stroke="#CACBCE" strokeWidth="2"/>
                         </g>
                     )}
                     {options.map((option: string, index:number) => {
-                        let x=87, y=430+40*index;
+                        let x=87, y=440+50*index;
                         return (
                             <MultipleFactor type={option} x={x} y={y}/>
                         )})

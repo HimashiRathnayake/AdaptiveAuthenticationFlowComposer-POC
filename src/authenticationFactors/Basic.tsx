@@ -6,8 +6,8 @@ type props ={
 }
 
 export const Basic: React.FC<props> = ({options}) => {
-    let Y= options.length*40;
-    let height = 780+Y;
+    let Y= options.length*50;
+    let height = 740+Y;
     let viewBox = `0 0 526 ${height}`;
     return(
         <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
@@ -20,8 +20,8 @@ export const Basic: React.FC<props> = ({options}) => {
                     <text id="Sign_In" data-name="Sign In" transform="translate(966 -1109.461)" fill="#323232" fontSize="29" fontFamily="Roboto-Regular, Roboto"><tspan x="0" y="0">Sign In</tspan></text>
                     <text id="Forgot_Username_or_Password_" data-name="Forgot Username or Password?" transform="translate(806 -907.461)" fill="#323232" fontSize="18" fontFamily="Roboto-Regular, Roboto"><tspan x="0" y="0">Forgot </tspan><tspan y="0" fill="#f47b20">Username</tspan><tspan y="0" xmlSpace="preserve"> or </tspan><tspan y="0" fill="#f47b20">Password</tspan><tspan y="0">?</tspan></text>
                     <text id="WSO2_Identity_Server_2020" data-name="WSO2 Identity Server © 2020" transform="translate(898 -504.461)" fill="#fff" fontSize="17" fontFamily="Helvetica"><tspan x="0" y={10+Y}>WSO2 Identity Server © 2020</tspan></text>
-                    <text id="Create_Account" data-name="Create Account" transform="translate(806 -609.461)" fill="#f47b20" fontSize="21" fontFamily="Helvetica"><tspan x="0" y="0">Create Account</tspan></text>
-                    <g id="Component_1" data-name="Component 1" transform="translate(1065 -640.461)">
+                    <text id="Create_Account" data-name="Create Account" transform="translate(806 -639.461)" fill="#f47b20" fontSize="21" fontFamily="Helvetica"><tspan x="0" y="0">Create Account</tspan></text>
+                    <g id="Component_1" data-name="Component 1" transform="translate(1065 -670.461)">
                         <rect id="Rectangle_25" data-name="Rectangle 25" width="158" height="51" rx="4" transform="translate(0 0)" fill="#f47b20"/>
                         <text id="Continue" transform="translate(0 12.085)" fill="#fff" fontSize="16" fontFamily="Lato-Bold, Lato" fontWeight="700"><tspan x="46.132" y="16">Continue</tspan></text>
                     </g>
@@ -66,15 +66,15 @@ By signing in, you agree to our Privacy Policy" transform="translate(806 -812.46
                 <g>
                     {options.length>0 && (
                         <g>
-                            <line x1="87" y1="650" x2="197" y2="650" stroke="#CACBCE" strokeWidth="2"/>
+                            <line x1="87" y1="630" x2="197" y2="630" stroke="#CACBCE" strokeWidth="2"/>
                             <text fontFamily="Cambria" fontSize="16" id="OR">
-                                <tspan id="svg_1" y={655} x={261}>OR</tspan>
+                                <tspan id="svg_1" y={635} x={255}>OR</tspan>
                             </text>
-                            <line x1="327" y1="650" x2="437" y2="650" stroke="#CACBCE" strokeWidth="2"/>
+                            <line x1="327" y1="630" x2="437" y2="630" stroke="#CACBCE" strokeWidth="2"/>
                         </g>
                     )}
                     {options.map((option: string, index:number) => {
-                        let x=87, y=670+40*index;
+                        let x=87, y=660+50*index;
                         return (
                             <MultipleFactor key={option} type={option} x={x} y={y}/>
                         )})

@@ -2,7 +2,7 @@ import React from 'react';
 import './styles/App.css';
 import VisualEditor from "./visualEditor/VisualEditor";
 import ScriptEditor from "./scriptEditor/ScriptEditor";
-import {GrPowerReset, VscDebugRestart} from "react-icons/all";
+import {VscDebugRestart} from "react-icons/all";
 import Icon from "./icons/icon.svg";
 // import {SideBar} from "./sideBar/SideBar";
 
@@ -16,7 +16,6 @@ const App = () => {
                     className="reset-button"
                     onClick={()=>window.location.reload()}
                 >
-                    {/* eslint-disable-next-line react/jsx-no-undef */}
                     <VscDebugRestart className="reset-icon"/> Reset
                 </button>
             </header>

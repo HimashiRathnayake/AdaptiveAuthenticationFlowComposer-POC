@@ -2,7 +2,7 @@ import React from "react";
 
 export const Twitter: React.FC = () => {
     return(
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:240}}>
+        <div className="svgContainer">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 220 180" enableBackground="new 0 0 200 250" xmlSpace="preserve">
                 <defs>
                     <rect id="rect-twitter" x="0%" y="0%" width="100%" height="100%" rx="10" fill="#fff"/>

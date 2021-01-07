@@ -26,7 +26,7 @@ export const ConditionNode = ({data}) => {
                 </div>
                 <div className="textContainer">
                     <text>{data.condition}</text>
-                    <text>{data.args}</text>
+                    {data.condition === "hasRole" && <text>{data.args}</text>}
                 </div>
             </div>
             <Handle

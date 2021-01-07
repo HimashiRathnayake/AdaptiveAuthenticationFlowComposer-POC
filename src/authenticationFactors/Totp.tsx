@@ -2,8 +2,8 @@ import React from "react";
 
 export const Totp: React.FC = () => {
     return(
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:240, height:245}}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="420" height="407" viewBox="0 0 420 407">
+        <div className="svgContainer totp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="240" viewBox="0 0 420 407">
                 <g id="sms-otp" transform="translate(-748 1223)">
                     <g id="Rectangle_618" data-name="Rectangle 618" transform="translate(748 -1182)" fill="#fff" stroke="rgba(188,188,188,0.5)" strokeWidth="1">
                         <rect width="420" height="323" rx="21" stroke="none"/>

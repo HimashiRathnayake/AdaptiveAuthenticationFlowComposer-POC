@@ -2,7 +2,7 @@ import React from "react";
 
 export const Google: React.FC = () => {
     return(
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:240, height:267}}>
+        <div className="svgContainer">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 268" enableBackground="0 0 240 266" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" xmlSpace="preserve">
                 <defs>
                     <rect id="rect-google" x="0%" y="0%" width="100%" height="100%" rx="10"/>

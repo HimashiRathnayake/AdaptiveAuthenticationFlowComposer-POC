@@ -30,6 +30,7 @@
   z-index: 1;
   align-items: center;
   justify-content: flex-start;
+  letter-spacing: 0.5px;
 }
 
 .header-icon {
@@ -38,17 +39,24 @@
   padding: 10px;
 }
 
+.headerText {
+  display: flex;
+  flex-direction: column;
+}
+
 .reset-button {
   display: flex;
   align-items: center;
+  justify-content: center;
   float: right;
   height: 4vh;
   width: 6vw;
-  margin-left: 66vw;
+  margin-left: 65vw;
   background-color: rgba(0,0,0,0.2);
   color: rgba(255,255,255,0.8);
-  box-shadow: 2px 2px 2px #4e5053;
+  box-shadow: 2px 2px 2px #191a1a;
   border-radius: 5px;
+  border-color: #191a1a;
 }
 
 .reset-icon {

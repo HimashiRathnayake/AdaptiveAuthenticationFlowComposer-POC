@@ -7,6 +7,7 @@ import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {setUseAttributesFromStep, setUseSubjectFromStep} from "../store/actionCreators";
 import {Dispatch} from "redux";
 import ReactModal from "react-modal";
+import {AuthenticatorIcons} from "../authenticationFactors/AuthenticatorIcons";
 
 type Props={
     onDone: Function,
@@ -24,6 +25,10 @@ export const AuthFactorList: React.FC<Props> = ({onDone, step, onBack}) => {
         },
         shallowEqual
     )
+
+    if (step===null){
+        step=steps.length+1;
+    }
 
     const dispatch: Dispatch<any> = useDispatch();
 
@@ -44,8 +49,8 @@ export const AuthFactorList: React.FC<Props> = ({onDone, step, onBack}) => {
 
     const [checkedList, setCheckedList] : [any, any] = useState(factors);
 
-    const onChange = (checked?:boolean, name?:string) => {
-        if(checked){
+    const onChange = (name?:string) => {
+        if(checkedList.indexOf(name)===-1){
             setCheckedList((checkedList:any[])=>[...checkedList, name]);
         }else{
             setCheckedList((checkedList:any[])=>[...checkedList.slice(0, checkedList.indexOf(name)), ...checkedList.slice(checkedList.indexOf(name) + 1)]);
@@ -70,61 +75,76 @@ export const AuthFactorList: React.FC<Props> = ({onDone, step, onBack}) => {
             className="authFactorList modal"
             overlayClassName="overlay"
         >
-            <div className="authFactorListContainer">
-                <h1>Step {step}</h1>
-                <div className="factor">
+            <div className="authFactorsContainer">
+                <div className="headerContainer">
+                    Step {step} Configuration
+                    <div className="headerHeading">Configure authentication step by selecting the local/federated authenticators.</div>
+                </div>
+                <div className="menuItemContainer">
                     <MenuItem value="subject" className="menuItem">
                         <Checkbox
                             className="checkbox"
+                            color="default"
                             checked={useSubjectFrom==step}
                             onChange={(event, checked) => onSubjectChange(checked)}
                         />
-                        <ListItemText primary={"Use subject identifier from this step"} />
+                        <ListItemText primary={"Use subject identifier from this step"} className="menuItemName"/>
                     </MenuItem>
                     <MenuItem value="attributes" className="menuItem">
                         <Checkbox
                             className="checkbox"
+                            color="default"
                             checked={useAttributesFrom==step}
                             onChange={(event, checked) => onAttributesStepChange(checked)}
                         />
-                        <ListItemText primary={"Use attributes from this step"} />
+                        <ListItemText primary={"Use attributes from this step"} className="menuItemName"/>
                     </MenuItem>
                 </div>
-                <h2>Select Authentication Factors</h2>
-                {authFactors.map((factor: any) => {
-                    let disabled = (step=="1" && factor.displayName==="fido")
-                        // || (checkedList.indexOf("basic")!==-1 && factor.type!=="federated" && factor.displayName!=="basic")
-                    let checked = checkedList.indexOf(factor.displayName)!==-1 && !disabled
-                    return(
-                        <div className="factor" key={factor.id}>
-                            <MenuItem value={factor.displayName} className="menuItem">
-                                <Checkbox
-                                    className="checkbox"
-                                    disabled ={disabled}
-                                    checked={checked}
-                                    onChange={(event, checked) => onChange(checked, factor.displayName)}
-                                />
-                                <ListItemText primary={factor.displayName} />
-                            </MenuItem>
-                            {(factor.displayName==="identifier-first"||factor.displayName==="active-sessions-limit-handler") && checkedList.indexOf(factor.displayName)!==-1 && <p className="warning">This is a handler. Make sure you add authenticators in other steps.</p>}
-                        </div>
-                )})}
+                <div className="authFactorsListContainer">
+                    <div className="authFactorsHeader">Authenticators</div>
+                    <div>Local</div>
+                    <div className="innerFactorsContainer">
+                        {authFactors.map((factor: any) => {
+                            let disabled = (step=="1" && factor.displayName==="fido")
+                            let checked = checkedList.indexOf(factor.displayName)!==-1 && !disabled
+                            return(
+                                disabled ? (<div></div>
+                                ): (<div className="factorContainer" key={factor.id}>
+                                    <button
+                                        className={checked ? "factor selectedFactor": "factor unselectedFactor"}
+                                        onClick={()=>onChange(factor.displayName)}
+                                    >
+                                        <div className={factor.type}>
+                                            <AuthenticatorIcons type={factor.displayName+"1"} iconX={0} iconY={0} iconHeight={50} iconWidth={50}/>
+                                        </div>
+                                        {/*{(factor.displayName==="identifier-first"||factor.displayName==="active-sessions-limit-handler") && checkedList.indexOf(factor.displayName)!==-1 && <p className="warning">This is a handler. Make sure you add authenticators in other steps.</p>}*/}
+                                    </button>
+                                    <div className="factorName">
+                                    {factor.displayName}
+                                    </div>
+                                </div>
+                                )
+                        )})}
+                    </div>
+                </div>
 
-                <div className="button-container">
-                    <button
-                        className="button-2"
-                        onClick={()=>onDone(checkedList)}
-                        disabled={checkedList.length===0}
-                    >
-                        <TiTick/>
-                        Done
-                    </button>
-                    <button
-                        className="button-2"
-                        onClick={()=>onBack()}
-                    >
-                        Cancel
-                    </button>
+                <div className="buttonContainer">
+                    <div>
+                        <button
+                            className="doneButton"
+                            onClick={()=>onDone(checkedList)}
+                            disabled={checkedList.length===0}
+                        >
+                            <TiTick/>
+                            Done
+                        </button>
+                        <button
+                            className="cancelButton"
+                            onClick={()=>onBack()}
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </ReactModal>

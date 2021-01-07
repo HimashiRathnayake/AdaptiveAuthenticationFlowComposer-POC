@@ -1,7 +1,9 @@
 .Visual-editor-header{
     margin-left: 1rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     padding-left: 1rem;
+    margin-top: -0.5rem;
+    letter-spacing: 0.5px;
 }
 
 .Visual-editor-body {

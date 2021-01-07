@@ -1,13 +1,12 @@
-import React, {useState} from "react";
+import React from "react";
 import {shallowEqual, useSelector} from "react-redux";
 import {DroppableContainer} from "../visualEditor/DroppableContainer";
-import {MdDelete, MdModeEdit} from "react-icons/all";
+import {HiClipboardList, MdDelete, MdModeEdit, MdSubject} from "react-icons/all";
 import {Handle, Position} from "react-flow-renderer";
 import {Basic} from "../authenticationFactors/Basic";
 import {IdentifierFirst} from "../authenticationFactors/IdentifierFirst";
 import {Login} from "../authenticationFactors/Login";
-import authFactors from "../AuthFactors.json";
-import {Tooltip} from "@material-ui/core";
+import {Icon, Tooltip} from "@material-ui/core";
 
 // @ts-ignore
 export const Step: React.FC = ({data}) => {
@@ -19,7 +18,6 @@ export const Step: React.FC = ({data}) => {
         },
         shallowEqual
     )
-    console.log(steps)
 
     let step = steps.filter((step:any)=>step.id==data.text);
     if (step.length>0){
@@ -29,16 +27,24 @@ export const Step: React.FC = ({data}) => {
     return (
         <div className="stepContainer">
             <div className="stepHeader">
-                <h3 className="stepHeaderText">Step {data.text}</h3>
+                <h4 className="stepHeaderText">Step {data.text}</h4>
             </div>
             <DroppableContainer containerName={data.text} className="step">
                 <div className="step-top-bar">
-                    {data.text==useSubjectFrom && <Tooltip title="Subject is used from this step" aria-label="s">
-                        <div className="stepHeaderIcon">s</div>
-                    </Tooltip>}
-                    {data.text==useAttributesFrom && <Tooltip title="Attributes are used from this step" aria-label="a">
-                        <div className="stepHeaderIcon">a</div>
-                    </Tooltip>}
+                    {data.text==useSubjectFrom &&
+                        <Tooltip title="Subject is used from this step" aria-label="s">
+                            <Icon className="stepHeaderIcon">
+                                <MdSubject/>
+                            </Icon>
+                        </Tooltip>
+                    }
+                    {data.text==useAttributesFrom &&
+                        <Tooltip title="Attributes are used from this step" aria-label="a">
+                            <Icon className="stepHeaderIcon">
+                                <HiClipboardList/>
+                            </Icon>
+                        </Tooltip>
+                    }
                     <Tooltip title="Edit" aria-label="Edit">
                         <button className="step-button" onClick={data.showAuthenticatorsList}>
                             <MdModeEdit/>

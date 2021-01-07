@@ -10,7 +10,7 @@ export const IdentifierFirst: React.FC<props> = ({options}) => {
     let height = 780+Y;
     let viewBox = `0 0 526 ${height}`;
     return(
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+        <div className="svgContainer">
             <svg xmlns="http://www.w3.org/2000/svg" width="526" height="370" viewBox={viewBox}>
                 <g id="login" transform="translate(-748 1219)">
                     <g id="Rectangle_618" data-name="Rectangle 618" transform="translate(748 -1172.461)" fill="#fff" stroke="rgba(188,188,188,0.5)" strokeWidth="1">

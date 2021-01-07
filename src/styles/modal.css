@@ -1,12 +1,8 @@
 .modal {
-    position: fixed;
+    position: absolute;
     background-color: #fff;
-    padding-top: 5vh;
     flex-direction: column;
     display: flex;
-    box-shadow: 1px 1px 5px #0f1011;
-    text-align: center;
-    font-size: 1rem;
     padding-bottom: 1rem;
     color: #313234;
 }
@@ -17,14 +13,27 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(3, 3, 3, 0.2);
 }
 
 .button {
-    width: 20vh;
+    width: 26vh;
     height: 5vh;
     align-self: center;
+    align-items: center;
+    justify-content: center;
     margin-top: 10px;
+    display: flex;
+    font-weight: 500;
+}
+
+.buttonSpace{
+    width: 10px;
+}
+
+.button:focus {
+    box-shadow:none !important;
+    border: none;
 }
 
 .button:hover {
@@ -33,29 +42,134 @@
 
 .authFactorList {
     position: fixed;
-    top: 20vh;
+    top: 15vh;
     left: 20vw;
-    right: 50vw;
-    bottom: 10vh;
-    padding-top: 20px;
+    right: 20vw;
+    max-height: 85vh;
     flex-direction: column;
     display: flex;
     box-shadow: 1px 1px 5px #0f1011;
+    border-radius: 4px;
+}
+
+.authFactorsContainer {
     overflow: scroll;
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.authFactorsContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.headerContainer {
+    color: rgba(0,0,0,.87);
+    font-weight: 500;
+    border-top-right-radius: 3px;
+    border-bottom: 1px solid rgba(34,36,38,.15);
+    font-size: 1.42857143rem;
+    padding: 1.75rem 1.5rem;
+    overflow: hidden;
+    min-height: 30px;
+}
+
+.headerHeading {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #9c9c9c;
+    width: 600px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.authFactorsHeader {
+    padding: 1.25rem 1.5rem;
+    font-weight: 500;
+    font-size: 1.14285714rem;
+}
+
+.menuItemContainer{
+    padding: 1.25rem 0rem 1rem 0rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.innerFactorsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 1rem;
+}
+
+.authFactorsListContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: #fff;
+    padding-bottom: 20px;
+    margin: 10px 10px 20px 10px;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px 0 #d4d4d5,0 0 0 1px #d4d4d5;
+    transition: box-shadow .1s ease,transform .1s ease;
+}
+
+.factorContainer {
+    width: 100px;
+    height: 120px;
+    margin: 9px;
+}
+
+.factor {
+    width: 100px;
+    height: 100px;
+    border-radius: 3px;
+    border: 1px solid #e8e8e8;
+}
+
+.factor:hover {
+    box-shadow: 0 1px 3px 0 #d4d4d5,0 0 0 1px #d4d4d5;
+}
+
+.unselectedFactor {
+    background-color: #fff;
+}
+
+.selectedFactor {
+    background-color: #eae9e9;
+}
+
+.federated {
+    margin-left: -8px;
+}
+
+.factorName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    color: #0f1011;
+    padding-top: 4px;
 }
 
 .conditionList {
     position: fixed;
     top: 25vh;
-    left: 20vw;
-    right: 50vw;
+    left: 25vw;
+    right: 25vw;
     bottom: 25vh;
-    border-radius: 2%;
+    border-radius: 4px;
 }
 
 .conditionGroup {
     padding-left: 2vw;
-    margin-bottom: 4vh;
+    margin: 5vh 0vh 5vh 0vh;
 }
 
 .conditionContainer {
@@ -74,11 +188,6 @@
     width: 28vw;
 }
 
-.factor {
-    display: flex;
-    flex-direction: column;
-}
-
 .menuItem {
     height: 5vh;
 }
@@ -87,14 +196,54 @@
     color: #971844;
 }
 
+.buttonContainer {
+    border-top: 1px solid rgba(34,36,38,.15);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    font-size: 1.43em;
+    line-height: 1.3em;
+    padding: 20px 30px 30px 30px;
+}
+
 .button-2 {
-    width: 20vh;
+    width: 18vh;
     height: 3vh;
     align-self: center;
-    margin-top: 5px;
+    margin-top: 15px;
     margin-bottom: 5px;
     box-shadow: 1px 1px 1px #0f1011;
     margin-inline: 2vw;
+}
+
+.cancelButton {
+    float: left;
+    margin-left: 0;
+    margin-right: .25em;
+    background: 0 0 !important;
+    color: #ff5000;
+    border: none;
+    padding: .78571429em 1.5em .78571429em;
+    cursor: pointer;
+}
+
+.doneButton {
+    cursor: pointer;
+    display: inline-block;
+    outline: 0;
+    border: none;
+    vertical-align: baseline;
+    background-color: #ff5000;
+    color: #fff;
+    padding: .78571429em 1.5em .78571429em;
+    font-weight: 500;
+    line-height: 1em;
+    border-radius: 3px;
+    float: right;
+    margin-right: 0.25em;
+}
+
+:disabled{
+    background-color: #77787b;
 }
 
 .successFailureSelectionForm{
@@ -103,9 +252,18 @@
 }
 
 .componentSelector{
+    border-radius: 4px;
+    position: fixed;
     top: 25vh;
-    left: 20vw;
-    right: 50vw;
-    bottom: 35vh;
-    border-radius: 2%;
+    left: 30vw;
+    right: 30vw;
+    bottom: 30vh;
+    max-height: 85vh;
+    box-shadow: 1px 1px 5px #0f1011;
+}
+
+.verticalButtonContainer {
+    flex-direction: column;
+    display: flex;
+    padding-top: 5vh;
 }

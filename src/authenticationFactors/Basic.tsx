@@ -1,5 +1,6 @@
 import React from "react";
 import {MultipleFactor} from "./MultipleFactor";
+import "../styles/svg.css";
 
 type props ={
     options:any
@@ -10,7 +11,7 @@ export const Basic: React.FC<props> = ({options}) => {
     let height = 740+Y;
     let viewBox = `0 0 526 ${height}`;
     return(
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+        <div className="svgContainer">
             <svg xmlns="http://www.w3.org/2000/svg" width="526" height="365" viewBox={viewBox}>
                 <g id="login" transform="translate(-748 1219)">
                     <g id="Rectangle_618" data-name="Rectangle 618" transform="translate(748 -1172.461)" fill="#fff" stroke="rgba(188,188,188,0.5)" strokeWidth="1">
@@ -23,7 +24,7 @@ export const Basic: React.FC<props> = ({options}) => {
                     <text id="Create_Account" data-name="Create Account" transform="translate(806 -639.461)" fill="#f47b20" fontSize="21" fontFamily="Helvetica"><tspan x="0" y="0">Create Account</tspan></text>
                     <g id="Component_1" data-name="Component 1" transform="translate(1065 -670.461)">
                         <rect id="Rectangle_25" data-name="Rectangle 25" width="158" height="51" rx="4" transform="translate(0 0)" fill="#f47b20"/>
-                        <text id="Continue" transform="translate(0 12.085)" fill="#fff" fontSize="16" fontFamily="Lato-Bold, Lato" fontWeight="700"><tspan x="46.132" y="16">Continue</tspan></text>
+                        <text id="Continue" transform="translate(0 12.085)" fill="#fff" fontSize="16" fontFamily="Roboto-Regular, Roboto" fontWeight="700"><tspan x="46.132" y="18">Continue</tspan></text>
                     </g>
                     <g id="form.checkbox.unchecked" transform="translate(806 -872.461)">
                         <text id="Remember_me_on_this_computer" data-name="Remember me on this computer" transform="translate(34 17)" fill="rgba(0,0,0,0.8)" fontSize="17" fontFamily="Roboto-Regular, Roboto"><tspan x="0" y="0">Remember me on this computer</tspan></text>

@@ -2,7 +2,7 @@ import React from "react";
 
 export const Facebook: React.FC = () => {
     return(
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center", width:240, height:185}}>
+        <div className="svgContainer">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" rx="4" viewBox="0 0 240 185" enableBackground="0 0 240 185" xmlSpace="preserve">
                 <g id="group-facebook">
                     <defs>

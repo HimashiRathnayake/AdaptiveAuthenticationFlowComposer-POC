@@ -30,3 +30,17 @@
 .textAddAuthenticators {
     fill: #919293;
 }
+
+.svgContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.basic {
+    border-radius: 9px;
+}
+
+.totp {
+    border-radius: 100%;
+}

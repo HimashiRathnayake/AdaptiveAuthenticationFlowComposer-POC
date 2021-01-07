@@ -42,7 +42,7 @@ export const ConditionList: React.FC<Props> = ({onDoneCondition, onBack}) => {
             className="conditionList modal"
             overlayClassName="overlay"
         >
-                <h2>Select Conditions</h2>
+                <div className="headerContainer">Select Conditions</div>
                 <FormControl component="fieldset">
                     <RadioGroup
                         className="conditionGroup"
@@ -91,9 +91,9 @@ export const ConditionList: React.FC<Props> = ({onDoneCondition, onBack}) => {
                         </div>
                     </RadioGroup>
                 </FormControl>
-                <div>
+                <div className="buttonContainer">
                     <button
-                        className="button-2"
+                        className="doneButton"
                         disabled={checkedCondition==="custom" && customConditionName===""}
                         onClick={()=>{
                         if(checkedCondition==="custom"){
@@ -106,7 +106,7 @@ export const ConditionList: React.FC<Props> = ({onDoneCondition, onBack}) => {
                         Done
                     </button>
                     <button
-                        className="button-2"
+                        className="cancelButton"
                         onClick={()=>onBack()}
                     >
                         Cancel

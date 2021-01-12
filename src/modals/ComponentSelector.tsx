@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import "../styles/modal.css"
-import {GoPlus} from "react-icons/all";
+import {BiPlusMedical, FaPlus, GoPlus} from "react-icons/all";
 
 type Props={
     isOpen: boolean,
@@ -19,14 +19,16 @@ export const ComponentSelector: React.FC<Props> = ({isOpen, onCancel, addStep, a
                 className="componentSelector modal"
                 overlayClassName="overlay"
                 ariaHideApp={true}
+                bodyOpenClassName="modalOpened"
             >
                  <div className="headerContainer">
                     Select Component
+                     <div className="headerHeading">Select a component to configure the authentication flow.</div>
                  </div>
                  <div className = "verticalButtonContainer">
-                     <button className="button" onClick={()=>addStep()}><GoPlus/><span className="buttonSpace"/> New Authentication Step</button>
-                     <button className="button" onClick={()=>addCondition()}><GoPlus/><span className="buttonSpace"/> New Condition</button>
-                     <button className="button" onClick={()=>onCancel()}>Cancel</button>
+                     <button className="button" onClick={()=>addStep()}><BiPlusMedical className="addIcon"/><div className="buttonText">New Authentication Step</div></button>
+                     <button className="button" onClick={()=>addCondition()}><BiPlusMedical className="addIcon"/><div className="buttonText">New Condition</div></button>
+                     <button className="cancelButton" onClick={()=>onCancel()}>Cancel</button>
                  </div>
             </ReactModal>
     );

@@ -95,15 +95,17 @@ export const GetCondition = (ast : any, scope:any, parentPath:any, state:any): a
 }
 
 export const GetConditionArguments = (ast : any, condition:string): any => {
-    let args: any[] = [];
+    let params: any[] = [];
     traverse(ast, {
         VariableDeclarator(path: any){
             if(path.node.id.name===syntax.roles){
-                args = path.node.init.elements.map((ele:any)=>ele.value);
+                params = path.node.init.elements.map((ele:any)=>ele.value);
+            }else if (path.node.id.name === syntax.invalidAttemptsToStepUp){
+                params = path.node.init.value;
             }
         }
     })
-    return args;
+    return params;
 }
 
 export const GetCallExpression = (ast : any, scope:any, parentPath:any, state:any): any => {
@@ -212,7 +214,7 @@ export const AddSuccessFailureSteps = (ast: any, currentStep: string, nextStep: 
     return ast;
 }
 
-export const AddCondition = (ast:any, step:string, condition:string) => {
+export const AddCondition = (ast:any, step:string, condition:string, params?:any) => {
     let path = FindStep(ast, step);
     let successPath = checkSuccessFailurePath(path.node, path.scope, path.parentPath, path.state, 'success');
     if(successPath===null){
@@ -225,7 +227,7 @@ export const AddCondition = (ast:any, step:string, condition:string) => {
         successPath[0].value.body.body.push(createIfStatement(condition));
     }
     ast.program.body.unshift(parse(syntax.getConditionSyntax(condition)).program.body[0]);
-    ast.program.body.unshift(createVariableDeclarationForCondition(condition));
+    ast.program.body.unshift(createVariableDeclarationForCondition(condition, params));
     return ast;
 }
 

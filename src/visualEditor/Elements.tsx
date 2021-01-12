@@ -53,11 +53,19 @@ export const MultiFactor = (id:string, type:string, x:number, y:number) => {
     });
 }
 
-export const Invisible = (id:string, x:number, y:number) => {
+export const Connector = (id:string, x:number, y:number) => {
     return ({
         id: id,
         position: {x: x, y: y},
-        type: 'invisible'
+        type: 'connector'
+    });
+}
+
+export const Start = (id:string, x:number, y:number) => {
+    return ({
+        id: id,
+        position: {x: x, y: y},
+        type: 'start'
     });
 }
 
@@ -99,10 +107,9 @@ export const Edge = (id:string, source:string|null, target:string|null, label:st
         type: 'step',
         arrowHeadType: 'arrow',
         label: label,
-        labelBgStyle: { fill: color, color: 'white'},
-        labelStyle: {fontSize: 14},
+        labelBgStyle: { fill: "#313234"},
+        labelStyle: {fontSize: 14, fill:"#fff", letterSpacing:"1px"},
         sourceHandle: handler,
         targetHandle: targetHandler,
-        // style: {fill:"red"}
     });
 }

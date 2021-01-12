@@ -5,6 +5,7 @@ import {PlusNode} from "./PlusNode";
 import {MultiFactorNode} from "./MultiFactorNode";
 import {Connector} from "./Connector";
 import {FailureNode} from "./FailureNode";
+import {StartNode} from "./StartNode";
 
 export const nodeTypes = {
     special: Step,
@@ -12,6 +13,8 @@ export const nodeTypes = {
     success: SuccessNode,
     plus: PlusNode,
     multiFactor: MultiFactorNode,
-    invisible: Connector,
+    connector: Connector,
+    start: StartNode,
     failure: FailureNode
+
 };

@@ -13,7 +13,7 @@ export const Totp: React.FC = () => {
                     {/*<text id="WSO2_Identity_Server_2020" data-name="WSO2 Identity Server © 2020" transform="translate(865 -820)" fill="#fff" fontSize="14" fontFamily="SegoeUI, Segoe UI"><tspan x="0" y="0">WSO2 Identity Server © 2020</tspan></text>*/}
                     <g id="Component_4" data-name="Component 4" transform="translate(990 -954)">
                         <rect id="Rectangle_25" data-name="Rectangle 25" width="139" height="41" rx="4" fill="#f47b20"/>
-                        <text id="Authenticate" transform="translate(0 9.658)" fill="#fff" fontSize="16" fontFamily="Lato-Bold, Lato" fontWeight="700"><tspan x="11" y="16">Authenticate</tspan></text>
+                        <text id="Authenticate" transform="translate(10 9.658)" fill="#fff" fontSize="16" fontFamily="Roboto-Regular, Roboto" fontWeight="700"><tspan x="11" y="16">Authenticate</tspan></text>
                     </g>
                     <g id="form.checkbox.unchecked" transform="translate(792 -995)">
                         <text id="Remember_the_device." data-name="Remember the device." transform="translate(27 14)" fill="rgba(0,0,0,0.8)" fontSize="14" fontFamily="Roboto-Regular, Roboto"><tspan x="0" y="0">Remember the device.</tspan></text>

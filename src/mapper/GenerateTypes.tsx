@@ -35,11 +35,17 @@ export const createVariableDeclaration = () => {
     return type.variableDeclaration(syntax.variable, [type.variableDeclarator(type.identifier(syntax.user), type.memberExpression(type.identifier(syntax.context), type.identifier(syntax.currentKnownSubject)))])
 }
 
-export const createVariableDeclarationForCondition = (condition:string) => {
+export const createVariableDeclarationForCondition = (condition:string, params?:any) => {
     let parameters: any = type.arrayExpression([]);
     let variableNameForParameters = syntax.params;
-    if (condition==="hasRole"){parameters=type.arrayExpression([type.stringLiteral("admin"), type.stringLiteral("manager")]); variableNameForParameters = syntax.roles;}
-    else if (condition==="isExceedInvalidAttempts"){parameters=type.numericLiteral(3); variableNameForParameters = syntax.invalidAttemptsToStepUp;}
+    if (condition==="hasRole"){
+        let roles = params.map((param:any)=>type.stringLiteral(param.value));
+        parameters=type.arrayExpression(roles);
+        variableNameForParameters = syntax.roles;
+    }
+    else if (condition==="isExceedInvalidAttempts"){
+        parameters=type.numericLiteral(+params); variableNameForParameters = syntax.invalidAttemptsToStepUp;
+    }
     return type.variableDeclaration(syntax.variable, [type.variableDeclarator(type.identifier(variableNameForParameters), parameters)])
 }
 

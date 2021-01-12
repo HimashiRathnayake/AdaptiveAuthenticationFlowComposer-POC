@@ -13,7 +13,7 @@ export const ConditionNode = ({data}) => {
             />
             <div>
                 <div>
-                    <svg height="50" width="50">
+                    <svg height="58" width="58" viewBox="0 0 50 50">
                         <circle cx="25" cy="25" r="20" stroke="#0A84AE" strokeWidth="3" fill="none"/>
                         <g>
                             <circle cx="20" cy="20" r="3" stroke="#0A84AE" strokeWidth="3" fill="none"/>
@@ -25,8 +25,8 @@ export const ConditionNode = ({data}) => {
                     </svg>
                 </div>
                 <div className="textContainer">
-                    <text>{data.condition}</text>
-                    {data.condition === "hasRole" && <text>{data.args}</text>}
+                    <div>{data.condition}</div>
+                    <div>{data.args}</div>
                 </div>
             </div>
             <Handle

@@ -28,23 +28,25 @@ export const Step: React.FC = ({data}) => {
         <div className="stepContainer">
             <div className="stepHeader">
                 <h4 className="stepHeaderText">Step {data.text}</h4>
+                <div className="headerIconContainer">
+                    {data.text==useSubjectFrom &&
+                    <Tooltip title="Subject is used from this step" aria-label="s">
+                        <Icon className="stepHeaderIcon">
+                            <MdSubject/>
+                        </Icon>
+                    </Tooltip>
+                    }
+                    {data.text==useAttributesFrom &&
+                    <Tooltip title="Attributes are used from this step" aria-label="a">
+                        <Icon className="stepHeaderIcon">
+                            <HiClipboardList/>
+                        </Icon>
+                    </Tooltip>
+                    }
+                </div>
             </div>
             <DroppableContainer containerName={data.text} className="step">
                 <div className="step-top-bar">
-                    {data.text==useSubjectFrom &&
-                        <Tooltip title="Subject is used from this step" aria-label="s">
-                            <Icon className="stepHeaderIcon">
-                                <MdSubject/>
-                            </Icon>
-                        </Tooltip>
-                    }
-                    {data.text==useAttributesFrom &&
-                        <Tooltip title="Attributes are used from this step" aria-label="a">
-                            <Icon className="stepHeaderIcon">
-                                <HiClipboardList/>
-                            </Icon>
-                        </Tooltip>
-                    }
                     <Tooltip title="Edit" aria-label="Edit">
                         <button className="step-button" onClick={data.showAuthenticatorsList}>
                             <MdModeEdit/>

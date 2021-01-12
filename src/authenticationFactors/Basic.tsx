@@ -75,7 +75,7 @@ By signing in, you agree to our Privacy Policy" transform="translate(806 -812.46
                         </g>
                     )}
                     {options.map((option: string, index:number) => {
-                        let x=87, y=660+50*index;
+                        let x=87, y=660+55*index;
                         return (
                             <MultipleFactor key={option} type={option} x={x} y={y}/>
                         )})

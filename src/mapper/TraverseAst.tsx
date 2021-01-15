@@ -3,13 +3,14 @@ import * as syntax from "./AdaptiveCodeSyntax";
 import generate from "@babel/generator";
 import * as type from "@babel/types";
 import {
-    createExpressionStatement, createIfStatement,
+    createExpressionStatement, createExpressionStatementWithSuccess, createIfStatement, createIfStatementWithArguments,
     createObjectExpressionWithCondition,
     createObjectExpressionWithProperty,
     createSuccessFailurePropertyWithStep,
     createSuccessPropertyWithCondition, createVariableDeclarationForCondition,
 } from "./GenerateTypes";
 import {parse} from "@babel/parser";
+import {last} from "lodash-es";
 
 const parser = require('@babel/parser').parse;
 
@@ -184,6 +185,25 @@ export const FindStep = (ast:any, step:string) => {
     return stepPath;
 }
 
+export const FindConditionWithLastStep = (ast:any, condition:string) => {
+    let stepPath : any = {};
+    let lastStep : any = 0;
+    traverse(ast, {
+        CallExpression(path: any){
+            if (path.node.callee.name===syntax.stepExecutor) {
+                lastStep = path.node.arguments[0].value;
+            }
+        },
+        IfStatement(path: any){
+            if (path.node.test.callee && path.node.test.callee.name===condition) {
+                stepPath = path;
+                path.stop();
+            }
+        }
+    })
+    return [lastStep, stepPath];
+}
+
 export const checkSuccessFailurePath = (ast : any, scope:any, parentPath:any, state:any, type:string) => {
     let successPath :any = null;
     traverse(ast, {
@@ -214,6 +234,34 @@ export const AddSuccessFailureSteps = (ast: any, currentStep: string, nextStep: 
     return ast;
 }
 
+export const AddSuccessFailureStepsBefore = (ast: any, beforeStep:string) => {
+    let pathBefore = FindStep(ast, beforeStep);
+    traverse(ast, {
+        CallExpression(path: any) {
+            if (path.node.callee.name === syntax.stepExecutor && path.node.arguments[0].value > +beforeStep-1) {
+                path.node.arguments[0].value = path.node.arguments[0].value + 1;
+            }
+        }
+    });
+    let args = pathBefore.parentPath.parent.body[0];
+    pathBefore.parentPath.parent.body[0] = createExpressionStatementWithSuccess(beforeStep, args);
+    return ast;
+}
+
+export const AddSuccessFailureStepsBeforeCondition = (ast: any, beforeStep:string) => {
+    let [lastStep, pathBefore] = FindConditionWithLastStep(ast, beforeStep);
+    traverse(ast, {
+        CallExpression(path: any) {
+            if (path.node.callee.name === syntax.stepExecutor && path.node.arguments[0].value > lastStep) {
+                path.node.arguments[0].value = path.node.arguments[0].value + 1;
+            }
+        }
+    })
+    let args = pathBefore.parent.body[0];
+    pathBefore.parent.body[0] = createExpressionStatementWithSuccess(lastStep + 1, args);
+    return [ast, lastStep+1];
+}
+
 export const AddCondition = (ast:any, step:string, condition:string, params?:any) => {
     let path = FindStep(ast, step);
     let successPath = checkSuccessFailurePath(path.node, path.scope, path.parentPath, path.state, 'success');
@@ -226,6 +274,15 @@ export const AddCondition = (ast:any, step:string, condition:string, params?:any
     }else{
         successPath[0].value.body.body.push(createIfStatement(condition));
     }
+    ast.program.body.unshift(parse(syntax.getConditionSyntax(condition)).program.body[0]);
+    ast.program.body.unshift(createVariableDeclarationForCondition(condition, params));
+    return ast;
+}
+
+export const AddConditionBeforeStep = (condition: string, params:any, ast: any, beforeStep:string) => {
+    let pathBefore = FindStep(ast, beforeStep);
+    let args = pathBefore.parentPath.parent.body[0];
+    pathBefore.parentPath.parent.body[0] = createIfStatementWithArguments(condition, args);
     ast.program.body.unshift(parse(syntax.getConditionSyntax(condition)).program.body[0]);
     ast.program.body.unshift(createVariableDeclarationForCondition(condition, params));
     return ast;

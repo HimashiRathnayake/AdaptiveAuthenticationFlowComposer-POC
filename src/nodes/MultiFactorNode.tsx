@@ -24,7 +24,7 @@ export const MultiFactorNode = ({data}) => {
             : data.type === "fido" ? <Fido/>
             : data.type === "totp" ? <Totp/>
             :<div className="multiFactor">
-                <text className="multiFactorText">{data.type}</text>
+                <div className="multiFactorText">{data.type}</div>
                 {data.type === "jwt-basic" ? <img src={Jwt} alt="Jwt" width="150" height="106"/>
                 : <div>
                     <svg className="icon" width="50" height="50" viewBox="0 0 512.005 512.005">

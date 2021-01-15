@@ -11,7 +11,7 @@ export const IdentifierFirst: React.FC<props> = ({options}) => {
     let viewBox = `0 0 526 ${height}`;
     return(
         <div className="svgContainer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="526" height="370" viewBox={viewBox}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="300" height="370" viewBox={viewBox}>
                 <g id="login" transform="translate(-748 1219)">
                     <g id="Rectangle_618" data-name="Rectangle 618" transform="translate(748 -1172.461)" fill="#fff" stroke="rgba(188,188,188,0.5)" strokeWidth="1">
                         <rect width="526" height={500+Y} rx="21" stroke="none"/>
@@ -55,7 +55,7 @@ export const IdentifierFirst: React.FC<props> = ({options}) => {
                     {options.map((option: string, index:number) => {
                         let x=87, y=440+50*index;
                         return (
-                            <MultipleFactor type={option} x={x} y={y}/>
+                            <MultipleFactor key={index} type={option} x={x} y={y}/>
                         )})
                     }
             </svg>

@@ -13,12 +13,17 @@ type Props={
     isOpen:boolean,
     onDone: Function,
     step: string,
+    nextStep: string,
     onBack: Function
 }
 
-export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, onBack}) => {
+export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep, onBack}) => {
 
     let factors: any[] = [];
+    let prefix : any = null;
+    if (step===null){
+        prefix = 'New';
+    }
 
     const [steps, useSubjectFrom, useAttributesFrom] : any = useSelector(
         (state:any) => {
@@ -26,10 +31,6 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, onBack}) 
         },
         shallowEqual
     )
-
-    if (step===null){
-        step=steps.length+1;
-    }
 
     const dispatch: Dispatch<any> = useDispatch();
 
@@ -82,7 +83,7 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, onBack}) 
         >
             <div className="authFactorsContainer">
                 <div className="headerContainer">
-                    Step {step} Configuration
+                    {prefix} Step {step} Configuration
                     <div className="headerHeading">Configure authentication step by selecting the local/federated authenticators.</div>
                 </div>
                 <div className="menuItemContainer">
@@ -110,7 +111,7 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, onBack}) 
                     <div className="authFactorsType">Local</div>
                     <div className="innerFactorsContainer">
                         {localFactors.map((factor: any) => {
-                            let disabled = (step=="1" && factor.displayName==="fido")
+                            let disabled = ((step=="1" || nextStep=="1") && factor.displayName==="fido")
                             let checked = checkedList.indexOf(factor.displayName)!==-1 && !disabled
                             return(
                                 disabled ? (<div></div>

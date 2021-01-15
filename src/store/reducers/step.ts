@@ -35,6 +35,21 @@ const stepReducer = (
                     })
                 }
             }
+        case actionTypes.SHIFT_ADD_FACTORS_TO_STEP:
+            let stepIndex=action.step;
+            return {
+                ...state,
+                steps: state.steps.map((item, id) => {
+                    if (item.id < stepIndex) {
+                        return item
+                    }else {
+                        return {
+                            ...item,
+                            id: +item.id+1
+                        }
+                    }
+                }).concat([{id: stepIndex, options: action.factors}])
+            }
         case actionTypes.CHANGE_SUBJECT_FROM_STEP:
             return {
                 ...state,

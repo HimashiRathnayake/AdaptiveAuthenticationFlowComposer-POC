@@ -1,7 +1,6 @@
 import {Handle, Position} from "react-flow-renderer";
 import React from "react";
 import "../styles/node.css";
-import {RiCheckboxBlankLine} from "react-icons/all";
 
 // @ts-ignore
 export const StartNode = ({data}) => {
@@ -21,9 +20,7 @@ export const StartNode = ({data}) => {
                 id='f'
                 onConnect={(params) => console.log('handle onConnect', params)}
             />
-            <div>
-                <RiCheckboxBlankLine/>
-            </div>
+            <div className="startIcon"/>
             <div className="bottom-text">Start</div>
             <Handle
                 type="source"

@@ -25,6 +25,15 @@ export const saveStep = (step:any, factors:any[]) => {
     return simulate(action)
 }
 
+export const shiftSaveStep = (step:any, factors:any[]) => {
+    const action: StepAction = {
+        type: actions.SHIFT_ADD_FACTORS_TO_STEP,
+        step,
+        factors
+    }
+    return simulate(action)
+}
+
 export const setUseSubjectFromStep = (step:any) => {
     const action: StepAction = {
         type: actions.CHANGE_SUBJECT_FROM_STEP,

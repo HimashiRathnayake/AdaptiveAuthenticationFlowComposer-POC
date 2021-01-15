@@ -31,6 +31,18 @@ export const createExpressionStatement = (step:string) => {
     return type.expressionStatement(type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+step)]));
 }
 
+export const createExpressionStatementWithSuccess = (step:string, args:any) => {
+    return type.expressionStatement(type.callExpression(type.identifier(syntax.stepExecutor),
+        [type.numericLiteral(+step), type.objectExpression(
+            [type.objectProperty(
+                type.identifier(syntax.onSuccess),
+                type.functionExpression(null, [type.identifier(syntax.context)], type.blockStatement(
+                    [args]
+                )))]
+        )]
+    ));
+}
+
 export const createVariableDeclaration = () => {
     return type.variableDeclaration(syntax.variable, [type.variableDeclarator(type.identifier(syntax.user), type.memberExpression(type.identifier(syntax.context), type.identifier(syntax.currentKnownSubject)))])
 }
@@ -52,4 +64,8 @@ export const createVariableDeclarationForCondition = (condition:string, params?:
 export const createIfStatement = (condition:string) => {
     // return type.ifStatement(type.identifier(condition), type.blockStatement([]));
     return type.ifStatement(type.callExpression(type.identifier(condition), [type.identifier(syntax.context)]), type.blockStatement([]))
+}
+
+export const createIfStatementWithArguments = (condition:string, args:any) => {
+    return type.ifStatement(type.callExpression(type.identifier(condition), [type.identifier(syntax.context)]), type.blockStatement([args]))
 }

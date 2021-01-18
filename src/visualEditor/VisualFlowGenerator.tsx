@@ -52,6 +52,8 @@ export const VisualFlowGenerator: React.FC = () => {
 
     const dispatch: Dispatch<any> = useDispatch();
 
+    console.log(steps)
+
     const addFactorToStore = React.useCallback(
         (step: any, factors:any[]) => dispatch(saveStep(step, factors)),
         [dispatch]
@@ -257,8 +259,9 @@ export const VisualFlowGenerator: React.FC = () => {
             saveAstToStore(newAst);
         }else{
             step = stepToViewAuthFactors.toString();
+            addFactorToStore(`${step}`, authFactors);
+            console.log(step, authFactors)
             setStep(null);
-            addFactorToStore(step, authFactors);
         }
         setVisibleAuthFactors(false);
     }
@@ -272,7 +275,6 @@ export const VisualFlowGenerator: React.FC = () => {
             setVisibleAuthFactors(false);
             setVisibleConditions(false);
             setElements([]);
-            setStep(null);
             setSuccessFailure(null);
 
             for (let step of stepsArray){
@@ -282,9 +284,9 @@ export const VisualFlowGenerator: React.FC = () => {
 
                 if (uniqueNodeIdList.indexOf(currentStep)===-1){
                     if(uniqueNodeIdList.length<1){
-                        createElement("start", x, y+stepHeight - 45, "start");
+                        createElement("start", x, y+stepHeight - 36.5, "start");
                         createEdge("start", 'plus '+currentStep, '#D6D5E6');
-                        x+=gapX+40;
+                        x+=gapX+80;
                     }else{
                         y=lastStepY;
                         let last = uniqueNodeIdList[uniqueNodeIdList.length-1];

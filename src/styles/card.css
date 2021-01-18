@@ -1,0 +1,55 @@
+.card {
+    display: inline-block;
+    margin-right: 2vw;
+    width: 12vw;
+    height: 12vw;
+    border: 1px solid #e8e8e8;
+    box-shadow: none;
+}
+
+.icon .icon {
+    width: 100px;
+    height: 100px;
+}
+
+.card:hover {
+    box-shadow: 0 1px 3px 0 #d4d4d5;
+    cursor: pointer;
+}
+
+.card .image-container {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.card .bottom-contaner {
+    height: 50%;
+    width: 100%;
+}
+
+.card .text-container {
+    padding-inline: 10px;
+    text-align: center;
+}
+
+.card .heading {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.3em;
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.card .sub-heading{
+    font-size: .8rem;
+    color: #77787b;
+    margin-top: 5px;
+    line-height: 1rem;
+}
+

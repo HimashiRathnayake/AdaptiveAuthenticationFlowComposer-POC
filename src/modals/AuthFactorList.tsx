@@ -50,6 +50,8 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
     }
 
     const [checkedList, setCheckedList] : [any, any] = useState(factors);
+    const [useSubjectFromThisStep, setUseSubjectFromThisStep] : [any, any] = useState(useSubjectFrom==step);
+    const [useAttributesFromThisStep, setUseAttributesFromThisStep] : [any, any] = useState(useAttributesFrom==step);
 
     const onChange = (name?:string) => {
         if(checkedList.indexOf(name)===-1){
@@ -59,16 +61,30 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
         }
     }
 
-    const onSubjectChange = (checked?:boolean) => {
-        if(checked){
-            changeSubjectIdentifier(step);
+    const onClick = () => {
+        if (useSubjectFrom==step && !useSubjectFromThisStep){
+            changeSubjectIdentifier("1");
+        }else if (!(useSubjectFrom==step) && useSubjectFromThisStep){
+            if (step===null && nextStep===null) {
+                changeSubjectIdentifier(steps.length+1);
+            }else if (step===null) {
+                changeSubjectIdentifier(nextStep);
+            }else {
+                changeSubjectIdentifier(step);
+            }
         }
-    }
-
-    const onAttributesStepChange = (checked?:boolean) => {
-        if(checked){
-            changeAttributesFRom(step);
+        if (useAttributesFrom==step && !useAttributesFromThisStep){
+            changeAttributesFRom("1");
+        }else if(!(useAttributesFrom==step) && useAttributesFromThisStep){
+            if (step===null && nextStep===null){
+                changeAttributesFRom(steps.length+1);
+            }else if (step===null){
+                changeAttributesFRom(nextStep);
+            }else {
+                changeAttributesFRom(step);
+            }
         }
+        onDone(checkedList);
     }
 
     const localFactors = authFactors.filter((element:any)=>element.type==="LOCAL"||element.type==="REQUEST_PATH");
@@ -91,8 +107,8 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                         <Checkbox
                             className="checkbox"
                             color="default"
-                            checked={useSubjectFrom==step}
-                            onChange={(event, checked) => onSubjectChange(checked)}
+                            checked={useSubjectFromThisStep}
+                            onChange={(event, checked) => setUseSubjectFromThisStep(checked)}
                         />
                         <ListItemText primary={"Use subject identifier from this step"} className="menuItemName"/>
                     </MenuItem>
@@ -100,8 +116,8 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                         <Checkbox
                             className="checkbox"
                             color="default"
-                            checked={useAttributesFrom==step}
-                            onChange={(event, checked) => onAttributesStepChange(checked)}
+                            checked={useAttributesFromThisStep}
+                            onChange={(event, checked) => setUseAttributesFromThisStep(checked)}
                         />
                         <ListItemText primary={"Use attributes from this step"} className="menuItemName"/>
                     </MenuItem>
@@ -114,14 +130,14 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                             let disabled = ((step=="1" || nextStep=="1") && factor.displayName==="fido")
                             let checked = checkedList.indexOf(factor.displayName)!==-1 && !disabled
                             return(
-                                disabled ? (<div></div>
+                                disabled ? (<div key={factor.id}></div>
                                 ): (<div className="factorContainer" key={factor.id}>
                                     <button
                                         className={checked ? "factor selectedFactor": "factor unselectedFactor"}
                                         onClick={()=>onChange(factor.displayName)}
                                     >
                                         <div className={factor.type}>
-                                            <AuthenticatorIcons type={factor.displayName+"1"} iconX={0} iconY={0} iconHeight={50} iconWidth={50}/>
+                                            <AuthenticatorIcons type={factor.displayName+"1"} iconX={0} iconY={0} iconHeight={40} iconWidth={40}/>
                                         </div>
                                         {/*{(factor.displayName==="identifier-first"||factor.displayName==="active-sessions-limit-handler") && checkedList.indexOf(factor.displayName)!==-1 && <p className="warning">This is a handler. Make sure you add authenticators in other steps.</p>}*/}
                                     </button>
@@ -141,7 +157,7 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                                         onClick={()=>onChange(factor.displayName)}
                                     >
                                         <div className={factor.type}>
-                                            <AuthenticatorIcons type={factor.displayName+"1"} iconX={0} iconY={0} iconHeight={50} iconWidth={50}/>
+                                            <AuthenticatorIcons type={factor.displayName+"1"} iconX={0} iconY={0} iconHeight={40} iconWidth={40}/>
                                         </div>
                                         {/*{(factor.displayName==="identifier-first"||factor.displayName==="active-sessions-limit-handler") && checkedList.indexOf(factor.displayName)!==-1 && <p className="warning">This is a handler. Make sure you add authenticators in other steps.</p>}*/}
                                     </button>
@@ -157,8 +173,8 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                 <div className="buttonContainer">
                     <div>
                         <button
-                            className="doneButton"
-                            onClick={()=>onDone(checkedList)}
+                            className="doneButton floatRight"
+                            onClick={()=>onClick()}
                             disabled={checkedList.length===0}
                         >
                             Done

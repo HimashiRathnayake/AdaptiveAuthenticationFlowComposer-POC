@@ -30,12 +30,14 @@
 .stepHeaderText {
     justify-content: flex-start;
     font-size: 1.1rem;
+    margin-left: 2px;
 }
 
 .headerIconContainer {
     display: flex;
     flex-direction: row;
-    padding-left: 10vw;
+    width: 13.4vw;
+    justify-content: flex-end;
 }
 
 .stepHeaderIcon {
@@ -43,7 +45,14 @@
     border: rgba(0,0,0,0);
     margin-left: 10px;
     cursor: default;
-    justify-content: flex-end;
+}
+
+.subjectIcon {
+    font-size: 23px;
+}
+
+.attributesIcon {
+    font-size: 22px;
 }
 
 .step {

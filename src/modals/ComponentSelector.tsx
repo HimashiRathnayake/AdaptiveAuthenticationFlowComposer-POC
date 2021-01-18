@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import "../styles/modal.css"
-import {BiPlusMedical, FaPlus, GoPlus} from "react-icons/all";
+import {ActionCard} from "../components/ActionCard";
+import {ReactComponent as StepIcon} from "../icons/step.svg";
+import {ReactComponent as ConditionIcon} from "../icons/condition.svg";
 
 type Props={
     isOpen: boolean,
@@ -22,13 +24,24 @@ export const ComponentSelector: React.FC<Props> = ({isOpen, onCancel, addStep, a
                 bodyOpenClassName="modalOpened"
             >
                  <div className="headerContainer">
-                    Select Component
-                     <div className="headerHeading">Select a component to configure the authentication flow.</div>
+                    Select a component
                  </div>
-                 <div className = "verticalButtonContainer">
-                     <button className="button" onClick={()=>addStep()}><BiPlusMedical className="addIcon"/><div className="buttonText">New Authentication Step</div></button>
-                     <button className="button" onClick={()=>addCondition()}><BiPlusMedical className="addIcon"/><div className="buttonText">New Condition</div></button>
-                     <button className="cancelButton" onClick={()=>onCancel()}>Cancel</button>
+                 <div className="buttonCardContainer">
+                     <ActionCard
+                         icon={<StepIcon/>}
+                         heading="New Authentication Step"
+                         subHeading="Create an authentication step by selecting the local/federated authenticators"
+                         onClick={()=>addStep()}
+                     />
+                     <ActionCard
+                         icon={<ConditionIcon/>}
+                         heading="New Condition"
+                         subHeading="Add a condition to flow by selecting a predefined condition or defining a customized condition"
+                         onClick={()=>addCondition()}
+                     />
+                 </div>
+                 <div className="buttonContainer">
+                     <button className="cancelButton floatRight" onClick={()=>onCancel()}>Cancel</button>
                  </div>
             </ReactModal>
     );

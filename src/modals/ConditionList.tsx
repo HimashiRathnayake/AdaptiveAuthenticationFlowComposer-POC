@@ -80,7 +80,7 @@ export const ConditionList: React.FC<Props> = ({isOpen, onDoneCondition, onBack}
                 </div>
                 <div className="buttonContainer">
                     <button
-                        className="doneButton"
+                        className="doneButton floatRight"
                         disabled={checkedCondition==="custom" && customConditionName===""}
                         onClick={()=>{
                         if(checkedCondition==="custom"){

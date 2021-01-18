@@ -4,7 +4,7 @@ import VisualEditor from "./visualEditor/VisualEditor";
 import ScriptEditor from "./scriptEditor/ScriptEditor";
 import {VscDebugRestart} from "react-icons/all";
 import Icon from "./icons/Asgardeo-Logos/SVG/logo-2.svg";
-// import {SideBar} from "./sideBar/SideBar";
+import {SideBar} from "./sideBar/SideBar";
 
 const App = () => {
     return (
@@ -22,7 +22,7 @@ const App = () => {
                 </div>
             </header>
             <div className="Container">
-                {/*<div className="Side-bar"><SideBar/></div>*/}
+                <div className="Side-bar"><SideBar/></div>
                 <div className="Visual-editor"><VisualEditor/></div>
                 <div className="Script-editor"><ScriptEditor/></div>
             </div>

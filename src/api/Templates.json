@@ -1,0 +1,14 @@
+[
+  {
+    "templateName": "Role-Based",
+    "script": "// This script will step up authentication for any user belonging\n// to one of the given roles\n// If the user has any of the below roles, authentication will be stepped up\nvar rolesToStepUp = ['admin', 'manager'];\n\nvar onLoginRequest = function(context) {\n    executeStep(1, {\n        onSuccess: function (context) {\n            // Extracting authenticated subject from the first step\n            var user = context.currentKnownSubject;\n            // Checking if the user is assigned to one of the given roles\n            var hasRole = hasAnyOfTheRoles(user, rolesToStepUp);\n            if (hasRole) {\n                Log.info(user.username + ' Has one of Roles: ' + rolesToStepUp.toString());\n                executeStep(2);\n            }\n        }\n    });\n};"
+  },
+  {
+    "templateName": "User Store-Based",
+    "script": "// This script will prompt 2FA to the app only for a selected set of user stores.\n// If the user is in one of the following user stores, user will be prompted 2FA\nvar userStoresToStepUp = ['EMPLOYEES', 'CONTRACTORS'];\n\nvar onLoginRequest = function(context) {\n    executeStep(1, {\n        onSuccess: function (context) {\n            // Extracting user store domain of authenticated subject from the first step\n            var userStoreDomain = context.currentKnownSubject.userStoreDomain;\n            // Checking if the user is from whitelisted tenant domain\n            if (userStoresToStepUp.indexOf(userStoreDomain) >= 0) {\n                executeStep(2);\n            }\n        }\n    });\n};"
+  },
+  {
+    "templateName": "Tenant-Based",
+    "script": "// This script will prompt 2FA to the app only for a selected\n// set of tenants.\n// The app is assumed to be a SAAS app here which can be accessed by any tenant\n\n// If the user is in one of the following tenants, user will be prompted 2FA\nvar tenantsToStepUp = ['abc.com', 'xyz.com'];\n\nvar onLoginRequest = function(context) {\n    executeStep(1, {\n        onSuccess: function (context) {\n            // Extracting tenant domain of authenticated subject from the first step\n            var userTenantDomain = context.currentKnownSubject.tenantDomain;\n            // Checking if the user is from whitelisted tenant domain\n            if (tenantsToStepUp.indexOf(userTenantDomain) >= 0) {\n                executeStep(2);\n            }\n        }\n    });\n};"
+  }
+]

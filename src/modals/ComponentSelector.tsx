@@ -29,14 +29,14 @@ export const ComponentSelector: React.FC<Props> = ({isOpen, onCancel, addStep, a
                  <div className="buttonCardContainer">
                      <ActionCard
                          icon={<StepIcon/>}
-                         heading="New Authentication Step"
-                         subHeading="Create an authentication step by selecting the local/federated authenticators"
+                         heading="Authentication Step"
+                         subHeading="Add an authentication step by selecting authenticators"
                          onClick={()=>addStep()}
                      />
                      <ActionCard
                          icon={<ConditionIcon/>}
-                         heading="New Condition"
-                         subHeading="Add a condition to flow by selecting a predefined condition or defining a customized condition"
+                         heading="Condition"
+                         subHeading="Add a condition by selecting predefined conditions"
                          onClick={()=>addCondition()}
                      />
                  </div>

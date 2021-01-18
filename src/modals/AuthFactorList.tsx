@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import "../styles/modal.css"
-import authFactors from "../AuthFactors.json";
-import {Checkbox, ListItemText, MenuItem, Tooltip} from "@material-ui/core";
-import {TiTick} from "react-icons/all";
+import authFactors from "../api/AuthFactors.json";
+import {Checkbox, ListItemText, MenuItem} from "@material-ui/core";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {setUseAttributesFromStep, setUseSubjectFromStep} from "../store/actionCreators";
 import {Dispatch} from "redux";
 import ReactModal from "react-modal";
 import {AuthenticatorIcons} from "../authenticationFactors/AuthenticatorIcons";
+import {Hint} from "../components/Hint";
 
 type Props={
     isOpen:boolean,
@@ -102,25 +102,31 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                     {prefix} Step {step} Configuration
                     <div className="headerHeading">Configure authentication step by selecting the local/federated authenticators.</div>
                 </div>
-                <div className="menuItemContainer">
-                    <MenuItem value="subject" className="menuItem">
-                        <Checkbox
-                            className="checkbox"
-                            color="default"
-                            checked={useSubjectFromThisStep}
-                            onChange={(event, checked) => setUseSubjectFromThisStep(checked)}
-                        />
-                        <ListItemText primary={"Use subject identifier from this step"} className="menuItemName"/>
-                    </MenuItem>
-                    <MenuItem value="attributes" className="menuItem">
-                        <Checkbox
-                            className="checkbox"
-                            color="default"
-                            checked={useAttributesFromThisStep}
-                            onChange={(event, checked) => setUseAttributesFromThisStep(checked)}
-                        />
-                        <ListItemText primary={"Use attributes from this step"} className="menuItemName"/>
-                    </MenuItem>
+                <div className="menu">
+                    <div className="menuItemContainer">
+                        <MenuItem value="subject" className="menuItem">
+                            <Checkbox
+                                className="checkbox"
+                                color="default"
+                                checked={useSubjectFromThisStep}
+                                onChange={(event, checked) => setUseSubjectFromThisStep(checked)}
+                            />
+                            <ListItemText primary={"Use subject identifier from this step"} className="menuItemName"/>
+                        </MenuItem>
+                        <Hint hint="This option will use the subject identifier from this step"/>
+                    </div>
+                    <div className="menuItemContainer">
+                        <MenuItem value="attributes" className="menuItem">
+                            <Checkbox
+                                className="checkbox"
+                                color="default"
+                                checked={useAttributesFromThisStep}
+                                onChange={(event, checked) => setUseAttributesFromThisStep(checked)}
+                            />
+                            <ListItemText primary={"Use attributes from this step"} className="menuItemName"/>
+                        </MenuItem>
+                        <Hint hint="This option will use the attributes identifier from this step"/>
+                    </div>
                 </div>
                 {/*<div className="authFactorsListContainer">*/}
                     <div className="authFactorsHeader">Authenticators</div>

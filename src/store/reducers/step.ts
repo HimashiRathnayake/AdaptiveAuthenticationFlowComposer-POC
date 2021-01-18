@@ -45,7 +45,7 @@ const stepReducer = (
                     }else {
                         return {
                             ...item,
-                            id: +item.id+1
+                            id: `${+item.id+1}`
                         }
                     }
                 }).concat([{id: stepIndex, options: action.factors}])

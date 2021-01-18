@@ -16,7 +16,7 @@ type AstAction = {
 
 type StepAction = {
     type: string
-    step: any
+    step: string
     factors?: any[]
 }
 

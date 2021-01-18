@@ -21,9 +21,7 @@ export const PlusNode = ({data}) => {
                 id='f'
                 onConnect={(params) => console.log('handle onConnect', params)}
             />
-            <div>
                 <BsPlusCircle/>
-            </div>
             <Handle
                 type="source"
                 position={Position.Right}

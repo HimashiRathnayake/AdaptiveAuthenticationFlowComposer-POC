@@ -52,8 +52,6 @@ export const VisualFlowGenerator: React.FC = () => {
 
     const dispatch: Dispatch<any> = useDispatch();
 
-    console.log(steps)
-
     const addFactorToStore = React.useCallback(
         (step: any, factors:any[]) => dispatch(saveStep(step, factors)),
         [dispatch]
@@ -200,6 +198,7 @@ export const VisualFlowGenerator: React.FC = () => {
     const onClick = (element:any) => {
         if(element.type==='plus'){
             let idAsArray = element.id.split(" ");
+            console.log(idAsArray[idAsArray.length-1])
             if(idAsArray[idAsArray.length-1]!=="final"){
                 setBeforeStep(idAsArray[idAsArray.length-1]);
             }
@@ -284,15 +283,15 @@ export const VisualFlowGenerator: React.FC = () => {
 
                 if (uniqueNodeIdList.indexOf(currentStep)===-1){
                     if(uniqueNodeIdList.length<1){
-                        createElement("start", x, y+stepHeight - 36.5, "start");
+                        createElement("start", x, y+stepHeight - 31.5, "start");
                         createEdge("start", 'plus '+currentStep, '#D6D5E6');
-                        x+=gapX+80;
+                        x+=gapX+115;
                     }else{
                         y=lastStepY;
                         let last = uniqueNodeIdList[uniqueNodeIdList.length-1];
                         createEdge(last, 'plus '+currentStep, '#D6D5E6');
                     }
-                    createElement('plus '+currentStep, x-gapX/2-15, y+stepHeight-22.5, 'plus');
+                    createElement('plus '+currentStep, x-gapX/2-15, y+stepHeight-18.5, 'plus');
                     createElement(currentStep, x, y);
                     createEdge('plus '+currentStep, currentStep, '#D6D5E6');
                     lastStepX=x;
@@ -305,7 +304,7 @@ export const VisualFlowGenerator: React.FC = () => {
                     let remainSuccess=successSteps[2];
 
                     if(condition!==undefined && uniqueNodeIdList.indexOf(condition)===-1){
-                        createElement("plus "+condition, x-gapX/2-15, y+197.5, 'plus');
+                        createElement("plus "+condition, x-gapX/2-15, y+201.5, 'plus');
                         createElement(condition, x, y+185.5, 'condition', GetConditionArguments(ast, condition).toString());
                         createEdge(uniqueNodeIdList[uniqueNodeIdList.length-2], "plus "+condition, '#D6D5E6');
                         createEdge("plus "+condition, condition, '#D6D5E6');
@@ -315,7 +314,7 @@ export const VisualFlowGenerator: React.FC = () => {
 
                     for (let successStep of successPath){
                         if (uniqueNodeIdList.indexOf(successStep)===-1){
-                            createElement("plus "+successStep, x-gapX/2-15, y+197.5, 'plus');
+                            createElement("plus "+successStep, x-gapX/2-15, y+201.5, 'plus');
                             createElement(successStep, x, y);
                             createEdge("plus "+successStep, successStep, '#D6D5E6');
                             x+=stepWidth + gapX;
@@ -336,7 +335,7 @@ export const VisualFlowGenerator: React.FC = () => {
                             else{
                                 createEdge(remainSuccess[remainSuccess.indexOf(successStep)-1], "plus "+successStep,'#D6D5E6');
                             }
-                            createElement("plus "+successStep, x-gapX/2-15, y+197.5, 'plus');
+                            createElement("plus "+successStep, x-gapX/2-15, y+201.5, 'plus');
                             createElement(successStep, x, y);
                             createEdge("plus "+successStep, successStep, '#D6D5E6');
                             x+=stepWidth + gapX;
@@ -363,8 +362,8 @@ export const VisualFlowGenerator: React.FC = () => {
 
             y+=186.5;
             for (let step of stepsToSuccess){
-                createElement('plus '+step+' final', x-gapX/2-15, y+11, 'plus');
-                createElement(step+'success', x, y, 'success');
+                createElement('plus '+step+' final', x-gapX/2-15, y+15, 'plus');
+                createElement(step+'success', x, y-10, 'success');
                 createEdge('plus '+step+' final', step+'success', '#D6D5E6');
                 createEdge(step, 'plus '+step+' final', '#D6D5E6');
                 // y+=800;

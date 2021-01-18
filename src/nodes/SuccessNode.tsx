@@ -9,7 +9,7 @@ export const SuccessNode = ({data}) => {
             <Handle
                 type="target"
                 position={Position.Left}
-                style={{top:30, opacity:0}}
+                style={{top:40, opacity:0}}
                 onConnect={(params) => console.log('handle onConnect', params)}
             />
             <div>

@@ -1,7 +1,7 @@
 import React from "react";
 import {shallowEqual, useSelector} from "react-redux";
 import {DroppableContainer} from "../visualEditor/DroppableContainer";
-import {FaRegUser, HiClipboardList, MdDelete, MdModeEdit, MdSubject, TiUserOutline} from "react-icons/all";
+import {FaUser, HiClipboardList, MdDelete, MdModeEdit, TiUserOutline} from "react-icons/all";
 import {Handle, Position} from "react-flow-renderer";
 import {Basic} from "../authenticationFactors/Basic";
 import {IdentifierFirst} from "../authenticationFactors/IdentifierFirst";
@@ -31,16 +31,16 @@ export const Step: React.FC = ({data}) => {
                 <div className="headerIconContainer">
                     {data.text==useSubjectFrom &&
                     <Tooltip title="Subject is used from this step" aria-label="s">
-                        <Icon className="stepHeaderIcon">
-                            <TiUserOutline className="subjectIcon"/>
-                        </Icon>
+                        <div className="stepHeaderIcon">
+                            Subject
+                        </div>
                     </Tooltip>
                     }
                     {data.text==useAttributesFrom &&
                     <Tooltip title="Attributes are used from this step" aria-label="a">
-                        <Icon className="stepHeaderIcon">
-                            <HiClipboardList className="attributesIcon"/>
-                        </Icon>
+                        <div className="stepHeaderIcon">
+                            Attributes
+                        </div>
                     </Tooltip>
                     }
                 </div>

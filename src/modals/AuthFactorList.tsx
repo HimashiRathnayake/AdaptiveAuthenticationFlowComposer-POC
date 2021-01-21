@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import "../styles/modal.css"
 import authFactors from "../api/AuthFactors.json";
-import {Checkbox, ListItemText, MenuItem} from "@material-ui/core";
+import {Checkbox, ListItemText, MenuItem, Tooltip} from "@material-ui/core";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {setUseAttributesFromStep, setUseSubjectFromStep} from "../store/actionCreators";
 import {Dispatch} from "redux";
@@ -147,7 +147,11 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                                         </div>
                                         {/*{(factor.displayName==="identifier-first"||factor.displayName==="active-sessions-limit-handler") && checkedList.indexOf(factor.displayName)!==-1 && <p className="warning">This is a handler. Make sure you add authenticators in other steps.</p>}*/}
                                     </button>
-                                    <div className="factorName">{factor.displayName}</div>
+                                    <Tooltip title={factor.displayName}>
+                                        <div className="factorName">
+                                            {factor.displayName}
+                                        </div>
+                                    </Tooltip>
                                 </div>
                             ))
                         })}
@@ -167,9 +171,11 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                                         </div>
                                         {/*{(factor.displayName==="identifier-first"||factor.displayName==="active-sessions-limit-handler") && checkedList.indexOf(factor.displayName)!==-1 && <p className="warning">This is a handler. Make sure you add authenticators in other steps.</p>}*/}
                                     </button>
-                                    <div className="factorName">
-                                        {factor.displayName}
-                                    </div>
+                                    <Tooltip title={factor.displayName}>
+                                        <div className="factorName">
+                                            {factor.displayName}
+                                        </div>
+                                    </Tooltip>
                                 </div>
                             )
                         })}

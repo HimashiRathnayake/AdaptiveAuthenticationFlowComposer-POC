@@ -1,7 +1,7 @@
 import React, {ReactElement} from 'react';
 import "../styles/template.css";
 import templates from "../api/Templates.json";
-import {saveAstFromVisualEditor} from "../store/actionCreators";
+import {saveAstFromVisualEditor, saveStep} from "../store/actionCreators";
 import {Dispatch} from "redux";
 import {useDispatch} from "react-redux";
 import {ParseToAst} from "../mapper/Parser";
@@ -20,13 +20,22 @@ export const Template: React.FC<BoxProps> = ({ name }) => {
         [dispatch]
     );
 
+    const addFactorToStep = React.useCallback(
+        (step: any, factors:any[]) => dispatch(saveStep(step, factors)),
+        [dispatch]
+    );
+
     const updateWithTemplate = (name:string) => {
         let template : any = {}
         template = templates.find(template=> {
-            return template.templateName === name
+            return template.name === name
         });
         // @ts-ignore
-        saveAstToStore(ParseToAst(template.script));
+        saveAstToStore(ParseToAst(template.code.join('\n')));
+        for(let step in template.defaultAuthenticators){
+            let authenticatorObject = template.defaultAuthenticators[step]
+            addFactorToStep(step, authenticatorObject.federated.concat(authenticatorObject.local))
+        }
     }
 
     return (

@@ -1,7 +1,8 @@
 .template-container {
     padding: 16px 20px;
-    margin: 8px 0 4px;
-    background: rgb(35, 35, 35) none repeat scroll 0% 0%;
+    margin: 8px 0 5px;
+    /*background: rgb(35, 35, 35) none repeat scroll 0% 0%;*/
+    background-color: #434345;
     border-radius: 6px;
     height: 16px;
     font-size: 18px;
@@ -9,8 +10,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 2px solid rgb(35, 35, 35);
-    color: rgba(227, 227, 227, 0.7);
+    /*border: 2px solid rgb(35, 35, 35);*/
+    color: #E3E3E3;
     cursor: pointer;
     user-select: none;
 }

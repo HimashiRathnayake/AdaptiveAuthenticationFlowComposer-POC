@@ -1,12 +1,12 @@
 import React from "react";
 import {shallowEqual, useSelector} from "react-redux";
 import {DroppableContainer} from "../visualEditor/DroppableContainer";
-import {FaUser, HiClipboardList, MdDelete, MdModeEdit, TiUserOutline} from "react-icons/all";
+import {MdDelete, MdModeEdit} from "react-icons/all";
 import {Handle, Position} from "react-flow-renderer";
 import {Basic} from "../authenticationFactors/Basic";
 import {IdentifierFirst} from "../authenticationFactors/IdentifierFirst";
 import {Login} from "../authenticationFactors/Login";
-import {Icon, Tooltip} from "@material-ui/core";
+import {Tooltip} from "@material-ui/core";
 
 // @ts-ignore
 export const Step: React.FC = ({data}) => {
@@ -30,7 +30,7 @@ export const Step: React.FC = ({data}) => {
                 <h4 className="stepHeaderText">Step {data.text}</h4>
                 <div className="headerIconContainer">
                     {data.text==useSubjectFrom &&
-                    <Tooltip title="Subject is used from this step" aria-label="s">
+                    <Tooltip title="Subject identifier is used from this step" aria-label="s">
                         <div className="stepHeaderIcon">
                             Subject
                         </div>

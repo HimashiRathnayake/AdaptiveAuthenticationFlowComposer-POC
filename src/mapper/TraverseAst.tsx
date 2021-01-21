@@ -198,6 +198,12 @@ export const FindConditionWithLastStep = (ast:any, condition:string) => {
             if (path.node.test.callee && path.node.test.callee.name===condition) {
                 stepPath = path;
                 path.stop();
+            }else if (path.node.test && path.node.test.name===condition) {
+                stepPath = path;
+                path.stop();
+            }else if (path.node.test.left.callee.object.name===condition){
+                stepPath = path;
+                path.stop();
             }
         }
     })
@@ -243,8 +249,8 @@ export const AddSuccessFailureStepsBefore = (ast: any, beforeStep:string) => {
             }
         }
     });
-    let args = pathBefore.parentPath.parent.body[0];
-    pathBefore.parentPath.parent.body[0] = createExpressionStatementWithSuccess(beforeStep, args);
+    let args = pathBefore.parentPath.parent.body[pathBefore.parentPath.key];
+    pathBefore.parentPath.parent.body[pathBefore.parentPath.key] = createExpressionStatementWithSuccess(beforeStep, args);
     return ast;
 }
 
@@ -257,8 +263,8 @@ export const AddSuccessFailureStepsBeforeCondition = (ast: any, beforeStep:strin
             }
         }
     })
-    let args = pathBefore.parent.body[0];
-    pathBefore.parent.body[0] = createExpressionStatementWithSuccess(lastStep + 1, args);
+    let args = pathBefore.parent.body[pathBefore.key];
+    pathBefore.parent.body[pathBefore.key] = createExpressionStatementWithSuccess(lastStep + 1, args);
     return [ast, lastStep+1];
 }
 

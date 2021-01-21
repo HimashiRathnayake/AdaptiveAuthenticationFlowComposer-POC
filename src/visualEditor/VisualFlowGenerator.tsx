@@ -197,10 +197,9 @@ export const VisualFlowGenerator: React.FC = () => {
 
     const onClick = (element:any) => {
         if(element.type==='plus'){
-            let idAsArray = element.id.split(" ");
-            console.log(idAsArray[idAsArray.length-1])
-            if(idAsArray[idAsArray.length-1]!=="final"){
-                setBeforeStep(idAsArray[idAsArray.length-1]);
+            let nextStep = element.id.split(" ")[1].split(".")[0];
+            if(nextStep!=="final"){
+                setBeforeStep(nextStep);
             }
             setVisible(true);
             setSuccessFailure(null);
@@ -362,10 +361,10 @@ export const VisualFlowGenerator: React.FC = () => {
 
             y+=186.5;
             for (let step of stepsToSuccess){
-                createElement('plus '+step+' final', x-gapX/2-15, y+15, 'plus');
+                createElement('plus'+step+' final', x-gapX/2-15, y+15, 'plus');
                 createElement(step+'success', x, y-10, 'success');
-                createEdge('plus '+step+' final', step+'success', '#D6D5E6');
-                createEdge(step, 'plus '+step+' final', '#D6D5E6');
+                createEdge('plus'+step+' final', step+'success', '#D6D5E6');
+                createEdge(step, 'plus'+step+' final', '#D6D5E6');
                 // y+=800;
             }
 

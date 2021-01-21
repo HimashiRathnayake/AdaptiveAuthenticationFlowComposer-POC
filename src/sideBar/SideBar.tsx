@@ -11,7 +11,7 @@ export const SideBar: React.FC = () => {
             <h3 className="templates-name">Templates</h3>
             <div className="options">
                 {templates.map((template: any) => (
-                    <Template key={template.templateName} name={template.templateName}/>
+                    <Template key={template.name} name={template.name}/>
                 ))}
             </div>
         </div>

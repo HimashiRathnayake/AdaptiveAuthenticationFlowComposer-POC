@@ -8,6 +8,8 @@ import { Provider } from "react-redux"
 import thunk from "redux-thunk"
 import {rootReducer} from "./store/reducers"
 import ReactModal from "react-modal";
+import ReactNotification from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
 
 const store: Store<CombinedState<{ astReducer: AstState; stepReducer: StepsState; }>, AstAction | StepAction> & {
     dispatch: DispatchType
@@ -18,6 +20,7 @@ ReactModal.setAppElement('#root');
 ReactDOM.render(
     // <React.StrictMode>
         <Provider store={store}>
+            <ReactNotification/>
             <App />
         </Provider>,
     // </React.StrictMode>,

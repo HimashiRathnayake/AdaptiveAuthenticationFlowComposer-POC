@@ -63,16 +63,18 @@
   "self": "/t/carbon.super/api/server/v1/configs/authenticators/T0F1dGhSZXF1ZXN0UGF0aEF1dGhlbnRpY2F0b3I"
 }, {
   "id": "1",
+  "name": "FacebookAuthenticator",
   "displayName": "Facebook",
-  "type": "federated"
+  "type": "Facebook"
 }, {
   "id": "2",
   "displayName": "Twitter",
   "type": "federated"
 }, {
   "id": "3",
+  "name": "GoogleOIDCAuthenticator",
   "displayName": "Google",
-  "type": "federated"
+  "type": "Google"
 }, {
   "id": "4",
   "displayName": "Instagram",

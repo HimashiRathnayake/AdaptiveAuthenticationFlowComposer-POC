@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './styles/App.css';
 import VisualEditor from "./visualEditor/VisualEditor";
 import ScriptEditor from "./scriptEditor/ScriptEditor";
@@ -7,7 +7,9 @@ import Icon from "./icons/Asgardeo-Logos/SVG/logo-2.svg";
 import {SideBar} from "./sideBar/SideBar";
 import {shallowEqual, useSelector} from "react-redux";
 import {GenerateCodeFromAst} from "./mapper/CodeGenerator";
-import {updateAuthenticationSequence} from "./api/application";
+import {getAuthenticators, updateAuthenticationSequence} from "./api/application";
+import authFactors from "./api/AuthFactors.json";
+import { store } from 'react-notifications-component';
 
 const App = () => {
 
@@ -17,33 +19,31 @@ const App = () => {
         },
         shallowEqual
     );
+    
+    const getInfo = (option:any) : any => {
+        return authFactors.filter((factor:any)=>factor.displayName===option)
+    }
+
+    const stepsToRequest = steps.map((step : any) => {
+        return {
+            id: +step.id,
+            options: step.options.map((option:any)=>{
+                let optionInfo : any = getInfo(option)[0];
+                return {
+                    authenticator: optionInfo.name,
+                    idp: optionInfo.type
+                }
+            })
+        }
+    })
 
     const requestBody = {
         authenticationSequence: {
             attributeStepId: +subjectStepId,
-            steps: [
-                {
-                    "id": 1,
-                    "options": [
-                        {
-                            "authenticator": "BasicAuthenticator",
-                            "idp": "LOCAL"
-                        }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "options": [
-                        {
-                            "authenticator": "BasicAuthenticator",
-                            "idp": "LOCAL"
-                        }
-                    ]
-                }
-            ],
+            steps: stepsToRequest,
             subjectStepId: +attributeStepId,
             type: "USER_DEFINED",
-            script: GenerateCodeFromAst(ast),
+            script: GenerateCodeFromAst(ast)?.replaceAll("function (","function("),
         }
     };
 
@@ -61,7 +61,39 @@ const App = () => {
                     </button>
                     <button
                         className="reset-button"
-                        onClick={()=>updateAuthenticationSequence(requestBody)}
+                        onClick={()=>{
+                            updateAuthenticationSequence(requestBody).then(()=>{
+                                store.addNotification({
+                                    title: "Update Successful",
+                                    message: "Successfully updated the authentication flow of the application",
+                                    type: "success",
+                                    insert: "bottom",
+                                    container: "bottom-right",
+                                    animationIn: ["animate__animated", "animate__fadeIn"],
+                                    animationOut: ["animate__animated", "animate__fadeOut"],
+                                    dismiss: {
+                                        duration: 4000,
+                                        onScreen: true,
+                                        showIcon: true
+                                    }
+                                });
+                            }).catch(()=>{
+                                store.addNotification({
+                                    title: "Error!",
+                                    message: "Something went wrong",
+                                    type: "danger",
+                                    insert: "bottom",
+                                    container: "bottom-right",
+                                    animationIn: ["animate__animated", "animate__fadeIn"],
+                                    animationOut: ["animate__animated", "animate__fadeOut"],
+                                    dismiss: {
+                                        duration: 4000,
+                                        onScreen: true,
+                                        showIcon: true
+                                    }
+                                });
+                            })
+                        }}
                     >
                         Update
                     </button>

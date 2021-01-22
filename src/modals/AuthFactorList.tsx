@@ -88,7 +88,7 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
     }
 
     const localFactors = authFactors.filter((element:any)=>element.type==="LOCAL"||element.type==="REQUEST_PATH");
-    const externalFactors = authFactors.filter((element:any)=>element.type==="federated");
+    const externalFactors = authFactors.filter((element:any)=>element.type!=="LOCAL"&&element.type!=="REQUEST_PATH");
 
     return (
         <ReactModal

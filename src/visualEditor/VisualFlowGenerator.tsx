@@ -307,7 +307,7 @@ export const VisualFlowGenerator: React.FC = () => {
                         createElement(condition, x, y+185.5, 'condition', GetConditionArguments(ast, condition).toString());
                         createEdge(uniqueNodeIdList[uniqueNodeIdList.length-2], "plus "+condition, '#D6D5E6');
                         createEdge("plus "+condition, condition, '#D6D5E6');
-                        // createCustomEdge(condition, lastStep, 'red', 'Failure','failure', 'failTarget');
+                        // createCustomEdge(condition, 'success', 'red', 'Failure','failure', 'failTarget');
                         x+=gapX+conditionWidth;
                     }
 
@@ -362,8 +362,8 @@ export const VisualFlowGenerator: React.FC = () => {
             y+=186.5;
             for (let step of stepsToSuccess){
                 createElement('plus'+step+' final', x-gapX/2-15, y+15, 'plus');
-                createElement(step+'success', x, y-10, 'success');
-                createEdge('plus'+step+' final', step+'success', '#D6D5E6');
+                createElement('success', x, y-10, 'success');
+                createEdge('plus'+step+' final', 'success', '#D6D5E6');
                 createEdge(step, 'plus'+step+' final', '#D6D5E6');
                 // y+=800;
             }

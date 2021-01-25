@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "../styles/modal.css"
-import authFactors from "../api/AuthFactors.json";
 import {Checkbox, ListItemText, MenuItem, Tooltip} from "@material-ui/core";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {setUseAttributesFromStep, setUseSubjectFromStep} from "../store/actionCreators";
@@ -8,6 +7,7 @@ import {Dispatch} from "redux";
 import ReactModal from "react-modal";
 import {AuthenticatorIcons} from "../authenticationFactors/AuthenticatorIcons";
 import {Hint} from "../components/Hint";
+import {getAuthenticators, getIdentityProviders} from "../api/application";
 
 type Props={
     isOpen:boolean,
@@ -24,6 +24,26 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
     if (step===null){
         prefix = 'New';
     }
+
+    const [authFactors, setAuthFactors] = useState([]);
+    const [idpList, setIdpList] = useState([]);
+
+    useEffect(() => {
+        getAuthenticators()
+            .then((response) => {
+                setAuthFactors(response.data);
+            })
+            .catch((error) => {
+
+            });
+        getIdentityProviders()
+            .then((response) => {
+                setIdpList(response.data.identityProviders);
+            })
+            .catch((error) => {
+
+            });
+    }, []);
 
     const [steps, useSubjectFrom, useAttributesFrom] : any = useSelector(
         (state:any) => {
@@ -87,9 +107,6 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
         onDone(checkedList);
     }
 
-    const localFactors = authFactors.filter((element:any)=>element.type==="LOCAL"||element.type==="REQUEST_PATH");
-    const externalFactors = authFactors.filter((element:any)=>element.type!=="LOCAL"&&element.type!=="REQUEST_PATH");
-
     return (
         <ReactModal
             isOpen={isOpen}
@@ -132,7 +149,7 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                     <div className="authFactorsHeader">Authenticators</div>
                     <div className="authFactorsType">Local</div>
                     <div className="innerFactorsContainer">
-                        {localFactors.map((factor: any) => {
+                        {authFactors.map((factor: any) => {
                             let disabled = ((step=="1" || nextStep=="1") && factor.displayName==="fido")
                             let checked = checkedList.indexOf(factor.displayName)!==-1 && !disabled
                             return(
@@ -158,22 +175,22 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                     </div>
                     <div className="authFactorsType">Social Login</div>
                     <div className="innerFactorsContainer">
-                        {externalFactors.map((factor: any) => {
-                            let checked = checkedList.indexOf(factor.displayName)!==-1
+                        {idpList.map((factor: any) => {
+                            let checked = checkedList.indexOf(factor.name)!==-1
                             return(
                                 <div className="factorContainer" key={factor.id}>
                                     <button
                                         className={checked ? "factor selectedFactor": "factor unselectedFactor"}
-                                        onClick={()=>onChange(factor.displayName)}
+                                        onClick={()=>onChange(factor.name)}
                                     >
                                         <div className={factor.type}>
-                                            <AuthenticatorIcons type={factor.displayName+"1"} iconX={0} iconY={0} iconHeight={40} iconWidth={40}/>
+                                            <AuthenticatorIcons type={factor.name+"1"} iconX={0} iconY={0} iconHeight={40} iconWidth={40}/>
                                         </div>
                                         {/*{(factor.displayName==="identifier-first"||factor.displayName==="active-sessions-limit-handler") && checkedList.indexOf(factor.displayName)!==-1 && <p className="warning">This is a handler. Make sure you add authenticators in other steps.</p>}*/}
                                     </button>
-                                    <Tooltip title={factor.displayName}>
+                                    <Tooltip title={factor.name}>
                                         <div className="factorName">
-                                            {factor.displayName}
+                                            {factor.name}
                                         </div>
                                     </Tooltip>
                                 </div>

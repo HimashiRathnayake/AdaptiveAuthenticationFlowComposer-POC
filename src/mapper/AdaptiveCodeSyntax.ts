@@ -14,11 +14,11 @@ export const currentKnownSubject = "currentKnownSubject"
 
 export const getConditionSyntax = (condition:string) => {
     let code = `var ${condition}= function (context){\n`;
-    if (condition === "hasRole") {code+= "var user = context.currentKnownSubject;\nreturn hasAnyOfTheRoles(user, params);\n";}
+    if (condition === "hasRole") {code+= "var user = context.currentKnownSubject;\nreturn hasAnyOfTheRoles(user, rolesToStepUp);\n";}
     else if (condition === "isExceedInvalidAttempts") {code+=
         "var failedLoginAttemptsBeforeSuccessClaim= 'http://wso2.org/claims/identity/failedLoginAttemptsBeforeSuccess';" +
         "var user = context.steps[1].subject;\n" +
-        "   if (user.localClaims[failedLoginAttemptsBeforeSuccessClaim] >= invalidAttemptsToStepup) {\n" +
+        "   if (user.localClaims[failedLoginAttemptsBeforeSuccessClaim] >= invalidAttemptsToStepUp) {\n" +
         "       return true;\n" +
         "   } else {\n" +
         "       return false;\n" +
@@ -27,3 +27,11 @@ export const getConditionSyntax = (condition:string) => {
     code+="};";
     return code;
 }
+
+export const getVariableSyntax = (condition:string) => {
+    if (condition === "hasRole") {
+        return "var user = context.currentKnownSubject; \n" +
+            "var hasRole = hasAnyOfTheRoles(user, rolesToStepUp);"
+    }
+}
+

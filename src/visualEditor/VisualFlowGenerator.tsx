@@ -307,7 +307,7 @@ export const VisualFlowGenerator: React.FC = () => {
                         createElement(condition, x, y+185.5, 'condition', GetConditionArguments(ast, condition).toString());
                         createEdge(uniqueNodeIdList[uniqueNodeIdList.length-2], "plus "+condition, '#D6D5E6');
                         createEdge("plus "+condition, condition, '#D6D5E6');
-                        // createCustomEdge(condition, 'success', 'red', 'Failure','failure', 'failTarget');
+                        createCustomEdge(condition, 'success', 'red', 'Else','failure', 'targetTop');
                         x+=gapX+conditionWidth;
                     }
 

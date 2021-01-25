@@ -47,7 +47,7 @@
   width: 100vw;
 }
 
-.reset-button {
+.header-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,17 +55,33 @@
   height: 4vh;
   width: 6vw;
   margin-right: 10px;
-  /*background-color: rgba(0,0,0,0.2);*/
-  background-color: #3b3c3e;
   color: rgba(255,255,255,0.8);
   box-shadow: 1px 1px 1px #19191a;
   border-radius: 5px;
-  /*border-color: #191a1a;*/
   border: none;
+  cursor: pointer;
+  outline: 0;
+  vertical-align: baseline;
+  color: #fff;
+  padding: .78571429em 1.5em .78571429em;
+  font-weight: 500;
+  line-height: 1em;
 }
 
-.reset-button:hover{
-  border: 1px solid #19191a;
+.update {
+  background-color: #ff5000;
+}
+
+.reset {
+  background-color: #47484b;
+}
+
+.reset:hover{
+  background-color: #3a3a3d;
+}
+
+.update:hover:enabled {
+  background-color: #a13407;
 }
 
 .reset-icon {

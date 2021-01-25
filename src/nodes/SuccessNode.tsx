@@ -17,7 +17,7 @@ export const SuccessNode = ({data}) => {
                 position={Position.Top}
                 style={{top:40, opacity:0}}
                 onConnect={(params) => console.log('handle onConnect', params)}
-                id="failTarget"
+                id="targetTop"
             />
             <div>
                 <AiOutlineCheckCircle/>

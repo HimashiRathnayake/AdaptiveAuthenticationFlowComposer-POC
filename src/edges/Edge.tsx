@@ -1,5 +1,5 @@
 import React from 'react';
-import {ArrowHeadType, getEdgeCenter, getMarkerEnd, getSmoothStepPath, Position} from 'react-flow-renderer';
+import {ArrowHeadType, getEdgeCenter, getMarkerEnd, getSmoothStepPath, Position, EdgeText} from 'react-flow-renderer';
 
 type props ={
     id : string,
@@ -30,11 +30,17 @@ export const CustomEdge : React.FC<props> = ({id, sourceX, sourceY, targetX, tar
     return (
         <g>
             <path id={id} style={style} className="react-flow__edge-path" d={edgePath} markerEnd={markerEnd} />
-            <text>
-                <textPath href={`#${id}`} style={{fill:'#c96b72', fontSize:12}} startOffset="10%" textAnchor="middle">
-                    {data.text}
-                </textPath>
-            </text>
+            {/*<text>*/}
+            {/*    <textPath href={`#${id}`} style={{fill:'#fff', fontSize:14, letterSpacing:2}} startOffset="10%" textAnchor="middle">*/}
+                    <EdgeText
+                        x={center[0]-center[2]}
+                        y={center[1]-middleOffset/2}
+                        label={data.text}
+                        labelBgStyle={{fill:"#313234"}}
+                        labelStyle={{fontSize: 14, fill:"#fff", letterSpacing:"1px"}}
+                    />
+            {/*    </textPath>*/}
+            {/*</text>*/}
         </g>
     );
 }

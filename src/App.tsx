@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import './styles/App.css';
 import VisualEditor from "./visualEditor/VisualEditor";
 import ScriptEditor from "./scriptEditor/ScriptEditor";
@@ -14,11 +14,18 @@ import {
 import authFactors from "./api/AuthFactors.json";
 import { store } from 'react-notifications-component';
 import {Dispatch} from "redux";
-import {saveAstFromVisualEditor, saveStep} from "./store/actionCreators";
+import {
+    saveAstFromVisualEditor,
+    saveStep,
+    setUseAttributesFromStep,
+    setUseSubjectFromStep
+} from "./store/actionCreators";
 import {ParseToAst} from "./mapper/Parser";
+import {ConfirmationModal} from "./modals/ConfirmationModal";
 
 const App = () => {
 
+    const [AddConfirmation, setAddConfirmation] = useState<boolean>(false);
     const [ast, steps, subjectStepId, attributeStepId] : [any, any, any, any] = useSelector(
         (state:any) => {
             return [state.astReducer.ast, state.stepReducer.steps, state.stepReducer.useSubjectFrom, state.stepReducer.useAttributesFrom]
@@ -38,7 +45,19 @@ const App = () => {
         [dispatch]
     );
 
-    const appId = window.location.search.split("?appId=")[1];
+    const changeSubjectIdentifier = React.useCallback(
+        (step: string) => dispatch(setUseSubjectFromStep(step)),
+        [dispatch]
+    );
+
+    const changeAttributesFRom = React.useCallback(
+        (step: string) => dispatch(setUseAttributesFromStep(step)),
+        [dispatch]
+    );
+
+    const searchUrlPrams = new URLSearchParams(window.location.search);
+    const appId = searchUrlPrams.get("appId");
+    const callbackUrl = searchUrlPrams.get("callbackUrl");
 
     const getInfo = (option:any) : any => {
         return authFactors.filter((factor:any)=>factor.displayName===option)
@@ -47,8 +66,6 @@ const App = () => {
     const getDisplayName = (option:any) : any => {
         return authFactors.filter((factor:any)=>factor.name===option.authenticator)
     }
-
-    console.log(steps)
 
     const stepsToRequest = steps.map((step : any) => {
         return {
@@ -73,8 +90,10 @@ const App = () => {
         }
     };
 
-    const updateStore = (script:string, steps:any) => {
+    const updateStore = (script:string, steps:any, subjectStepId:number, attributesStepId:number) => {
         saveAstToStore(ParseToAst(script));
+        changeSubjectIdentifier(`${subjectStepId}`);
+        changeAttributesFRom(`${attributesStepId}`);
         for(let step of steps){
             let options = step.options.map((option:any)=>getDisplayName(option)[0].displayName)
             addFactorToStep(`${step.id}`, options);
@@ -84,12 +103,23 @@ const App = () => {
     useEffect(()=>{
         getApplicationDetails(appId)
             .then((response)=>{
-                updateStore(response.data.authenticationSequence.script, response.data.authenticationSequence.steps);
+                updateStore(response.data.authenticationSequence.script, response.data.authenticationSequence.steps, response.data.authenticationSequence.subjectStepId, response.data.authenticationSequence.attributeStepId);
             })
             .catch((error)=>{
 
             });
     }, []);
+
+    const showAddConfirmation: ReactElement = (
+        <ConfirmationModal
+            isOpen={AddConfirmation}
+            onCancel={()=>setAddConfirmation(false)}
+            onDone={()=>{
+                    window.open(callbackUrl+'?activeTabIndex=4', '_self','noopener');
+                }
+            }
+        />
+    )
 
     return (
         <div className="App">
@@ -107,19 +137,20 @@ const App = () => {
                         className="header-button update"
                         onClick={()=>{
                             updateAuthenticationSequence(requestBody, appId).then(()=>{
-                                store.addNotification({
-                                    title: "Update Successful",
-                                    message: "Successfully updated the authentication flow of the application",
-                                    type: "success",
-                                    insert: "bottom",
-                                    container: "bottom-right",
-                                    animationIn: ["animate__animated", "animate__fadeIn"],
-                                    animationOut: ["animate__animated", "animate__fadeOut"],
-                                    dismiss: {
-                                        duration: 4000,
-                                        showIcon: true
-                                    }
-                                });
+                                // store.addNotification({
+                                //     title: "Update Successful",
+                                //     message: "Successfully updated the authentication flow of the application",
+                                //     type: "success",
+                                //     insert: "bottom",
+                                //     container: "bottom-right",
+                                //     animationIn: ["animate__animated", "animate__fadeIn"],
+                                //     animationOut: ["animate__animated", "animate__fadeOut"],
+                                //     dismiss: {
+                                //         duration: 4000,
+                                //         showIcon: true
+                                //     }
+                                // });
+                                setAddConfirmation(true);
                             }).catch(()=>{
                                 store.addNotification({
                                     title: "Error!",
@@ -146,6 +177,7 @@ const App = () => {
                 <div className="Visual-editor"><VisualEditor/></div>
                 <div className="Script-editor"><ScriptEditor/></div>
             </div>
+            {showAddConfirmation}
         </div>
     );
 }

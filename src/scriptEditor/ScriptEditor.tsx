@@ -66,7 +66,7 @@ const ScriptEditor: React.FC = () => {
                 onChange={(ev, value) => {handleChange(value)}}
                 // editorDidMount={handleEditorDidMount}
                 language="javascript"
-                theme='dark'
+                theme='vs-dark'
             />
         </div>
     );

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getApplicationDetails = (appId:string) : Promise<any> => {
+export const getApplicationDetails = (appId:string|null) : Promise<any> => {
     return axios.get(
         `https://localhost:9443/api/server/v1/applications/${appId}`,
         {
@@ -57,7 +57,7 @@ export const getIdentityProviders = () : Promise<any> => {
     });
 };
 
-export const updateAuthenticationSequence = (requestBody: any, appId: string) : Promise<any> => {
+export const updateAuthenticationSequence = (requestBody: any, appId: string|null) : Promise<any> => {
     return axios.patch(
         `https://localhost:9443/t/carbon.super/api/server/v1/applications/${appId}`,
         requestBody,

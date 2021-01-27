@@ -1,5 +1,5 @@
 .hint-container {
-    color: #616161;
+    color: rgba(0,0,0,0.6);
     font-size: 0.75rem;
     display: flex;
     align-items: center;
@@ -10,4 +10,5 @@
 .hint-icon {
     padding-inline: 10px;
     margin-top: -1px;
+    opacity: 0.7;
 }

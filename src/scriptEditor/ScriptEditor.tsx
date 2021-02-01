@@ -26,6 +26,8 @@ const ScriptEditor: React.FC = () => {
     )
     const[code, setCode] = useState(GenerateCodeFromAst(ast));
 
+    console.log(ast);
+
     useEffect(()=>{
         if (changedFromVisualEditor) {
             setCode(GenerateCodeFromAst(ast));
@@ -67,6 +69,11 @@ const ScriptEditor: React.FC = () => {
                 // editorDidMount={handleEditorDidMount}
                 language="javascript"
                 theme='vs-dark'
+                options={
+                    {
+                        selectOnLineNumbers: true,
+                    }
+                }
             />
         </div>
     );

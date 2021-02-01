@@ -148,6 +148,7 @@
     height: 270px;
     display: flex;
     align-items: center;
+    background-color: #313234;
 }
 
 .multiFactor {

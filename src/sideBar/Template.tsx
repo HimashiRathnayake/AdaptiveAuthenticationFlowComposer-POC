@@ -5,7 +5,7 @@ import {saveAstFromVisualEditor, saveStep} from "../store/actionCreators";
 import {Dispatch} from "redux";
 import {useDispatch} from "react-redux";
 import {ParseToAst} from "../mapper/Parser";
-import {BsGearFill, FiDatabase, GrStorage, HiUsers} from "react-icons/all";
+import {BsGearFill, FiDatabase, FiLogIn, HiUsers} from "react-icons/all";
 
 interface BoxProps {
     name: string,
@@ -40,7 +40,7 @@ export const Template: React.FC<BoxProps> = ({ name }) => {
 
     return (
         <div className="template-container" onClick={()=>updateWithTemplate(name)}>
-            {name==="Role-Based" ? <HiUsers/> : name==="User Store-Based" ?  <FiDatabase/> : <BsGearFill/>}
+            {name==="Role-Based" ? <HiUsers/> : name==="User Store-Based" ?  <FiDatabase/> : name==="Basic Login" ? <FiLogIn/>: <BsGearFill/>}
             <div className="template-text">{name}</div>
         </div>
     )

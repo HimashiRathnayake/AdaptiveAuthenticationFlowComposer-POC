@@ -1,5 +1,25 @@
 [
   {
+    "name": "Basic Login",
+    "defaultAuthenticators": {
+      "1": {
+        "federated": [],
+        "local": [
+          "basic"
+        ]
+      },
+      "2": {
+        "federated": [],
+        "local": []
+      }
+    },
+    "code": [
+      "var onLoginRequest = function(context) {",
+      "    executeStep(1);",
+      "};"
+    ]
+  },
+  {
     "summary": "Prompts 2FA to the users who belongs to any of the given set of roles.",
     "preRequisites": [
       "Change the rolesList parameter to an array of roles of which users need to enforce 2FA.",

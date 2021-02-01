@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: row;
     border-bottom: 1px solid #49494c;
-    box-shadow: 1px 1px 1px #1d1d1f;
+    /*box-shadow: 1px 1px 1px #1d1d1f;*/
 }
 
 .Visual-editor-body {
@@ -16,17 +16,18 @@
 .Flow {
     height: 80vh;
     width: 50vw;
-    justify-self: center
+    justify-self: center;
 }
 
 .Flow-container {
     /*border: 1px solid rgba(0,0,0,0.2);*/
-    height: 87vh;
+    height: 86.8vh;
     width: 58.9vw;
     justify-self: center;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    background-color: #313234;
 }
 
 .flow-control {
@@ -34,5 +35,5 @@
 }
 
 .flowBackground {
-    opacity: 0.6;
+    opacity: 0.5;
 }

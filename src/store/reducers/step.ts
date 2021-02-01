@@ -16,10 +16,18 @@ const stepReducer = (
     switch (action.type) {
         case actionTypes.ADD_FACTOR_TO_STEP:
             let index=state.steps.map(step=>step.id).indexOf(action.step);
+            console.log(action)
             if(index===-1) {
                 return {
                     ...state,
                     steps: state.steps.concat([{id: action.step, options: action.factors}]),
+                }
+            }else if(action.factors?.length===0){
+                return {
+                    ...state,
+                    steps: state.steps.filter((step)=> {
+                        return +step.id !== +action.step
+                    }),
                 }
             }else{
                 return {

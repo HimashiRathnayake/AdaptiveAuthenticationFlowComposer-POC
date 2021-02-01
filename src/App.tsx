@@ -82,11 +82,11 @@ const App = () => {
 
     const requestBody = {
         authenticationSequence: {
-            attributeStepId: +subjectStepId,
+            attributeStepId: +attributeStepId,
             steps: stepsToRequest,
-            subjectStepId: +attributeStepId,
+            subjectStepId: +subjectStepId,
             type: "USER_DEFINED",
-            script: GenerateCodeFromAst(ast)?.replaceAll("function (","function("),
+            script: GenerateCodeFromAst(ast),
         }
     };
 

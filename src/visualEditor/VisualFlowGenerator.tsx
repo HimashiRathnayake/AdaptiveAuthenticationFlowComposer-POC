@@ -360,9 +360,11 @@ export const VisualFlowGenerator: React.FC = () => {
             }
 
             y+=186.5;
+            if(stepsToSuccess.length!==0) {
+                createElement('success', x, y - 10, 'success');
+            }
             for (let step of stepsToSuccess){
                 createElement('plus'+step+' final', x-gapX/2-15, y+15, 'plus');
-                createElement('success', x, y-10, 'success');
                 createEdge('plus'+step+' final', 'success', '#D6D5E6');
                 createEdge(step, 'plus'+step+' final', '#D6D5E6');
                 // y+=800;

@@ -209,7 +209,7 @@
 
 .selectedFactor {
     border: 0.124rem solid #ff5000;
-    background-color: rgba(255,80,0,0.05);
+    background-color: rgba(255,80,0,0.07);
 }
 
 .federated {

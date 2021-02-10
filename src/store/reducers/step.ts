@@ -1,32 +1,33 @@
-import * as actionTypes from "../actionTypes"
+import * as actionTypes from "../actions/actionTypes"
 
 const initialState: StepsState = {
     steps: [{
-        id:"1",
+        id: 1,
         options: ["basic"]
     }],
-    useSubjectFrom: "1",
-    useAttributesFrom: "1"
+    useSubjectFrom: 1,
+    useAttributesFrom: 1
 }
 
 const stepReducer = (
     state: StepsState = initialState,
     action: StepAction
 ): StepsState => {
+
     switch (action.type) {
+
         case actionTypes.ADD_FACTOR_TO_STEP:
-            let index=state.steps.map(step=>step.id).indexOf(action.step);
-            console.log(action)
+            let index=state.steps.map(step=>step.id).indexOf(+action.step);
             if(index===-1) {
                 return {
                     ...state,
-                    steps: state.steps.concat([{id: action.step, options: action.factors}]),
+                    steps: state.steps.concat([{id: +action.step, options: action.factors}]),
                 }
             }else if(action.factors?.length===0){
                 return {
                     ...state,
                     steps: state.steps.filter((step)=> {
-                        return +step.id !== +action.step
+                        return step.id !== action.step
                     }),
                 }
             }else{
@@ -43,31 +44,35 @@ const stepReducer = (
                     })
                 }
             }
+
         case actionTypes.SHIFT_ADD_FACTORS_TO_STEP:
-            let stepIndex=action.step;
+            let stepIndex = action.step;
             return {
                 ...state,
-                steps: state.steps.map((item, id) => {
+                steps: state.steps.map((item) => {
                     if (item.id < stepIndex) {
                         return item
-                    }else {
+                    } else {
                         return {
                             ...item,
-                            id: `${+item.id+1}`
+                            id: item.id + 1
                         }
                     }
                 }).concat([{id: stepIndex, options: action.factors}])
             }
+
         case actionTypes.CHANGE_SUBJECT_FROM_STEP:
             return {
                 ...state,
                 useSubjectFrom: action.step
             }
+
         case actionTypes.CHANGE_ATTRIBUTES_FROM_STEP:
             return{
                 ...state,
                 useAttributesFrom: action.step
             }
+
     }
     return state
 }

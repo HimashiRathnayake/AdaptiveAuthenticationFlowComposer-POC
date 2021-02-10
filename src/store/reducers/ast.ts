@@ -1,4 +1,4 @@
-import * as actionTypes from "../actionTypes"
+import * as actionTypes from "../actions/actionTypes"
 import {ParseToAst} from "../../mapper/Parser";
 import * as syntax from "../../mapper/AdaptiveCodeSyntax";
 

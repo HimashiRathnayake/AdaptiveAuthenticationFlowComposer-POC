@@ -3,7 +3,7 @@ import {Handle, Position} from "react-flow-renderer";
 import {AiOutlineCheckCircle} from "react-icons/all";
 
 // @ts-ignore
-export const SuccessNode = ({data}) => {
+export const SuccessNode = () => {
     return (
         <div className="success">
             <Handle

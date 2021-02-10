@@ -16,7 +16,7 @@ export const saveAstFromVisualEditor = (ast: Object) => {
     return simulate(action)
 }
 
-export const saveStep = (step:string, factors:any[]) => {
+export const saveStep = (step:number, factors:string[]) => {
     const action: StepAction = {
         type: actions.ADD_FACTOR_TO_STEP,
         step,
@@ -25,7 +25,7 @@ export const saveStep = (step:string, factors:any[]) => {
     return simulate(action)
 }
 
-export const shiftSaveStep = (step:string, factors:any[]) => {
+export const shiftSaveStep = (step:number, factors:string[]) => {
     const action: StepAction = {
         type: actions.SHIFT_ADD_FACTORS_TO_STEP,
         step,
@@ -34,7 +34,7 @@ export const shiftSaveStep = (step:string, factors:any[]) => {
     return simulate(action)
 }
 
-export const setUseSubjectFromStep = (step:any) => {
+export const setUseSubjectFromStep = (step:number) => {
     const action: StepAction = {
         type: actions.CHANGE_SUBJECT_FROM_STEP,
         step,
@@ -42,7 +42,7 @@ export const setUseSubjectFromStep = (step:any) => {
     return simulate(action)
 }
 
-export const setUseAttributesFromStep = (step:any) => {
+export const setUseAttributesFromStep = (step:number) => {
     const action: StepAction = {
         type: actions.CHANGE_ATTRIBUTES_FROM_STEP,
         step,

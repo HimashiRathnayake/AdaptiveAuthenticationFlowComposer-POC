@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from "react";
 import {ControlledEditor, monaco} from "@monaco-editor/react";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
-import {saveAst} from "../store/actionCreators";
+import {saveAst} from "../store/actions/actionCreators";
 import {ParseToAst} from "../mapper/Parser";
 import {GenerateCodeFromAst} from "../mapper/CodeGenerator";
 import '../styles/scriptEditor.css';

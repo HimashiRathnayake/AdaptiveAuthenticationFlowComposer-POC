@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import "../../styles/modal.css"
 import {Checkbox, ListItemText, MenuItem} from "@material-ui/core";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {setUseAttributesFromStep, setUseSubjectFromStep} from "../../store/actionCreators";
+import {setUseAttributesFromStep, setUseSubjectFromStep} from "../../store/actions/actionCreators";
 import {Dispatch} from "redux";
 import ReactModal from "react-modal";
 import {Hint} from "../Hint";
@@ -12,8 +12,8 @@ import {Authenticator} from "../Authenticators/Authenticator";
 type Props={
     isOpen:boolean,
     onDone: Function,
-    step: string,
-    nextStep: string,
+    step: number,
+    nextStep: number,
     onBack: Function
 }
 
@@ -55,23 +55,23 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
     const dispatch: Dispatch<any> = useDispatch();
 
     const changeSubjectIdentifier = React.useCallback(
-        (step: string) => dispatch(setUseSubjectFromStep(step)),
+        (step: number) => dispatch(setUseSubjectFromStep(step)),
         [dispatch]
     );
 
     const changeAttributesFRom = React.useCallback(
-        (step: string) => dispatch(setUseAttributesFromStep(step)),
+        (step: number) => dispatch(setUseAttributesFromStep(step)),
         [dispatch]
     );
 
-    let authFactorsOfStep = steps.filter((element:any)=>element.id==step);
+    let authFactorsOfStep = steps.filter((element:any)=>element.id===step);
     if (authFactorsOfStep.length>0){
         factors=authFactorsOfStep[0].options
     }
 
     const [checkedList, setCheckedList] : [any, any] = useState(factors);
-    const [useSubjectFromThisStep, setUseSubjectFromThisStep] : [any, any] = useState(useSubjectFrom==step);
-    const [useAttributesFromThisStep, setUseAttributesFromThisStep] : [any, any] = useState(useAttributesFrom==step);
+    const [useSubjectFromThisStep, setUseSubjectFromThisStep] : [any, any] = useState(useSubjectFrom===step);
+    const [useAttributesFromThisStep, setUseAttributesFromThisStep] : [any, any] = useState(useAttributesFrom===step);
 
     const onChange = (name?:string) => {
         if(checkedList.indexOf(name)===-1){
@@ -82,9 +82,9 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
     }
 
     const onClick = () => {
-        if (useSubjectFrom==step && !useSubjectFromThisStep){
-            changeSubjectIdentifier("1");
-        }else if (!(useSubjectFrom==step) && useSubjectFromThisStep){
+        if (useSubjectFrom===step && !useSubjectFromThisStep){
+            changeSubjectIdentifier(1);
+        }else if (!(useSubjectFrom===step) && useSubjectFromThisStep){
             if (step===null && nextStep===null) {
                 changeSubjectIdentifier(steps.length+1);
             }else if (step===null) {
@@ -93,9 +93,9 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                 changeSubjectIdentifier(step);
             }
         }
-        if (useAttributesFrom==step && !useAttributesFromThisStep){
-            changeAttributesFRom("1");
-        }else if(!(useAttributesFrom==step) && useAttributesFromThisStep){
+        if (useAttributesFrom===step && !useAttributesFromThisStep){
+            changeAttributesFRom(1);
+        }else if(!(useAttributesFrom===step) && useAttributesFromThisStep){
             if (step===null && nextStep===null){
                 changeAttributesFRom(steps.length+1);
             }else if (step===null){
@@ -150,7 +150,7 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                 <div className="authFactorsType">Local</div>
                 <div className="innerFactorsContainer">
                     {authFactors.map((factor: any) => {
-                        let disabled = ((step=="1" || nextStep=="1") && factor.displayName==="fido")
+                        let disabled = ((step===1 || nextStep===1) && factor.displayName==="fido")
                         let checked = checkedList.indexOf(factor.displayName)!==-1 && !disabled
                         return(
                             disabled ? (<div key={factor.id}/>

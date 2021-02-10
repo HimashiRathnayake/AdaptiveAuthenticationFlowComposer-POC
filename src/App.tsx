@@ -19,7 +19,7 @@ import {
     saveStep,
     setUseAttributesFromStep,
     setUseSubjectFromStep
-} from "./store/actionCreators";
+} from "./store/actions/actionCreators";
 import {ParseToAst} from "./mapper/Parser";
 import {ConfirmationModal} from "./components/modals/ConfirmationModal";
 
@@ -41,17 +41,17 @@ const App = () => {
     );
 
     const addFactorToStep = React.useCallback(
-        (step: string, factors:any[]) => dispatch(saveStep(step, factors)),
+        (step: number, factors:string[]) => dispatch(saveStep(step, factors)),
         [dispatch]
     );
 
     const changeSubjectIdentifier = React.useCallback(
-        (step: string) => dispatch(setUseSubjectFromStep(step)),
+        (step: number) => dispatch(setUseSubjectFromStep(step)),
         [dispatch]
     );
 
     const changeAttributesFRom = React.useCallback(
-        (step: string) => dispatch(setUseAttributesFromStep(step)),
+        (step: number) => dispatch(setUseAttributesFromStep(step)),
         [dispatch]
     );
 
@@ -92,11 +92,11 @@ const App = () => {
 
     const updateStore = (script:string, steps:any, subjectStepId:number, attributesStepId:number) => {
         saveAstToStore(ParseToAst(script));
-        changeSubjectIdentifier(`${subjectStepId}`);
-        changeAttributesFRom(`${attributesStepId}`);
+        changeSubjectIdentifier(subjectStepId);
+        changeAttributesFRom(attributesStepId);
         for(let step of steps){
             let options = step.options.map((option:any)=>getDisplayName(option)[0].displayName)
-            addFactorToStep(`${step.id}`, options);
+            addFactorToStep(step.id, options);
         }
     }
 

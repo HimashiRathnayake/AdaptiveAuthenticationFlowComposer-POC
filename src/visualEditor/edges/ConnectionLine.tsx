@@ -15,12 +15,8 @@ type props = {
 export const ConnectionLine : React.FC<props> = ({
                     sourceX,
                     sourceY,
-                    sourcePosition,
                     targetX,
                     targetY,
-                    targetPosition,
-                    connectionLineType,
-                    connectionLineStyle,
                 }) => {
     return (
         <g>

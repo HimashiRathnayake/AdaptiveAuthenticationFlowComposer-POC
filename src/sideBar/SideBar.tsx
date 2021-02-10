@@ -7,18 +7,24 @@ import templates from "../api/Templates.json";
 export const SideBar: React.FC = () => {
 
     return (
-        <div className="Side-bar">
-            <div className="container">
-                <h3 className="templates-name">Templates</h3>
-                <div className="options">
+        <>
+            <div className="sidebar">
+                <h3 className="sidebar-header">
+                    Templates
+                </h3>
+                <div className="sidebar-options">
                     {templates.map((template: any) => (
-                        <Template key={template.name} name={template.name}/>
+                        <Template
+                            key={template.name}
+                            name={template.name}
+                        />
                     ))}
                 </div>
-                <div className="side-bar-bottom">
-                    <AiOutlineCopyrightCircle className="copyright-icon"/> 2021 WSO2
+                <div className="sidebar-bottom">
+                    <AiOutlineCopyrightCircle className="copyright-icon"/>
+                    2021 WSO2
                 </div>
             </div>
-        </div>
+        </>
     );
 }

@@ -6,7 +6,7 @@ import {
     saveStep,
     setUseAttributesFromStep,
     setUseSubjectFromStep
-} from "../store/actionCreators";
+} from "../store/actions/actionCreators";
 import {Dispatch} from "redux";
 import {useDispatch} from "react-redux";
 import {ParseToAst} from "../mapper/Parser";
@@ -31,23 +31,22 @@ export const Template: React.FC<BoxProps> = ({ name }) => {
     );
 
     const changeSubjectIdentifier = React.useCallback(
-        (step: string) => dispatch(setUseSubjectFromStep(step)),
+        (step: number) => dispatch(setUseSubjectFromStep(step)),
         [dispatch]
     );
 
     const changeAttributesFRom = React.useCallback(
-        (step: string) => dispatch(setUseAttributesFromStep(step)),
+        (step: number) => dispatch(setUseAttributesFromStep(step)),
         [dispatch]
     );
 
     const updateWithTemplate = (name:string) => {
-        let template : any = {}
+        let template : any;
         template = templates.find(template=> {
             return template.name === name
         });
-        changeSubjectIdentifier("1");
-        changeAttributesFRom("1");
-        // @ts-ignore
+        changeSubjectIdentifier(1);
+        changeAttributesFRom(1);
         saveAstToStore(ParseToAst(template.code.join('\n')));
         for(let step in template.defaultAuthenticators){
             let authenticatorObject = template.defaultAuthenticators[step]

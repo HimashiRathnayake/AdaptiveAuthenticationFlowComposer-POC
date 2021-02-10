@@ -118,7 +118,7 @@ export const GetCondition = (ast : any, scope:any, parentPath:any, state:any): o
     };
 }
 
-export const GetConditionArguments = (ast : any, condition:string): any => {
+export const GetConditionArguments = (ast : any): any => {
     let params: any[] = [];
     traverse(ast, {
         VariableDeclarator(path: any){

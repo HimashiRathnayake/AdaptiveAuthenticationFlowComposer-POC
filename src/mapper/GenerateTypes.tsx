@@ -43,10 +43,6 @@ export const createExpressionStatementWithSuccess = (step:string, args:any) : ty
     ));
 }
 
-export const createVariableDeclaration = () : type.VariableDeclaration => {
-    return type.variableDeclaration(syntax.variable, [type.variableDeclarator(type.identifier(syntax.user), type.memberExpression(type.identifier(syntax.context), type.identifier(syntax.currentKnownSubject)))])
-}
-
 export const createVariableDeclarationForCondition = (condition:string, params?:any) : type.VariableDeclaration => {
     let parameters: any = type.arrayExpression([]);
     let variableNameForParameters = syntax.params;

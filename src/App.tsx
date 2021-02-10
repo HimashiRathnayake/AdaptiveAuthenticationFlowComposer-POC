@@ -21,7 +21,7 @@ import {
     setUseSubjectFromStep
 } from "./store/actionCreators";
 import {ParseToAst} from "./mapper/Parser";
-import {ConfirmationModal} from "./modals/ConfirmationModal";
+import {ConfirmationModal} from "./components/modals/ConfirmationModal";
 
 const App = () => {
 
@@ -67,7 +67,7 @@ const App = () => {
         return authFactors.filter((factor:any)=>factor.name===option.authenticator)
     }
 
-    const stepsToRequest = steps.map((step : any) => {
+    const stepsToRequest = steps.filter((step: any)=>step.options.length!==0).map((step : any) => {
         return {
             id: +step.id,
             options: step.options.map((option:any)=>{
@@ -106,7 +106,7 @@ const App = () => {
                 updateStore(response.data.authenticationSequence.script, response.data.authenticationSequence.steps, response.data.authenticationSequence.subjectStepId, response.data.authenticationSequence.attributeStepId);
             })
             .catch((error)=>{
-
+                console.log(error);
             });
     }, []);
 
@@ -137,19 +137,6 @@ const App = () => {
                         className="header-button update"
                         onClick={()=>{
                             updateAuthenticationSequence(requestBody, appId).then(()=>{
-                                // store.addNotification({
-                                //     title: "Update Successful",
-                                //     message: "Successfully updated the authentication flow of the application",
-                                //     type: "success",
-                                //     insert: "bottom",
-                                //     container: "bottom-right",
-                                //     animationIn: ["animate__animated", "animate__fadeIn"],
-                                //     animationOut: ["animate__animated", "animate__fadeOut"],
-                                //     dismiss: {
-                                //         duration: 4000,
-                                //         showIcon: true
-                                //     }
-                                // });
                                 setAddConfirmation(true);
                             }).catch(()=>{
                                 store.addNotification({
@@ -172,12 +159,14 @@ const App = () => {
                     </button>
                 </div>
             </header>
-            <div className="Container">
-                <div className="Side-bar"><SideBar/></div>
-                <div className="Visual-editor"><VisualEditor/></div>
-                <div className="Script-editor"><ScriptEditor/></div>
+
+            <div className="App-Container">
+                <SideBar/>
+                <VisualEditor/>
+                <ScriptEditor/>
             </div>
             {showAddConfirmation}
+
         </div>
     );
 }

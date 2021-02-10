@@ -7,7 +7,7 @@ import "../styles/visualEditor.css";
 const VisualEditor = () => {
 
     return (
-        <div>
+        <div className="Visual-editor">
             <div className='Visual-editor-header'>
                 <h3>Visual Editor</h3>
             </div>

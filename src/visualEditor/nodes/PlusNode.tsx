@@ -1,10 +1,10 @@
 import {Handle, Position} from "react-flow-renderer";
 import React from "react";
-import "../styles/node.css";
+import "../../styles/node.css";
 import {BsPlusCircle} from "react-icons/all";
 
 // @ts-ignore
-export const PlusNode = ({data}) => {
+export const PlusNode = () => {
     return (
         <div className="plus">
             <Handle

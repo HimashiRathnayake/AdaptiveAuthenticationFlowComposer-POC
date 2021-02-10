@@ -1,11 +1,10 @@
 import React from "react";
 import {shallowEqual, useSelector} from "react-redux";
-import {DroppableContainer} from "../visualEditor/DroppableContainer";
 import {MdDelete, MdModeEdit} from "react-icons/all";
 import {Handle, Position} from "react-flow-renderer";
-import {Basic} from "../authenticationFactors/Basic";
-import {IdentifierFirst} from "../authenticationFactors/IdentifierFirst";
-import {Login} from "../authenticationFactors/Login";
+import {Basic} from "../authenticationFactorSVGs/Basic";
+import {IdentifierFirst} from "../authenticationFactorSVGs/IdentifierFirst";
+import {Login} from "../authenticationFactorSVGs/Login";
 import {Tooltip} from "@material-ui/core";
 
 // @ts-ignore
@@ -45,7 +44,7 @@ export const Step: React.FC = ({data}) => {
                     }
                 </div>
             </div>
-            <DroppableContainer containerName={data.text} className="step">
+            <div className="step">
                 <div className="step-top-bar">
                     <Tooltip title="Edit" aria-label="Edit">
                         <button className="step-button" onClick={data.showAuthenticatorsList}>
@@ -85,7 +84,7 @@ export const Step: React.FC = ({data}) => {
                     style={{ opacity : 0 }}
                     onConnect={(params) => console.log('handle onConnect', params)}
                 />
-            </DroppableContainer>
+            </div>
         </div>
     );
 };

@@ -1,14 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import "../styles/modal.css"
-import {Checkbox, ListItemText, MenuItem, Tooltip} from "@material-ui/core";
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {setUseAttributesFromStep, setUseSubjectFromStep} from "../store/actionCreators";
-import {Dispatch} from "redux";
+import React from 'react';
+import "../../styles/modal.css"
 import ReactModal from "react-modal";
-import {AuthenticatorIcons} from "../authenticationFactors/AuthenticatorIcons";
-import {Hint} from "../components/Hint";
-import {getAuthenticators, getIdentityProviders} from "../api/application";
-import {IoMdCheckmarkCircle, IoMdCheckmarkCircleOutline} from "react-icons/all";
+import {IoMdCheckmarkCircleOutline} from "react-icons/all";
 
 type Props={
     isOpen:boolean,

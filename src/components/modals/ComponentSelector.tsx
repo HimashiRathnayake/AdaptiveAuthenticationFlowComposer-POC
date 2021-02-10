@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactModal from 'react-modal';
-import "../styles/modal.css"
-import {ActionCard} from "../components/ActionCard";
-import {ReactComponent as StepIcon} from "../icons/step.svg";
-import {ReactComponent as ConditionIcon} from "../icons/condition.svg";
+import "../../styles/modal.css"
+import {ActionCard} from "../ActionCard";
+import {ReactComponent as StepIcon} from "../../icons/step.svg";
+import {ReactComponent as ConditionIcon} from "../../icons/condition.svg";
 
 type Props={
     isOpen: boolean,

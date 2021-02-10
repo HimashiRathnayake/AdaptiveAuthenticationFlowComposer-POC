@@ -1,9 +1,9 @@
 import {Handle, Position} from "react-flow-renderer";
 import React from "react";
-import "../styles/node.css";
+import "../../styles/node.css";
 
 // @ts-ignore
-export const StartNode = ({data}) => {
+export const StartNode = () => {
     return (
         <div className="start">
             <Handle

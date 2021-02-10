@@ -10,61 +10,77 @@ import {
     createSuccessPropertyWithCondition, createVariableDeclarationForCondition,
 } from "./GenerateTypes";
 import {parse} from "@babel/parser";
-import {last} from "lodash-es";
 
-const parser = require('@babel/parser').parse;
-
-export const GetRequest = (ast:any) => {
+//check whether the script has a login request
+export const HasLoginRequest = (ast:any) : boolean => {
     let request: boolean = false;
     try{
         traverse(ast, {
             VariableDeclarator(path: any){
                 if (path.node.id.name === syntax.loginRequest){
                     request = true;
+                    path.stop();
                 }
             },
         })
     }
-    catch(e){}
+    catch(error){
+        console.log(error);
+    }
     return(request);
 }
 
-export const GetLastStep = (ast: any): number => {
-    let lastStep: number = 0;
-    traverse(ast, {
-        CallExpression(path: any){
-            if (path.node.callee.name===syntax.stepExecutor) {
-                if (path.node.arguments[0].value > lastStep){
-                    lastStep = path.node.arguments[0].value
+export const HasHarmfulOperations = (ast:any) : boolean => {
+    let harmful: boolean = false;
+    try{
+        traverse(ast, {
+            WhileStatement(path: any){
+                console.log(path);
+                harmful = true;
+                path.stop();
+            },
+            ForStatement(path: any){
+                harmful = true;
+                path.stop();
+            }
+        })
+    }
+    catch(error){
+        console.log(error);
+    }
+    return(harmful);
+}
+
+export const GetStepsInSuccessPath = (ast : any, scope:any, parentPath:any, state:any) : object|undefined => {
+    let successSteps: object|undefined = undefined;
+    try {
+        traverse(ast, {
+            ObjectMember(path: any) {
+                if (path.node.key.name === syntax.onSuccess) {
+                    let steps = GetCallExpressionsInPath(path.node, path.scope, path.parentPath, path.state);
+                    let condition: any = GetCondition(path.node, path.scope, path.parentPath, path.state);
+                    let remaining = steps.filter((step: any) => condition.onSuccess.indexOf(step) === -1);
+                    successSteps = {
+                        condition: condition.condition,
+                        onConditionSuccess: condition.onSuccess,
+                        remainingSuccess: remaining
+                    };
                 }
+                path.skip()
             }
-        },
-    })
-    return lastStep;
+        }, scope, state, parentPath)
+    } catch (error){
+        console.log(error);
+    }
+    return successSteps;
 }
 
-export const GetSuccessStep = (ast : any, scope:any, parentPath:any, state:any) => {
-    let successSteps: any[] = [];
-    traverse(ast, {
-        ObjectMember(path: any){
-            if (path.node.key.name===syntax.onSuccess){
-                let steps = GetCallExpression(path.node, path.scope, path.parentPath, path.state);
-                let [condition, success] = GetCondition(path.node, path.scope, path.parentPath, path.state)
-                let remaining = steps.filter( (step:any) => success.indexOf(step)===-1);
-                successSteps.push([condition, success, remaining]);
-            }
-            path.skip()
-        }
-    }, scope, state, parentPath)
-    return successSteps[0];
-}
-
-export const GetFailureStep = (ast : any, scope:any, parentPath:any, state:any) => {
+export const GetStepsInFailurePath = (ast : any, scope:any, parentPath:any, state:any) => {
     let failSteps: number[] = [];
     traverse(ast, {
         ObjectMember(path: any){
             if (path.node.key.name===syntax.onFail){
-                failSteps.push(GetCallExpression(path.node, path.scope, path.parentPath, path.state));
+                failSteps.push(GetCallExpressionsInPath(path.node, path.scope, path.parentPath, path.state));
             }
             path.skip()
         }
@@ -72,27 +88,34 @@ export const GetFailureStep = (ast : any, scope:any, parentPath:any, state:any) 
     return failSteps.pop();
 }
 
-export const GetCondition = (ast : any, scope:any, parentPath:any, state:any): any => {
+export const GetCondition = (ast : any, scope:any, parentPath:any, state:any): object => {
     let condition: string|undefined = undefined;
     let success: any[] = [];
-    traverse(ast, {
-        CallExpression(path:any){
-            if (path.node.callee.name===syntax.stepExecutor){
-                path.stop();
+    try {
+        traverse(ast, {
+            CallExpression(path: any) {
+                if (path.node.callee.name === syntax.stepExecutor) {
+                    path.stop();
+                }
             }
-        }
-        ,IfStatement(path: any){
-            if (path.node.test.type==='Identifier'){
-                condition = path.node.test.name
-            }else if (path.node.test.type==='CallExpression'){
-                condition = path.node.test.callee.name
-            }else{
-                condition = generate(path.node.test).code;
+            , IfStatement(path: any) {
+                if (path.node.test.type === 'Identifier') {
+                    condition = path.node.test.name
+                } else if (path.node.test.type === 'CallExpression') {
+                    condition = path.node.test.callee.name
+                } else {
+                    condition = generate(path.node.test).code;
+                }
+                success = GetCallExpressionsInPath(path.node, path.scope, path.parentPath, path.state);
             }
-            success = GetCallExpression(path.node, path.scope, path.parentPath, path.state);
-        }
-    }, scope, state, parentPath)
-    return [condition, success];
+        }, scope, state, parentPath)
+    } catch (error) {
+        console.log(error);
+    }
+    return {
+        condition: condition,
+        onSuccess: success,
+    };
 }
 
 export const GetConditionArguments = (ast : any, condition:string): any => {
@@ -109,7 +132,7 @@ export const GetConditionArguments = (ast : any, condition:string): any => {
     return params;
 }
 
-export const GetCallExpression = (ast : any, scope:any, parentPath:any, state:any): any => {
+export const GetCallExpressionsInPath = (ast : any, scope:any, parentPath:any, state:any): any => {
     const steps: number[] = [];
     traverse(ast, {
         CallExpression(path: any){
@@ -122,62 +145,34 @@ export const GetCallExpression = (ast : any, scope:any, parentPath:any, state:an
     return steps;
 }
 
-export const GetStepsFromAst = (ast : any) => {
-
+export const GetAllStepsFromAst = (ast : any) : any[] => {
     let stepsArray: any[] = [];
-
     try{
-        let count=0;
         traverse(ast, {
             CallExpression(path: any){
                 if (path.node.callee.name===syntax.stepExecutor){
-                    let success = GetSuccessStep(path.node, path.scope, path.parentPath, path.state);
-                    let fail = GetFailureStep(path.node, path.scope, path.parentPath, path.state);
-                    stepsArray.push([count, path.node.arguments[0].value, success, fail]) //key, step, onSuccess, onFail
-                    count = count+1
+                    let success = GetStepsInSuccessPath(path.node, path.scope, path.parentPath, path.state);
+                    let fail = GetStepsInFailurePath(path.node, path.scope, path.parentPath, path.state);
+                    stepsArray.push({
+                        step: path.node.arguments[0].value,
+                        onSuccess: success,
+                        onFail: fail
+                    })
                 }
             }
         })
     }
-    catch(e){}
-
+    catch(error){
+        console.log(error);
+    }
     return(stepsArray);
 }
 
-export const AddStepToEnd = (ast: any): object => {
-    let pathASt: any = ast;
-    let AlreadyHasStep = false;
-    traverse(ast, {
-        CallExpression(path: any){
-            if (path.node.callee.name===syntax.stepExecutor) {
-                pathASt = path
-                AlreadyHasStep = true;
-                path.skip()
-            }
-        },
-    })
-    if (AlreadyHasStep) {
-        let stepNode = type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+GetLastStep(ast)+1)])
-        pathASt.insertAfter(stepNode);
-    }else{
-        let stepNode = type.callExpression(type.identifier(syntax.stepExecutor), [type.numericLiteral(+GetLastStep(ast)+1)])
-        let node = type.variableDeclaration(
-            syntax.variable,
-            [
-                type.variableDeclarator(type.identifier(syntax.loginRequest),
-                    type.functionExpression(null, [type.identifier(syntax.context)], type.blockStatement([type.expressionStatement(stepNode)])))]
-        );
-        ast = parser('');
-        ast.program.body.push(node);
-    }
-    return ast;
-}
-
-export const FindStep = (ast:any, step:string) => {
+export const GetPathOfStep = (ast:any, step:string) : any => {
     let stepPath : any = {};
     traverse(ast, {
         CallExpression(path: any){
-            if (path.node.callee.name===syntax.stepExecutor && path.node.arguments[0].value == step) {
+            if (path.node.callee.name===syntax.stepExecutor && path.node.arguments[0].value === +step) {
                 stepPath = path;
             }
         },
@@ -185,7 +180,7 @@ export const FindStep = (ast:any, step:string) => {
     return stepPath;
 }
 
-export const FindConditionWithLastStep = (ast:any, condition:string) => {
+export const GetConditionPathWithLastStep = (ast:any, condition:string) : any[] => {
     let stepPath : any = {};
     let lastStep : any = 0;
     traverse(ast, {
@@ -210,11 +205,11 @@ export const FindConditionWithLastStep = (ast:any, condition:string) => {
     return [lastStep, stepPath];
 }
 
-export const checkSuccessFailurePath = (ast : any, scope:any, parentPath:any, state:any, type:string) => {
-    let successPath :any = null;
+export const GetSuccessFailurePath = (ast : any, scope:any, parentPath:any, state:any, type:string) : any => {
+    let successPath : any = null;
     traverse(ast, {
         ObjectMember(path: any){
-            let key = (type==='success')?syntax.onSuccess : syntax.onFail
+            let key = (type==='success') ? syntax.onSuccess : syntax.onFail
             if (path.node.key.name===key){
                 successPath = [path.node, path.scope, path.parentPath, path.state];
             }
@@ -225,8 +220,8 @@ export const checkSuccessFailurePath = (ast : any, scope:any, parentPath:any, st
 }
 
 export const AddSuccessFailureSteps = (ast: any, currentStep: string, nextStep: string, stepType:string) => {
-    let path = FindStep(ast, currentStep);
-    let successPath = checkSuccessFailurePath(path.node, path.scope, path.parentPath, path.state, stepType);
+    let path = GetPathOfStep(ast, currentStep);
+    let successPath = GetSuccessFailurePath(path.node, path.scope, path.parentPath, path.state, stepType);
     if (successPath === null) {
         let key = (stepType==='success')?syntax.onSuccess : syntax.onFail
         if(path.node.arguments.length===1) {
@@ -241,7 +236,7 @@ export const AddSuccessFailureSteps = (ast: any, currentStep: string, nextStep: 
 }
 
 export const AddSuccessFailureStepsBefore = (ast: any, beforeStep:string) => {
-    let pathBefore = FindStep(ast, beforeStep);
+    let pathBefore = GetPathOfStep(ast, beforeStep);
     traverse(ast, {
         CallExpression(path: any) {
             if (path.node.callee.name === syntax.stepExecutor && path.node.arguments[0].value > +beforeStep-1) {
@@ -255,7 +250,7 @@ export const AddSuccessFailureStepsBefore = (ast: any, beforeStep:string) => {
 }
 
 export const AddSuccessFailureStepsBeforeCondition = (ast: any, beforeStep:string) => {
-    let [lastStep, pathBefore] = FindConditionWithLastStep(ast, beforeStep);
+    let [lastStep, pathBefore] = GetConditionPathWithLastStep(ast, beforeStep);
     traverse(ast, {
         CallExpression(path: any) {
             if (path.node.callee.name === syntax.stepExecutor && path.node.arguments[0].value > lastStep) {
@@ -269,8 +264,8 @@ export const AddSuccessFailureStepsBeforeCondition = (ast: any, beforeStep:strin
 }
 
 export const AddCondition = (ast:any, step:string, condition:string, params?:any) => {
-    let path = FindStep(ast, step);
-    let successPath = checkSuccessFailurePath(path.node, path.scope, path.parentPath, path.state, 'success');
+    let path = GetPathOfStep(ast, step);
+    let successPath = GetSuccessFailurePath(path.node, path.scope, path.parentPath, path.state, 'success');
     if(successPath===null){
         if(path.node.arguments.length===1) {
             path.node.arguments.push(createObjectExpressionWithCondition(syntax.onSuccess, condition));
@@ -286,7 +281,7 @@ export const AddCondition = (ast:any, step:string, condition:string, params?:any
 }
 
 export const AddConditionBeforeStep = (condition: string, params:any, ast: any, beforeStep:string) => {
-    let pathBefore = FindStep(ast, beforeStep);
+    let pathBefore = GetPathOfStep(ast, beforeStep);
     let args = pathBefore.parentPath.parent.body[0];
     pathBefore.parentPath.parent.body[0] = createIfStatementWithArguments(condition, args);
     ast.program.body.unshift(parse(syntax.getConditionSyntax(condition)).program.body[0]);
@@ -306,7 +301,7 @@ export const AddStepToCondition = (ast:any, condition:string, step:string) => {
 }
 
 export const DeleteStep = (ast:any, step:string) => {
-    let parentPath = FindStep(ast, step).parentPath;
+    let parentPath = GetPathOfStep(ast, step).parentPath;
     delete(parentPath.parent.body[parentPath.key]);
     return ast;
 }

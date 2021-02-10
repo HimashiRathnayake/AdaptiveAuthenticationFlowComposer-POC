@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/svg.css";
+import "../../styles/svg.css";
 import { AuthenticatorIcons } from "./AuthenticatorIcons";
 
 type props ={

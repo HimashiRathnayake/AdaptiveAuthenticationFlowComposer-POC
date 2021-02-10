@@ -1,6 +1,6 @@
 import React from "react";
 import {MultipleFactor} from "./MultipleFactor";
-import "../styles/svg.css";
+import "../../styles/svg.css";
 
 type props ={
     options:any

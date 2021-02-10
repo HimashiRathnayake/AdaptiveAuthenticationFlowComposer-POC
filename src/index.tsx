@@ -21,7 +21,7 @@ ReactDOM.render(
     // <React.StrictMode>
         <Provider store={store}>
             <ReactNotification/>
-            <App />
+            <App/>
         </Provider>,
     // </React.StrictMode>,
     document.getElementById('root')

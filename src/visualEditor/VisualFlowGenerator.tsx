@@ -3,45 +3,44 @@ import {
     AddCondition, AddConditionBeforeStep,
     AddStepToCondition,
     AddSuccessFailureSteps,
-    AddSuccessFailureStepsBefore, AddSuccessFailureStepsBeforeCondition,
+    AddSuccessFailureStepsBefore, AddSuccessFailureStepsBeforeCondition, HasLoginRequest,
     DeleteStep,
     GetConditionArguments,
-    GetRequest,
-    GetStepsFromAst
+    GetAllStepsFromAst, HasHarmfulOperations
 } from "../mapper/TraverseAst";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import ReactFlow, {Background, Controls} from "react-flow-renderer";
 import {Condition, CustomEdge, Edge, Element, Connector, MultiFactor, Plus, Success, Start} from "./Elements";
-import {ComponentSelector} from "../modals/ComponentSelector";
+import {ComponentSelector} from "../components/modals/ComponentSelector";
 import {Dispatch} from "redux";
 import {saveAstFromVisualEditor, saveStep, shiftSaveStep} from "../store/actionCreators";
-import {DroppableContainer} from "./DroppableContainer";
 import "../styles/visualEditor.css";
-import {AuthFactorList} from "../modals/AuthFactorList";
-import {nodeTypes} from "../nodes";
-import {edgeTypes} from "../edges";
-import {ConditionList} from "../modals/ConditionList";
+import {AuthFactorList} from "../components/modals/AuthFactorList";
+import {nodeTypes} from "./nodes";
+import {edgeTypes} from "./edges";
+import {ConditionList} from "../components/modals/ConditionList";
+import {AiFillWarning} from "react-icons/all";
 
 let uniqueNodeIdList: any[] = []; //Array to keep a unique nodes id list
 let lastStep: any = null;
 let x = 20; let y = 200;
 let stepHeight = 220;
 let stepWidth = 300;
-let distanceX=350; let distanceY=600;
+let distanceX=350; //let distanceY=600;
 let lastStepX = 10; let lastStepY = 200;
 let gapX = 150, conditionWidth = 50;
 let stepsToSuccess: any[] = [];
 
 export const VisualFlowGenerator: React.FC = () => {
 
-    const [visible, setVisible] = useState(false);
-    const [visibleAuthFactors, setVisibleAuthFactors] = useState(false);
-    const [visibleConditions, setVisibleConditions] = useState(false);
-    const [elementsList, setElements] : [any, any] = useState([]);
-    const [stepToViewAuthFactors, setStep] : [any, any] = useState(null);
-    const [successFailure, setSuccessFailure] : [any, any] = useState(null);
-    const [beforeStep, setBeforeStep] : [any,any] = useState(null);
-    const [endsWithCondition, setEndsWithCondition] : [any, any] = useState(null);
+    const [visible, setVisible] = useState<boolean>(false);
+    const [visibleAuthFactors, setVisibleAuthFactors] = useState<boolean>(false);
+    const [visibleConditions, setVisibleConditions] = useState<boolean>(false);
+    const [elementsList, setElements] = useState<any>([]);
+    const [stepToViewAuthFactors, setStep] = useState<any>(null);
+    const [successFailure, setSuccessFailure] = useState<any>(null);
+    const [beforeStep, setBeforeStep] = useState<any>(null);
+    const [endsWithCondition, setEndsWithCondition] = useState<any>(null);
 
     const [ast, steps] : [any, any] = useSelector(
         (state:any) => {
@@ -67,7 +66,7 @@ export const VisualFlowGenerator: React.FC = () => {
         [dispatch]
     );
 
-    let stepsArray = GetStepsFromAst(ast);
+    let stepsArray = GetAllStepsFromAst(ast);
 
     const createEdge = (source:string|null, target:string|null, color:string, label?:string, handler?:string, targetHandler?:string) => {
         setElements((elements:any[])=>[...elements, Edge(`${source}${target}`, source, target, label, color, handler, targetHandler)]);
@@ -247,7 +246,7 @@ export const VisualFlowGenerator: React.FC = () => {
                 step = (lastStep + 1).toString();
                 addFactorToStore(step, authFactors);
             }
-            else if (endsWithCondition!==null){
+            else{
                 newAst = AddStepToCondition(ast, endsWithCondition, (+lastStep + 1).toString());
                 setEndsWithCondition(null);
                 step = (lastStep + 1).toString();
@@ -276,9 +275,9 @@ export const VisualFlowGenerator: React.FC = () => {
             setSuccessFailure(null);
 
             for (let step of stepsArray){
-                let currentStep = step[1];
-                let successSteps = step[2];
-                let failureSteps = step[3];
+                let currentStep = step.step;
+                let onSuccessPath = step.onSuccess;
+                let failureSteps = step.onFail;
 
                 if (uniqueNodeIdList.indexOf(currentStep)===-1){
                     if(uniqueNodeIdList.length<1){
@@ -297,10 +296,10 @@ export const VisualFlowGenerator: React.FC = () => {
                     x+=stepWidth + gapX;
                 }
 
-                if (successSteps!==undefined){
-                    let condition = successSteps[0];
-                    let successPath = successSteps[1];
-                    let remainSuccess=successSteps[2];
+                if (onSuccessPath!==undefined){
+                    let condition = onSuccessPath.condition;
+                    let successPath = onSuccessPath.onConditionSuccess;
+                    let remainSuccess=onSuccessPath.remainingSuccess;
 
                     if(condition!==undefined && uniqueNodeIdList.indexOf(condition)===-1){
                         createElement("plus "+condition, x-gapX/2-15, y+201.5, 'plus');
@@ -374,13 +373,14 @@ export const VisualFlowGenerator: React.FC = () => {
     );
 
     return (
-        <DroppableContainer className='Flow' containerName="Flow">
-            {GetRequest(ast) && <div className='Flow-container'>
+        <div className='Flow'>
+            {(HasLoginRequest(ast) && !HasHarmfulOperations(ast)) ? (
+                <div className='Flow-container'>
                     <ComponentSelector isOpen={visible} onCancel={onCancel} addStep={addStep} addCondition={addCondition}/>
                     {visibleAuthFactors &&
                         <AuthFactorList isOpen={visibleAuthFactors} onDone={onDone} step={stepToViewAuthFactors} nextStep={beforeStep} onBack={()=>{setVisibleAuthFactors(false); setStep(null);}}/>
                     }
-                    <ConditionList isOpen={visibleConditions} onDoneCondition={addConditionToFlow} onBack={()=>{setVisibleConditions((false))}}/>
+                    <ConditionList isOpen={visibleConditions} onDoneCondition={addConditionToFlow} onBack={()=>{setVisibleConditions(false)}}/>
                     <ReactFlow
                         elements={elementsList}
                         nodesConnectable={false}
@@ -392,8 +392,19 @@ export const VisualFlowGenerator: React.FC = () => {
                         <Controls className="flow-control"/>
                         <Background color="#aaa" gap={16} className="flowBackground"/>
                     </ReactFlow>
-            </div>}
-        </DroppableContainer>
+                </div>
+            ) : HasHarmfulOperations(ast) ?
+                (<div className="warning">
+                    <div className="warning-header"><AiFillWarning className="warning-icon"/>Error</div>
+                    <div className="warning-content">There is a harmful operation in the script. Therefore the visual flow cannot be generated</div>
+                </div>
+            ) : (
+                <div className="warning">
+                    <div className="warning-header"><AiFillWarning className="warning-icon"/>Error</div>
+                    <div className="warning-content">There are some errors in the script. There for the visual flow cannot be generated</div>
+                </div>
+            )}
+        </div>
     )
 
 }

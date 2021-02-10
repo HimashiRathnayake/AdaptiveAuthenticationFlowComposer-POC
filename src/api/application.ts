@@ -1,8 +1,9 @@
 import axios from "axios";
+import {getApplicationsResourceEndpoints} from "../configs/endpoints.ts";
 
 export const getApplicationDetails = (appId:string|null) : Promise<any> => {
     return axios.get(
-        `https://localhost:9443/api/server/v1/applications/${appId}`,
+        `${getApplicationsResourceEndpoints().applications}${appId}`,
         {
             headers: {
                 "Accept": "application/json",
@@ -21,7 +22,7 @@ export const getApplicationDetails = (appId:string|null) : Promise<any> => {
 
 export const getAuthenticators = () : Promise<any> => {
     return axios.get(
-        'https://localhost:9443/api/server/v1/configs/authenticators',
+        getApplicationsResourceEndpoints().authenticators,
         {
             headers: {
                 "Accept": "application/json",
@@ -40,7 +41,7 @@ export const getAuthenticators = () : Promise<any> => {
 
 export const getIdentityProviders = () : Promise<any> => {
     return axios.get(
-        'https://localhost:9443/api/server/v1/identity-providers?filter=isEnabled eq "true"&requiredAttributes=federatedAuthenticators',
+        getApplicationsResourceEndpoints().identityProviders,
         {
             headers: {
                 "Accept": "application/json",
@@ -59,7 +60,7 @@ export const getIdentityProviders = () : Promise<any> => {
 
 export const updateAuthenticationSequence = (requestBody: any, appId: string|null) : Promise<any> => {
     return axios.patch(
-        `https://localhost:9443/t/carbon.super/api/server/v1/applications/${appId}`,
+        `${getApplicationsResourceEndpoints().applications}${appId}`,
         requestBody,
         {
             headers: {

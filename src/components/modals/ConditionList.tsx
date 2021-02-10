@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import "../styles/modal.css"
+import "../../styles/modal.css"
 import {Radio, RadioGroup, FormControlLabel, FormControl} from "@material-ui/core";
 import ReactModal from "react-modal";
 import Select from "react-select";

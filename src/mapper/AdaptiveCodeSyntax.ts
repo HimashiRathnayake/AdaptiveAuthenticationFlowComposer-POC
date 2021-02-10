@@ -28,10 +28,3 @@ export const getConditionSyntax = (condition:string) => {
     return code;
 }
 
-export const getVariableSyntax = (condition:string) => {
-    if (condition === "hasRole") {
-        return "var user = context.currentKnownSubject; \n" +
-            "var hasRole = hasAnyOfTheRoles(user, rolesToStepUp);"
-    }
-}
-

@@ -1,5 +1,5 @@
 import React from 'react';
-import "../../styles/modal.css"
+import "../styles/modal.css"
 import ReactModal from "react-modal";
 import {IoMdCheckmarkCircleOutline} from "react-icons/all";
 

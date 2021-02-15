@@ -1,12 +1,12 @@
 import {Handle, Position} from "react-flow-renderer";
 import React from "react";
-import {Google} from "../authenticationFactorSVGs/Google";
-import {Facebook} from "../authenticationFactorSVGs/Facebook";
-import {Instagram} from "../authenticationFactorSVGs/Instagram";
-import {Twitter} from "../authenticationFactorSVGs/Twitter";
-import {Fido} from "../authenticationFactorSVGs/Fido";
+import {Google} from "../SVGs/Google";
+import {Facebook} from "../SVGs/Facebook";
+import {Instagram} from "../SVGs/Instagram";
+import {Twitter} from "../SVGs/Twitter";
+import {Fido} from "../SVGs/Fido";
 import Jwt from "../../icons/jwt.png";
-import {Totp} from "../authenticationFactorSVGs/Totp";
+import {Totp} from "../SVGs/Totp";
 // @ts-ignore
 export const MultiFactorNode = ({data}) => {
     return (

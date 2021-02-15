@@ -5,9 +5,9 @@ import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {setUseAttributesFromStep, setUseSubjectFromStep} from "../../store/actions/actionCreators";
 import {Dispatch} from "redux";
 import ReactModal from "react-modal";
-import {Hint} from "../Hint";
-import {getAuthenticators, getIdentityProviders} from "../../api/application";
-import {Authenticator} from "../Authenticators/Authenticator";
+import {Hint} from "../../components/Hint";
+import {getAuthenticators} from "../../api/application";
+import {Authenticator} from "../components/Authenticator";
 
 type Props={
     isOpen:boolean,
@@ -20,6 +20,7 @@ type Props={
 export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep, onBack}) => {
 
     let factors: any[] = [];
+    let factorsOfFirstStep: any[] = [];
     let prefix : any = null;
     if (step===null){
         prefix = 'New';
@@ -36,7 +37,7 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
             .catch((error) => {
                 console.log(error);
             });
-        getIdentityProviders()
+        getAuthenticators("idp")
             .then((response) => {
                 setIdpList(response.data.identityProviders);
             })
@@ -64,9 +65,14 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
         [dispatch]
     );
 
-    let authFactorsOfStep = steps.filter((element:any)=>element.id===step);
-    if (authFactorsOfStep.length>0){
-        factors=authFactorsOfStep[0].options
+    let currentStep = steps.filter((element:any)=>element.id===step);
+    if (currentStep.length>0){
+        factors=currentStep[0].options
+    }
+
+    let firstStep = steps.filter((element:any)=>element.id===1);
+    if (firstStep.length>0){
+        factorsOfFirstStep=firstStep[0].options
     }
 
     const [checkedList, setCheckedList] : [any, any] = useState(factors);
@@ -147,23 +153,31 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                 </div>
 
                 <div className="authFactorsHeader">Authenticators</div>
+                {/*<div>This is a handler make sure to add authenticators in other steps</div>*/}
                 <div className="authFactorsType">Local</div>
                 <div className="innerFactorsContainer">
                     {authFactors.map((factor: any) => {
-                        let disabled = ((step===1 || nextStep===1) && factor.displayName==="fido")
+                        let disabled = false;
+                        if(factor.displayName==="fido" || factor.displayName==="totp"){
+                            console.log(nextStep)
+                            if (step===1 || nextStep==1) {
+                                disabled = true;
+                            }else if(factorsOfFirstStep.indexOf("basic")===-1 && factorsOfFirstStep.indexOf("identifier-first")===-1){
+                                disabled = true;
+                            }
+                        }
                         let checked = checkedList.indexOf(factor.displayName)!==-1 && !disabled
                         return(
-                            disabled ? (<div key={factor.id}/>
-                            ): (
-                                <Authenticator
-                                    key={factor.id}
-                                    factorName={factor.displayName}
-                                    factorType={factor.type}
-                                    checked={checked}
-                                    onChange={onChange}
-                                />
-                            ))
-                    })}
+                            <Authenticator
+                                key={factor.id}
+                                factorName={factor.displayName}
+                                factorType={factor.type}
+                                checked={checked}
+                                onChange={onChange}
+                                disabled={disabled}
+                            />
+                        )})
+                    }
                 </div>
                 <div className="authFactorsType">Social Login</div>
                 <div className="innerFactorsContainer">
@@ -176,6 +190,7 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                                 factorType={factor.type}
                                 checked={checked}
                                 onChange={onChange}
+                                disabled={false}
                             />
                         )
                     })}

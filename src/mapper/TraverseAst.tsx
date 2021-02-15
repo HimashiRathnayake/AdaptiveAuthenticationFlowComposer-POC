@@ -25,7 +25,7 @@ export const HasLoginRequest = (ast:any) : boolean => {
         })
     }
     catch(error){
-        console.log(error);
+        //console.log(error);
     }
     return(request);
 }
@@ -46,7 +46,7 @@ export const HasHarmfulOperations = (ast:any) : boolean => {
         })
     }
     catch(error){
-        console.log(error);
+        //console.log(error);
     }
     return(harmful);
 }
@@ -70,7 +70,7 @@ export const GetStepsInSuccessPath = (ast : any, scope:any, parentPath:any, stat
             }
         }, scope, state, parentPath)
     } catch (error){
-        console.log(error);
+        //console.log(error);
     }
     return successSteps;
 }
@@ -110,7 +110,7 @@ export const GetCondition = (ast : any, scope:any, parentPath:any, state:any): o
             }
         }, scope, state, parentPath)
     } catch (error) {
-        console.log(error);
+        //console.log(error);
     }
     return {
         condition: condition,
@@ -163,7 +163,7 @@ export const GetAllStepsFromAst = (ast : any) : any[] => {
         })
     }
     catch(error){
-        console.log(error);
+        //console.log(error);
     }
     return(stepsArray);
 }
@@ -301,7 +301,8 @@ export const AddStepToCondition = (ast:any, condition:string, step:string) => {
 }
 
 export const DeleteStep = (ast:any, step:string) => {
-    let parentPath = GetPathOfStep(ast, step).parentPath;
-    delete(parentPath.parent.body[parentPath.key]);
+    let parentPath = GetPathOfStep(ast, step);
+    console.log(parentPath)
+    // delete(parentPath.parent.body[parentPath.key]);
     return ast;
 }

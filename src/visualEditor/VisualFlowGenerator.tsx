@@ -11,14 +11,14 @@ import {
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import ReactFlow, {Background, Controls} from "react-flow-renderer";
 import {Condition, CustomEdge, Edge, Element, Connector, MultiFactor, Plus, Success, Start} from "./Elements";
-import {ComponentSelector} from "../components/modals/ComponentSelector";
+import {ComponentSelector} from "./modals/ComponentSelector";
 import {Dispatch} from "redux";
 import {saveAstFromVisualEditor, saveStep, shiftSaveStep} from "../store/actions/actionCreators";
 import "../styles/visualEditor.css";
-import {AuthFactorList} from "../components/modals/AuthFactorList";
+import {AuthFactorList} from "./modals/AuthFactorList";
 import {nodeTypes} from "./nodes";
 import {edgeTypes} from "./edges";
-import {ConditionList} from "../components/modals/ConditionList";
+import {ConditionList} from "./modals/ConditionList";
 import {AiFillWarning} from "react-icons/all";
 
 let uniqueNodeIdList: any[] = []; //Array to keep a unique nodes id list
@@ -26,7 +26,7 @@ let lastStep: any = null;
 let x = 20; let y = 200;
 let stepHeight = 220;
 let stepWidth = 300;
-let distanceX=350; //let distanceY=600;
+let distanceX=350, distanceY=600;
 let lastStepX = 10; let lastStepY = 200;
 let gapX = 150, conditionWidth = 50;
 let stepsToSuccess: any[] = [];
@@ -334,22 +334,6 @@ export const VisualFlowGenerator: React.FC = () => {
                         }
                     }
                 }
-
-                // if (failureSteps!==undefined){
-                //     let count=1;
-                //     for (let failureStep of failureSteps){
-                //         if (uniqueNodeIdList.indexOf(failureStep)===-1){
-                //             createElement(failureStep, lastStepX, lastStepY+distanceY+200);
-                //         }
-                //         if (failureSteps.indexOf(failureStep)===0){
-                //             createEdge(currentStep, failureStep, '#c63046', undefined, "failure", "failTarget");
-                //         }
-                //         else{
-                //             createEdge(failureSteps[failureSteps.indexOf(failureStep)-1], failureStep,'#D6D5E6');
-                //         }
-                //     }
-                //     count+=1;
-                // }
             }
 
             y+=186.5;
@@ -392,10 +376,7 @@ export const VisualFlowGenerator: React.FC = () => {
                     <div className="warning-content">There is a harmful operation in the script. Therefore the visual flow cannot be generated</div>
                 </div>
             ) : (
-                <div className="warning">
-                    <div className="warning-header"><AiFillWarning className="warning-icon"/>Error</div>
-                    <div className="warning-content">There are some errors in the script. There for the visual flow cannot be generated</div>
-                </div>
+                <div className="warning"/>
             )}
         </div>
     )

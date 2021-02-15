@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/composer.iml" filepath="$PROJECT_DIR$/.idea/composer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../test/identity-apps/apps/console/.idea/console.iml" filepath="$PROJECT_DIR$/../test/identity-apps/apps/console/.idea/console.iml" />
     </modules>
   </component>
 </project>

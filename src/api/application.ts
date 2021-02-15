@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getApplicationsResourceEndpoints} from "../configs/endpoints.ts";
+import {getApplicationsResourceEndpoints} from "../configs/endpoints";
 
 export const getApplicationDetails = (appId:string|null) : Promise<any> => {
     return axios.get(
@@ -20,9 +20,11 @@ export const getApplicationDetails = (appId:string|null) : Promise<any> => {
     });
 }
 
-export const getAuthenticators = () : Promise<any> => {
+export const getAuthenticators = (type?:string) : Promise<any> => {
     return axios.get(
-        getApplicationsResourceEndpoints().authenticators,
+        type==="idp"
+            ? getApplicationsResourceEndpoints().identityProviders
+            : getApplicationsResourceEndpoints().authenticators,
         {
             headers: {
                 "Accept": "application/json",
@@ -39,9 +41,9 @@ export const getAuthenticators = () : Promise<any> => {
     });
 };
 
-export const getIdentityProviders = () : Promise<any> => {
+export const getTemplates = () : Promise<any> => {
     return axios.get(
-        getApplicationsResourceEndpoints().identityProviders,
+        getApplicationsResourceEndpoints().templates,
         {
             headers: {
                 "Accept": "application/json",
@@ -50,7 +52,7 @@ export const getIdentityProviders = () : Promise<any> => {
         }
     ).then((response) => {
         if (response.status !== 200) {
-            return Promise.reject(new Error("Failed to update authentication sequence"));
+            return Promise.reject(new Error("Failed to get templates"));
         }
         return Promise.resolve(response);
     }).catch((error) => {

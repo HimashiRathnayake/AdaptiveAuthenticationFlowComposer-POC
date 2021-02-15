@@ -2,9 +2,9 @@ import React from "react";
 import {shallowEqual, useSelector} from "react-redux";
 import {MdDelete, MdModeEdit} from "react-icons/all";
 import {Handle, Position} from "react-flow-renderer";
-import {Basic} from "../authenticationFactorSVGs/Basic";
-import {IdentifierFirst} from "../authenticationFactorSVGs/IdentifierFirst";
-import {Login} from "../authenticationFactorSVGs/Login";
+import {Basic} from "../SVGs/Basic";
+import {IdentifierFirst} from "../SVGs/IdentifierFirst";
+import {Login} from "../SVGs/Login";
 import {Tooltip} from "@material-ui/core";
 
 // @ts-ignore

@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Authentication Flow Composer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A UI based tool to design and configure the authentication flow by providing the required steps and conditions for authentication easily through the UI itself. This allows you to define authentication flows with no prior syntax knowledge.
 
 ## Available Scripts
 

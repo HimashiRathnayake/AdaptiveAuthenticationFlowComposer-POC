@@ -123,10 +123,11 @@
 .step-button {
     background-color: rgba(0,0,0,0);
     color: #a3a5aa;
-    border: rgba(0,0,0,0);
+    border: none;
     font-size: 24px;
     margin-top: 3px;
     cursor: pointer;
+    outline: none;
 }
 
 .authenticators-button {

@@ -82,7 +82,7 @@ const ScriptEditor: React.FC = () => {
                     options={
                         {
                             selectOnLineNumbers: true,
-                            glyphMargin: true
+                            // glyphMargin: true
                         }
                     }
                 />

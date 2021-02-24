@@ -2,7 +2,7 @@ import React, {ReactElement, useEffect, useState} from 'react';
 import './styles/App.css';
 import VisualEditor from "./visualEditor/VisualEditor";
 import ScriptEditor from "./scriptEditor/ScriptEditor";
-import {VscDebugRestart} from "react-icons/all";
+import {IoMdCheckmarkCircleOutline, VscDebugRestart} from "react-icons/all";
 import Icon from "./icons/Asgardeo-Logos/SVG/logo-2.svg";
 import {SideBar} from "./sideBar/SideBar";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
@@ -21,7 +21,7 @@ import {
     setUseSubjectFromStep
 } from "./store/actions/actionCreators";
 import {ParseToAst} from "./mapper/Parser";
-import {ConfirmationModal} from "./components/ConfirmationModal";
+import {AlertModal} from "./components/AlertModal";
 
 const App = () => {
 
@@ -111,7 +111,9 @@ const App = () => {
     }, []);
 
     const showAddConfirmation: ReactElement = (
-        <ConfirmationModal
+        <AlertModal
+            header={<><IoMdCheckmarkCircleOutline className="iconCorrect"/>Update Successful</>}
+            content={<>We will route you back to the console and you can continue from there.</>}
             isOpen={AddConfirmation}
             onCancel={()=>setAddConfirmation(false)}
             onDone={()=>{
@@ -125,7 +127,7 @@ const App = () => {
         <div className="App">
             <header className="App-header">
                 <img src={Icon} alt="" className="header-icon"/>
-                <div className="headerText">Authentication Flow Designer</div>
+                <div className="headerText">Authentication Flow Composer</div>
                 <div className="headerButtonContainer">
                     <button
                         className="header-button reset"

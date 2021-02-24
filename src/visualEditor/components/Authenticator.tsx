@@ -13,21 +13,27 @@ type Props = {
 export const Authenticator: React.FC<Props> = ({factorName, factorType, checked, onChange, disabled}) => {
     return(
         <div className="factorContainer">
-            <button
-                className={checked ? "factor selectedFactor": "factor unselectedFactor"}
-                onClick={()=>onChange(factorName)}
-                disabled={disabled}
+            <Tooltip
+                title={(factorName==='fido' || factorName==='totp')?'This is a second factor authenticator and this can be used only if a basic authenticator or a identifier-first authenticator has been added in a previous step':''}
+                arrow={true}
+                placement="top"
             >
-                <div className={factorType}>
-                    <AuthenticatorIcons
-                        type={factorName+"-icon"}
-                        iconX={0}
-                        iconY={0}
-                        iconHeight={40}
-                        iconWidth={40}
-                    />
-                </div>
-            </button>
+                <button
+                    className={checked ? "factor selectedFactor": "factor unselectedFactor"}
+                    onClick={()=>onChange(factorName)}
+                    disabled={disabled}
+                >
+                    <div className={factorType}>
+                        <AuthenticatorIcons
+                            type={factorName+"-icon"}
+                            iconX={0}
+                            iconY={0}
+                            iconHeight={40}
+                            iconWidth={40}
+                        />
+                    </div>
+                </button>
+            </Tooltip>
             <Tooltip title={factorName}>
                 <div className="factorName">
                     {factorName}

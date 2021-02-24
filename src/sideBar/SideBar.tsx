@@ -60,8 +60,10 @@ export const SideBar: React.FC = () => {
         changeAttributesFRom(1);
         saveAstToStore(ParseToAst(template.code.join('\n')));
         for(let step in template.defaultAuthenticators){
-            let authenticatorObject = template.defaultAuthenticators[step]
-            addFactorToStep(step, authenticatorObject.federated.concat(authenticatorObject.local))
+            if(template.defaultAuthenticators.hasOwnProperty(step)) {
+                let authenticatorObject = template.defaultAuthenticators[step];
+                addFactorToStep(step, authenticatorObject.federated.concat(authenticatorObject.local));
+            }
         }
     }
 

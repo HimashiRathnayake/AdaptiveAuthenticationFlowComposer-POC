@@ -8,6 +8,7 @@ import ReactModal from "react-modal";
 import {Hint} from "../../components/Hint";
 import {getAuthenticators} from "../../api/application";
 import {Authenticator} from "../components/Authenticator";
+import {AlertModal} from "../../components/AlertModal";
 
 type Props={
     isOpen:boolean,
@@ -28,6 +29,7 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
 
     const [authFactors, setAuthFactors] = useState([]);
     const [idpList, setIdpList] = useState([]);
+    const [openConfirmMessage, setOpenConfirmMessage] = useState(false);
 
     useEffect(() => {
         getAuthenticators()
@@ -153,13 +155,11 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                 </div>
 
                 <div className="authFactorsHeader">Authenticators</div>
-                {/*<div>This is a handler make sure to add authenticators in other steps</div>*/}
                 <div className="authFactorsType">Local</div>
                 <div className="innerFactorsContainer">
                     {authFactors.map((factor: any) => {
                         let disabled = false;
                         if(factor.displayName==="fido" || factor.displayName==="totp"){
-                            console.log(nextStep)
                             if (step===1 || nextStep==1) {
                                 disabled = true;
                             }else if(factorsOfFirstStep.indexOf("basic")===-1 && factorsOfFirstStep.indexOf("identifier-first")===-1){
@@ -213,6 +213,14 @@ export const AuthFactorList: React.FC<Props> = ({isOpen, onDone, step, nextStep,
                         </button>
                     </div>
                 </div>
+
+                <AlertModal
+                    header={<>You are adding a handler</>}
+                    content={<>The authenticator you are trying to add is a handler. Make sure you add authenticators in other steps.</>}
+                    isOpen={openConfirmMessage}
+                    onConfirm={()=>{setOpenConfirmMessage(false)}}
+                />
+
             </div>
         </ReactModal>
     );

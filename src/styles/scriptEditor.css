@@ -23,6 +23,7 @@
 
 .monaco-editor {
     height: 87%;
+    width: 100%;
 }
 
 .warningIcon {
@@ -32,9 +33,9 @@
     background-position: right bottom;
     cursor: pointer;
     display: inline-block;
-    height: 10%;
-    width: 10%;
-    font-size: 1px;
+    /*height: 10%;*/
+    /*width: 10%;*/
+    font-size: 20px;
     margin-left: 9px;
-    line-height: 5px;
+    line-height: 1px;
 }

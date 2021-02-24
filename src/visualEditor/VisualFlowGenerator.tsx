@@ -26,7 +26,7 @@ let lastStep: any = null;
 let x = 20; let y = 200;
 let stepHeight = 220;
 let stepWidth = 300;
-let distanceX=350, distanceY=600;
+let distanceX=350; //distanceY=600;
 let lastStepX = 10; let lastStepY = 200;
 let gapX = 150, conditionWidth = 50;
 let stepsToSuccess: any[] = [];
@@ -271,7 +271,7 @@ export const VisualFlowGenerator: React.FC = () => {
             for (let step of stepsArray){
                 let currentStep = step.step;
                 let onSuccessPath = step.onSuccess;
-                let failureSteps = step.onFail;
+                let onFailurePath = step.onFail;
 
                 if (uniqueNodeIdList.indexOf(currentStep)===-1){
                     if(uniqueNodeIdList.length<1){
@@ -334,6 +334,18 @@ export const VisualFlowGenerator: React.FC = () => {
                         }
                     }
                 }
+
+                if (onFailurePath!==undefined) {
+                    for (let failureStep of onFailurePath) {
+                        if (uniqueNodeIdList.indexOf(failureStep) === -1) {
+                            uniqueNodeIdList.push(failureStep);
+                            // createElement("plus " + failureStep, lastStepX - gapX / 2 - 15, y + 201.5, 'plus');
+                            // createElement(failureStep, lastStepX, y);
+                            // createEdge("plus " + failureStep, failureStep, '#D6D5E6');
+                            // createEdge(uniqueNodeIdList[uniqueNodeIdList.length - 3], "plus " + failureStep, '#D6D5E6');
+                        }
+                    }
+                }
             }
 
             y+=186.5;
@@ -352,7 +364,7 @@ export const VisualFlowGenerator: React.FC = () => {
 
     return (
         <div className='Flow'>
-            {(HasLoginRequest(ast) && !HasHarmfulOperations(ast)) ? (
+            {(HasLoginRequest(ast) && HasHarmfulOperations(ast).length===0) ? (
                 <div className='Flow-container'>
                     <ComponentSelector isOpen={visible} onCancel={onCancel} addStep={addStep} addCondition={addCondition}/>
                     {visibleAuthFactors &&
@@ -370,7 +382,7 @@ export const VisualFlowGenerator: React.FC = () => {
                         <Background color="#aaa" gap={16} className="flowBackground"/>
                     </ReactFlow>
                 </div>
-            ) : HasHarmfulOperations(ast) ?
+            ) : HasHarmfulOperations(ast).length>0 ?
                 (<div className="warning">
                     <div className="warning-header"><AiFillWarning className="warning-icon"/>Error</div>
                     <div className="warning-content">There is a harmful operation in the script. Therefore the visual flow cannot be generated</div>

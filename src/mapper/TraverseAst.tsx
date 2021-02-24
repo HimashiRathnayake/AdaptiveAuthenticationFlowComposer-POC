@@ -30,25 +30,22 @@ export const HasLoginRequest = (ast:any) : boolean => {
     return(request);
 }
 
-export const HasHarmfulOperations = (ast:any) : boolean => {
-    let harmful: boolean = false;
+export const HasHarmfulOperations = (ast:any) : number[] => {
+    let harmfulLocationArray: number[] = [];
     try{
         traverse(ast, {
             WhileStatement(path: any){
-                console.log(path);
-                harmful = true;
-                path.stop();
+                harmfulLocationArray.push(path.node.body.loc.start.line);
             },
             ForStatement(path: any){
-                harmful = true;
-                path.stop();
+                harmfulLocationArray.push(path.node.body.loc.start.line);
             }
         })
     }
     catch(error){
         //console.log(error);
     }
-    return(harmful);
+    return(harmfulLocationArray);
 }
 
 export const GetStepsInSuccessPath = (ast : any, scope:any, parentPath:any, state:any) : object|undefined => {

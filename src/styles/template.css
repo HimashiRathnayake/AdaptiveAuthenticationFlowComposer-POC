@@ -1,3 +1,9 @@
+.template {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .template-container {
     padding: 16px 20px;
     margin: 8px 0 5px;
@@ -15,6 +21,7 @@
     color: #E3E3E3;
     cursor: pointer;
     user-select: none;
+    width: 10vw;
 }
 
 .template-container:hover {
@@ -26,4 +33,10 @@
     font-size: 14px;
     display: flex;
     margin-top: 1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.infoIcon {
+    margin-left: 4px;
 }

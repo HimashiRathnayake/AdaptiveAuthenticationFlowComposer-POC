@@ -20,14 +20,14 @@
 }
 
 .Flow {
-    height: 80vh;
+    height: 85vh;
     width: 50vw;
     justify-self: center;
 }
 
 .Flow-container {
     /*border: 1px solid rgba(0,0,0,0.2);*/
-    height: 86.8vh;
+    height: 87.1vh;
     width: 58.9vw;
     justify-self: center;
     display: flex;

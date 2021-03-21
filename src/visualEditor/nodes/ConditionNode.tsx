@@ -1,8 +1,7 @@
 import {Handle, Position} from "react-flow-renderer";
 import React from "react";
 
-// @ts-ignore
-export const ConditionNode = ({data}) => {
+export const ConditionNode = (data: any) => {
     return (
         <div className="condition">
             <Handle

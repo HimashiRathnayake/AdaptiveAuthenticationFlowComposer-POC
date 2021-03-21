@@ -10,6 +10,8 @@
     /*background: rgb(35, 35, 35) none repeat scroll 0% 0%;*/
     /*background-color: #434345;*/
     background-color: rgb(45, 45, 45);
+    /*border-bottom-left-radius: 6px;*/
+    /*border-top-left-radius: 6px;*/
     border-radius: 6px;
     height: 16px;
     font-size: 18px;
@@ -17,7 +19,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    /*border: 2px solid rgb(35, 35, 35);*/
+    /*border-right: 2px solid rgba(105, 105, 108, 0.2);*/
     color: #E3E3E3;
     cursor: pointer;
     user-select: none;
@@ -37,6 +39,23 @@
     text-overflow: ellipsis;
 }
 
+.template-icon-container{
+    padding: 16px 10px;
+    margin: 8px 0 5px;
+    /*background: rgb(35, 35, 35) none repeat scroll 0% 0%;*/
+    /*background-color: #434345;*/
+    background-color: rgb(45, 45, 45);
+    height: 16px;
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom-right-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
 .infoIcon {
     margin-left: 4px;
+    cursor: pointer;
 }

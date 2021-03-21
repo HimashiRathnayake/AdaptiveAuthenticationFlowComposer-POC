@@ -4,68 +4,8 @@ import {Template} from "./Template";
 import {AiOutlineCopyrightCircle} from "react-icons/all";
 import templates from "../api/Templates.json";
 // import {getTemplates} from "../api/application";
-import {Dispatch} from "redux";
-import {useDispatch} from "react-redux";
-import {
-    saveAstFromVisualEditor,
-    saveStep,
-    setUseAttributesFromStep,
-    setUseSubjectFromStep
-} from "../store/actions/actionCreators";
-import {ParseToAst} from "../mapper/Parser";
 
 export const SideBar: React.FC = () => {
-
-    // const [templates, setTemplates] = useState<any[]>([]);
-    //
-    // useEffect(() => {
-    //     getTemplates()
-    //         .then((response) => {
-    //             let scriptTemplates = JSON.parse(response?.data?.templatesJSON);
-    //             setTemplates(scriptTemplates?.user_based?.templates);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // }, []);
-
-    const dispatch: Dispatch<any> = useDispatch();
-
-    const saveAstToStore = React.useCallback(
-        (ast: Object) => dispatch(saveAstFromVisualEditor(ast)),
-        [dispatch]
-    );
-
-    const addFactorToStep = React.useCallback(
-        (step: any, factors:any[]) => dispatch(saveStep(step, factors)),
-        [dispatch]
-    );
-
-    const changeSubjectIdentifier = React.useCallback(
-        (step: number) => dispatch(setUseSubjectFromStep(step)),
-        [dispatch]
-    );
-
-    const changeAttributesFRom = React.useCallback(
-        (step: number) => dispatch(setUseAttributesFromStep(step)),
-        [dispatch]
-    );
-
-    const updateWithTemplate = (name:string) => {
-        let template : any;
-        template = templates.find(template=> {
-            return template.name === name
-        });
-        changeSubjectIdentifier(1);
-        changeAttributesFRom(1);
-        saveAstToStore(ParseToAst(template.code.join('\n')));
-        for(let step in template.defaultAuthenticators){
-            if(template.defaultAuthenticators.hasOwnProperty(step)) {
-                let authenticatorObject = template.defaultAuthenticators[step];
-                addFactorToStep(step, authenticatorObject.federated.concat(authenticatorObject.local));
-            }
-        }
-    }
 
     return (
         <>
@@ -77,8 +17,7 @@ export const SideBar: React.FC = () => {
                     {templates.map((template: any) => (
                         <Template
                             key={template.name}
-                            name={template.name}
-                            updateWithTemplate={updateWithTemplate}
+                            templateObject={template}
                         />
                     ))}
                 </div>

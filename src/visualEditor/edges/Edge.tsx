@@ -29,7 +29,7 @@ export const CustomEdge : React.FC<props> = ({id, sourceX, sourceY, targetX, tar
 
     return (
         <g>
-            <path id={id} style={style} className="react-flow__edge-path" d={edgePath} markerEnd={markerEnd} />
+            <path id={id} className="react-flow__edge-path" d={edgePath} markerEnd={markerEnd} />
             {/*<text>*/}
             {/*    <textPath href={`#${id}`} style={{fill:'#fff', fontSize:14, letterSpacing:2}} startOffset="10%" textAnchor="middle">*/}
                     <EdgeText

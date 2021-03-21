@@ -298,8 +298,7 @@ export const AddStepToCondition = (ast:any, condition:string, step:string) => {
 }
 
 export const DeleteStep = (ast:any, step:string) => {
-    let parentPath = GetPathOfStep(ast, step);
-    console.log(parentPath)
-    // delete(parentPath.parent.body[parentPath.key]);
+    let parentPath = GetPathOfStep(ast, step).parentPath;
+    delete(parentPath.parent.body[parentPath.key]);
     return ast;
 }

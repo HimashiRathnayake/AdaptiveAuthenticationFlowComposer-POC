@@ -27,7 +27,7 @@ const stepReducer = (
                 return {
                     ...state,
                     steps: state.steps.filter((step)=> {
-                        return step.id !== action.step
+                        return +step.id !== +action.step
                     }),
                 }
             }else{

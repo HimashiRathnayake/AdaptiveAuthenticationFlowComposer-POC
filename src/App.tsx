@@ -1,4 +1,4 @@
-import React, {ReactElement, useEffect, useState} from 'react';
+import React, {ReactElement, useEffect, useRef, useState} from 'react';
 import './styles/App.css';
 import VisualEditor from "./visualEditor/VisualEditor";
 import ScriptEditor from "./scriptEditor/ScriptEditor";
@@ -22,6 +22,7 @@ import {
 } from "./store/actions/actionCreators";
 import {ParseToAst} from "./mapper/Parser";
 import {AlertModal} from "./components/AlertModal";
+import ScriptBasedFlow from "./scriptEditor/Script-based-flow";
 
 const App = () => {
 
@@ -67,6 +68,16 @@ const App = () => {
         return authFactors.filter((factor:any)=>factor.name===option.authenticator)
     }
 
+    useEffect(() => {
+            getApplicationDetails(appId)
+                .then((response) => {
+                    updateStore(response.data.authenticationSequence.script, response.data.authenticationSequence.steps, response.data.authenticationSequence.subjectStepId, response.data.authenticationSequence.attributeStepId);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+    }, []);
+
     const stepsToRequest = steps.filter((step: any)=>step.options.length!==0).map((step : any) => {
         return {
             id: +step.id,
@@ -99,16 +110,6 @@ const App = () => {
             addFactorToStep(step.id, options);
         }
     }
-
-    useEffect(()=>{
-        getApplicationDetails(appId)
-            .then((response)=>{
-                updateStore(response.data.authenticationSequence.script, response.data.authenticationSequence.steps, response.data.authenticationSequence.subjectStepId, response.data.authenticationSequence.attributeStepId);
-            })
-            .catch((error)=>{
-                console.log(error);
-            });
-    }, []);
 
     const showAddConfirmation: ReactElement = (
         <AlertModal
@@ -165,7 +166,7 @@ const App = () => {
             <div className="App-Container">
                 <SideBar/>
                 <VisualEditor/>
-                <ScriptEditor/>
+                <ScriptBasedFlow/>
             </div>
             {showAddConfirmation}
 
